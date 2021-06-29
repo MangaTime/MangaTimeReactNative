@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, SafeAreaView, StyleSheet, Text } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { decrement, increment } from '../../redux/Counter/counterReducer';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
-
 export const Home = () => {
   const count = useAppSelector((state) => state.persist.counter.value);
   const dispatch = useAppDispatch();
@@ -18,6 +18,7 @@ export const Home = () => {
       <Text>{count}</Text>
       <Button onPress={onIncrease} title="+" />
       <Button onPress={onDecrease} title="-" />
+      <Icon size={20} name="glass"></Icon>
     </SafeAreaView>
   );
 };
