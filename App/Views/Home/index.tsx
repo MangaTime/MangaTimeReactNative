@@ -4,7 +4,7 @@ import { decrement, increment } from '../../redux/Counter/counterReducer';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 
 export const Home = () => {
-  const count = useAppSelector((state) => state.counter.value);
+  const count = useAppSelector((state) => state.persist.counter.value);
   const dispatch = useAppDispatch();
   const onIncrease = () => {
     dispatch(increment());
