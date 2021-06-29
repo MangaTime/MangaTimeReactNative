@@ -6,11 +6,13 @@ module.exports = {
     es2021: true,
     jest: true,
   },
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   extends: [
+    '@typescript-eslint',
     '@react-native-community',
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   parserOptions: {
     ecmaFeatures: {
