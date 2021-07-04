@@ -4,13 +4,13 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { decrement, increment } from '../../redux/Counter/counterReducer';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 
-export const Home = () => {
+export const Home: React.FC = () => {
   const count = useAppSelector((state) => state.persist.counter.value);
   const dispatch = useAppDispatch();
-  const onIncrease = () => {
+  const onIncrease = (): void => {
     dispatch(increment());
   };
-  const onDecrease = () => {
+  const onDecrease = (): void => {
     dispatch(decrement());
   };
   return (
