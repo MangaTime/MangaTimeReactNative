@@ -6,13 +6,14 @@ import { MangaList } from '../../Components/MangaList';
 import { MangaDetail } from '../../Components/MangaDetail';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 import { AuthForm } from '../../Components/AuthForm';
-
+import { FollowingList } from '../../Components/FollowingList';
 export const Home = () => {
   const dispatch = useAppDispatch();
 
   return (
     <SafeAreaView style={styles.container}>
       <AuthForm />
+      <FollowingList />
       <MangaList />
       <MangaDetail />
     </SafeAreaView>
