@@ -69,8 +69,8 @@ export const mangaSlice = createSlice({
         builder.addCase(fetchMangaDetail.fulfilled, (state, action) => {
             // Add user to the state array
             console.log(action.payload)
-            let mangaDetail = action.meta.arg
-            let volumes = Object.entries(action.payload.volumes).map(([key, value]) => {
+            const mangaDetail = action.meta.arg
+            const volumes = Object.entries(action.payload.volumes).map(([key, value]) => {
                 return {
                     name: key,
                     chapters: Object.entries((value as any).chapters).map(([ckey, cvalue]) => {
