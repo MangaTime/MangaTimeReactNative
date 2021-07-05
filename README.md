@@ -49,3 +49,9 @@ Contains all Views
 •App/Views/Home/Components/ComponentA //Component that is used only by this view
 •App/Views/Home/Components/ComponentB //If this component is shared by 2+ Views, consider moving it
 ```
+
+## Convention
+
+Folder: Capital
+
+File: camelCase
