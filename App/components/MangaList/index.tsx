@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 
 import { fetchUpdatedManga, fetchMangaDetail, Manga } from '../../redux/Manga/mangaReducer'
 export const MangaList = () => {
-  // const count = useAppSelector((state) => state.persist.counter.value);
   const recentlyUpdatedManga = useAppSelector((state) => state.mangaReducer.recentlyUpdatedManga)
   const dispatch = useAppDispatch();
   const updateMangaList = () => {
