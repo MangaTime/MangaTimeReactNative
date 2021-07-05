@@ -51,7 +51,6 @@ export const userSlice = createSlice({
     });
 
     builder.addCase(logoutThunk.fulfilled, (s, action) => {
-      // Add user to the state array
       const state = s;
       console.log(action.payload);
       if (action.payload.result == 'ok') {
@@ -60,6 +59,14 @@ export const userSlice = createSlice({
         state.refreshToken = undefined;
         state.loggedIn = false;
       }
+    });
+
+    builder.addCase(logoutThunk.rejected, (s, action) => {
+      const state = s;
+      state.username = undefined;
+      state.sessionToken = undefined;
+      state.refreshToken = undefined;
+      state.loggedIn = false;
     });
   },
 });
