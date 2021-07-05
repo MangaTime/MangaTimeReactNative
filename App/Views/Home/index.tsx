@@ -1,17 +1,16 @@
 import React from 'react';
 import { Button, SafeAreaView, StyleSheet, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Cards } from '../../components/Cards';
 import { decrement, increment } from '../../redux/Counter/counterReducer';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
-export const Home = () => {
+
+export const Home: React.FC = () => {
   const count = useAppSelector((state) => state.persist.counter.value);
   const dispatch = useAppDispatch();
-  const onIncrease = () => {
+  const onIncrease = (): void => {
     dispatch(increment());
   };
-
-  const onDecrease = () => {
+  const onDecrease = (): void => {
     dispatch(decrement());
   };
   return (
@@ -19,8 +18,7 @@ export const Home = () => {
       <Text>{count}</Text>
       <Button onPress={onIncrease} title="+" />
       <Button onPress={onDecrease} title="-" />
-      <Icon size={20} name="glass"></Icon>
-      <Cards />
+      <Icon size={20} name="glass" />
     </SafeAreaView>
   );
 };
