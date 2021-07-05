@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistCombineReducers } from 'redux-persist';
 import counterReducer from './Counter/counterReducer';
+import userReducer from './User/userReducer';
 import mangaReducer from './Manga/mangaReducer';
 
 const persistConfig = {
@@ -8,7 +9,7 @@ const persistConfig = {
   storage: AsyncStorage,
 };
 
-const persistReducers = { counter: counterReducer };
+const persistReducers = { counter: counterReducer, user: userReducer };
 const persist = persistCombineReducers(persistConfig, persistReducers);
 const reducers = {
   persist,
