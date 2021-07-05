@@ -5,7 +5,6 @@ import ReduxThunk from 'redux-thunk';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 
 export const MangaDetail = () => {
-    // const count = useAppSelector((state) => state.persist.counter.value);
     const mangaDetail = useAppSelector((state) => state.mangaReducer.mangaDetail)
     const dispatch = useAppDispatch();
     if (mangaDetail)
