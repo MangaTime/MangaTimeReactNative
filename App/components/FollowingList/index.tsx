@@ -13,28 +13,28 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 
 import {
-  fetchUpdatedManga,
+  fetchFollowingManga,
   fetchMangaDetail,
   Manga,
 } from '../../redux/Manga/mangaReducer';
 
-export const MangaList = () => {
-  const recentlyUpdatedManga = useAppSelector(
-    (state) => state.mangaReducer.recentlyUpdatedManga,
+export const FollowingList = () => {
+  const followingManga = useAppSelector(
+    (state) => state.mangaReducer.followingManga,
   );
   const dispatch = useAppDispatch();
-  const updateMangaList = () => {
-    dispatch(fetchUpdatedManga());
+  const updateFollowingList = () => {
+    dispatch(fetchFollowingManga());
   };
   const getMangaDetail = (manga: Manga) => {
     dispatch(fetchMangaDetail(manga));
   };
   return (
     <SafeAreaView style={styles.container}>
-      <Button onPress={updateMangaList} title="Update" />
+      <Button onPress={updateFollowingList} title="Update" />
       <FlatList
         style={styles.mangaList}
-        data={recentlyUpdatedManga}
+        data={followingManga}
         keyExtractor={(item, index) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity

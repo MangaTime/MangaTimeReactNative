@@ -13,6 +13,8 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
+import client from '../Services/baseClient';
+import interceptorInit from '../Services/interceptorInit';
 import reducers from './reducers';
 
 export const store = configureStore({
@@ -23,6 +25,8 @@ export const store = configureStore({
     },
   }),
 });
+
+interceptorInit(client, store);
 
 export const persistor = persistStore(store);
 
