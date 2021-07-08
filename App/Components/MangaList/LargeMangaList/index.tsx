@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
+
 import {
   FlatList,
-  Button,
   SafeAreaView,
   View,
   Image,
@@ -9,38 +9,30 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 
-import {
-  fetchFollowingManga,
-  fetchMangaDetail,
-  Manga,
-} from '../../redux/Manga/mangaReducer';
+import { Manga } from '../../../redux/Manga/mangaReducer';
 
-export const FollowingList = () => {
-  const followingManga = useAppSelector(
-    (state) => state.mangaReducer.followingManga,
-  );
-  const dispatch = useAppDispatch();
-  const updateFollowingList = () => {
-    dispatch(fetchFollowingManga());
-  };
-  const getMangaDetail = (manga: Manga) => {
-    dispatch(fetchMangaDetail(manga));
-  };
+interface MangaListProps {
+  mangaList: Manga[];
+  itemCallback: (arg: Manga) => void;
+}
+export const LargeMangaList = ({
+  mangaList,
+  itemCallback,
+}: MangaListProps): ReactElement => {
   return (
     <SafeAreaView style={styles.container}>
-      <Button onPress={updateFollowingList} title="Update" />
+      <Text>LARGE</Text>
+
       <FlatList
         style={styles.mangaList}
-        data={followingManga}
-        keyExtractor={(item, index) => item.id}
+        data={mangaList}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
-              getMangaDetail(item);
+              itemCallback(item);
             }}>
             <View style={styles.item}>
               <Image
@@ -63,7 +55,6 @@ const styles = StyleSheet.create({
   container: { width: '100%' },
   mangaList: {
     borderWidth: 1,
-    borderColor: 'black',
   },
   item: {
     flexDirection: 'row',
