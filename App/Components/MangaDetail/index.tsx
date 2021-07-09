@@ -18,14 +18,16 @@ export const MangaDetail: React.FC = () => {
         <Text style={styles.mangaName}>{mangaDetail.name}</Text>
         <FlatList
           data={mangaDetail.volumes}
-          keyExtractor={(item) => item.name}
-          renderItem={({ item }) => (
+          keyExtractor={(vol) => vol.name}
+          renderItem={(vol) => (
             <View>
-              <Text>Volume {item.name}</Text>
+              <Text>Volume {vol.item.name}</Text>
               <FlatList
-                data={item.chapters}
-                keyExtractor={(item, index) => item.name}
-                renderItem={({ item }) => <Text>Chapter {item.name}</Text>}
+                data={vol.item.chapters}
+                keyExtractor={(chapter) => chapter.name}
+                renderItem={(chapter) => (
+                  <Text>Chapter {chapter.item.name}</Text>
+                )}
               />
             </View>
           )}
