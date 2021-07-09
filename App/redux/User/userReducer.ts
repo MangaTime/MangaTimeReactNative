@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { login, logout } from '../../Services/userService';
+import { login, logout, refreshToken } from '../../Services/userService';
 
 export interface UserState {
   loggedIn: boolean;
@@ -30,10 +30,30 @@ export const logoutThunk = createAsyncThunk(
   },
 );
 
+export const refreshThunk = createAsyncThunk(
+  'user/refresh',
+  async ({ token }: { token: string }, thunkAPI) => {
+    const response = await refreshToken(token);
+    return response;
+  },
+);
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    updateToken: (
+      state,
+      action: PayloadAction<{ session?: string; refresh?: string }>,
+    ): any => {
+      state.refreshToken = action.payload.refresh;
+      state.sessionToken = action.payload.session;
+      if (!action.payload.session && !action.payload.refresh) {
+        state.loggedIn = false;
+        state.username = undefined;
+      }
+    },
+  },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(loginThunk.fulfilled, (s, action) => {
@@ -47,6 +67,14 @@ export const userSlice = createSlice({
         state.loggedIn = true;
       } else {
         state.loggedIn = false;
+      }
+    });
+
+    builder.addCase(refreshThunk.fulfilled, (s, action) => {
+      const state = s;
+      if (action.payload.result == 'ok') {
+        state.sessionToken = action.payload.token.session;
+        state.refreshToken = action.payload.token.refresh;
       }
     });
 
@@ -71,6 +99,6 @@ export const userSlice = createSlice({
   },
 });
 
-// export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { updateToken } = userSlice.actions;
 
 export default userSlice.reducer;

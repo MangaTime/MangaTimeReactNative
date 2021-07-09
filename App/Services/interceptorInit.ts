@@ -1,5 +1,8 @@
+import { useAppDispatch } from '../redux/Hooks';
+import { refreshThunk, updateToken } from '../redux/User/userReducer';
+
 export default (client: any, store: any) => {
-  const onFulfilledRequest = (originalConfig: any): any => {
+  const addAuthHeader = (originalConfig: any): any => {
     let config = { ...originalConfig };
     const { sessionToken } = store.getState().persist.user;
     console.log(sessionToken);
@@ -15,7 +18,34 @@ export default (client: any, store: any) => {
     }
     return config;
   };
-  const onRejectedResponse = (error: any): any => {
+  const refreshAccessToken = async (): Promise<any> => {
+    const { refreshToken } = store.getState().persist.user;
+    return client
+      .post('/auth/refresh', {
+        token: refreshToken,
+      })
+      .then((response: any) => {
+        store.dispatch(
+          updateToken({
+            session: response.token.session,
+            refresh: response.token.refresh,
+          }),
+        );
+      })
+      .catch(function () {
+        store.dispatch(updateToken({}));
+      });
+  };
+  const onFulfilledRequest = addAuthHeader;
+  const onRejectedResponse = async (error: any): any => {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      await refreshAccessToken();
+
+      return client(addAuthHeader(originalRequest));
+    }
+    return Promise.reject(error);
     throw error;
   };
   const onResolvedResponse = (response: any) => response.data;

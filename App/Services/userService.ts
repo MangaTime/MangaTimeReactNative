@@ -11,3 +11,9 @@ export const login = async (username: string, password: string) => {
 export const logout = async () => {
   return client.post('/auth/logout');
 };
+
+export const refreshToken = async (token: string) => {
+  return client.post('/auth/refresh', {
+    token,
+  });
+};
