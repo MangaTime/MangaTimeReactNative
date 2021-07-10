@@ -1,5 +1,6 @@
 import React from 'react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Navigator } from './App/Navigator';
@@ -45,7 +46,9 @@ const App = () => {
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <PaperProvider theme={theme}>
-          <Navigator />
+          <SafeAreaProvider>
+            <Navigator />
+          </SafeAreaProvider>
         </PaperProvider>
       </PersistGate>
     </Provider>
