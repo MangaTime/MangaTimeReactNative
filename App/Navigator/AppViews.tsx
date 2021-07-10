@@ -1,3 +1,4 @@
 const HOME = 'Home';
 const SETTINGS = 'Settings';
-export default { HOME, SETTINGS };
+const BROWSE = 'Browse';
+export default { HOME, SETTINGS, BROWSE };
