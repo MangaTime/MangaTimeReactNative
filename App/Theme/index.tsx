@@ -20,7 +20,7 @@ const Black = {
 const White = {
   ...PaperDefaultTheme,
   ...NavigationDefaultTheme,
-  dark: true,
+  dark: false,
   colors: {
     ...PaperDefaultTheme.colors,
     ...NavigationDefaultTheme.colors,
@@ -34,7 +34,7 @@ const White = {
 };
 
 export const CombinedDefaultTheme = {
-  ...Black,
+  ...White,
 };
 
 // Because navigation is a bitch to theme
