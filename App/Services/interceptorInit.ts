@@ -5,7 +5,6 @@ export default (client: any, store: any) => {
   const addAuthHeader = (originalConfig: any): any => {
     let config = { ...originalConfig };
     const { sessionToken } = store.getState().persist.user;
-    console.log(sessionToken);
     if (sessionToken) {
       const authHeader = { Authorization: `Bearer ${sessionToken}` };
       config = {

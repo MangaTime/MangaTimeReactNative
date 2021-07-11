@@ -1,54 +1,28 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  getFollowingManga,
-  getMangaDetail,
-  getUpdatedManga,
-} from '../../Services/mangaService';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getMangaDetail, getUpdatedManga } from '../../Services/mangaService';
+import { Chapter, Manga, Volume } from './interfaces';
 
-export interface Chapter {
-  name: string;
-}
-export interface Volume {
-  name: string;
-  chapters?: Chapter[];
-}
-export interface Manga {
-  id: string;
-  name: string;
-  description: string;
-  cover_art: string;
-  volumes?: Volume[];
-}
 export interface MangaState {
-  recentlyUpdatedManga: Manga[];
-  recentlyAddedManga: Manga[];
-  followingManga: Manga[];
+  recentlyUpdatedManga?: Manga[];
+  recentlyAddedManga?: Manga[];
   mangaDetail?: Manga;
 }
 const initialState: MangaState = {
   recentlyUpdatedManga: [],
   recentlyAddedManga: [],
-  followingManga: [],
 };
 
 export const fetchUpdatedManga = createAsyncThunk(
   'manga/fetchUpdatedManga',
-  async (arg, thunkAPI) => {
+  async () => {
     return getUpdatedManga();
   },
 );
 
 export const fetchMangaDetail = createAsyncThunk(
   'manga/fetchMangaDetail',
-  async (manga: Manga, thunkAPI) => {
+  async (manga: Manga) => {
     return getMangaDetail(manga.id);
-  },
-);
-
-export const fetchFollowingManga = createAsyncThunk(
-  'manga/fetchFollowingManga',
-  async (arg, thunkAPI) => {
-    return getFollowingManga();
   },
 );
 
@@ -66,19 +40,16 @@ export const mangaSlice = createSlice({
     builder.addCase(fetchUpdatedManga.fulfilled, (s, action) => {
       // Add user to the state array
       const state = s;
-      state.recentlyUpdatedManga = (action.payload.results as any[]).map(
-        (e) => {
-          const item = {
-            id: e.data.id,
-            name: e.data.attributes.title.en, // get only english title and description for now
-            description: e.data.attributes.description.en,
-            cover_art: (e.relationships as any[]).find(
-              (e) => e.type == 'cover_art',
-            )?.attributes?.fileName,
-          };
-          return item;
-        },
-      );
+      state.recentlyUpdatedManga = action.payload.results?.map((e) => {
+        const item = {
+          id: e.data?.id,
+          name: e.data?.attributes?.title?.en, // get only english title and description for now
+          description: e.data?.attributes?.description?.en,
+          cover_art: e.relationships?.find((e1) => e1.type === 'cover_art')
+            ?.attributes?.fileName,
+        };
+        return item as Manga;
+      });
     });
 
     builder.addCase(fetchMangaDetail.fulfilled, (s, action) => {
@@ -100,23 +71,6 @@ export const mangaSlice = createSlice({
         },
       );
       state.mangaDetail = { ...mangaDetail, volumes };
-    });
-
-    // TODO: move this parser code to a separate helper function
-    builder.addCase(fetchFollowingManga.fulfilled, (s, action) => {
-      // Add user to the state array
-      const state = s;
-      state.followingManga = (action.payload.results as any[]).map((e) => {
-        const item = {
-          id: e.data.id,
-          name: e.data.attributes.title.en, // get only english title and description for now
-          description: e.data.attributes.description.en,
-          cover_art: (e.relationships as any[]).find(
-            (e) => e.type == 'cover_art',
-          )?.attributes?.fileName,
-        };
-        return item;
-      });
     });
   },
 });

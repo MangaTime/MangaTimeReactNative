@@ -12,6 +12,7 @@ import { AuthForm } from '../../Components/AuthForm';
 
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 import {
+  fetchFollowingManga,
   fetchMangaDetail,
   fetchUpdatedManga,
   Manga,
@@ -31,6 +32,7 @@ export const Home: React.FC = () => {
   );
   const updateMangaList = () => {
     dispatch(fetchUpdatedManga());
+    dispatch(fetchFollowingManga());
   };
   const getMangaDetail = (manga: Manga) => {
     dispatch(fetchMangaDetail(manga));
