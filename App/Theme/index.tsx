@@ -42,3 +42,5 @@ export const CombinedDefaultThemeNavigation = {
   ...CombinedDefaultTheme,
   dark: false,
 };
+
+export const AppTheme = { Black, White };
