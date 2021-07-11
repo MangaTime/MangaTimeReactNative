@@ -2,10 +2,14 @@ import React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { Appbar, Avatar, Button, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAppDispatch } from '../../redux/Hooks';
+import { changeTheme } from '../../redux/Theme/themeReducer';
+import { AppTheme } from '../../Theme';
 
 export const Settings = () => {
   const { colors, dark } = useTheme();
   const insets = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
   return (
     <>
       <View
@@ -32,6 +36,16 @@ export const Settings = () => {
           Login
         </Button>
       </Appbar>
+      <Button
+        mode="contained"
+        onPress={() => dispatch(changeTheme(AppTheme.Black))}>
+        Black
+      </Button>
+      <Button
+        mode="contained"
+        onPress={() => dispatch(changeTheme(AppTheme.White))}>
+        White
+      </Button>
     </>
   );
 };
