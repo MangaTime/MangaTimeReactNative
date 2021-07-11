@@ -2,15 +2,17 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { CombinedDefaultThemeNavigation } from '../Theme';
+import { useAppSelector } from '../redux/Hooks';
 import { Home } from '../Views/Home';
 import { Settings } from '../Views/Settings';
 import AppViews from './AppViews';
 
 const Tab = createMaterialBottomTabNavigator();
 export const Navigator = () => {
+  const { theme } = useAppSelector((state) => state.persist.theme);
+  const navTheme = { ...theme, dark: false };
   return (
-    <NavigationContainer theme={CombinedDefaultThemeNavigation}>
+    <NavigationContainer theme={navTheme}>
       <Tab.Navigator shifting>
         <Tab.Screen
           name={AppViews.HOME}
