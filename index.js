@@ -8,9 +8,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import App from './App';
 import { name as appName } from './app.json';
 import { persistor, store } from './App/redux/store';
-
 import BackgroundFetch from 'react-native-background-fetch';
-import { store } from './App/redux/store';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification, { Importance } from 'react-native-push-notification';
 import {
