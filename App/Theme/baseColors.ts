@@ -24,4 +24,9 @@ export const baseColors = {
     light: '#67DAFF',
     dark: '#007AC1',
   },
+  yellow: {
+    normal: '#FDD835',
+    light: '#FFFF6B',
+    dark: '#C6A700',
+  },
 };

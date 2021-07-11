@@ -82,7 +82,23 @@ const Blue = {
   },
 };
 
-export const AppTheme = { Black, White, Pink, Red, Blue };
+const Yellow = {
+  ...PaperDefaultTheme,
+  ...NavigationDefaultTheme,
+  dark: false,
+  colors: {
+    ...PaperDefaultTheme.colors,
+    ...NavigationDefaultTheme.colors,
+    ...PaperDefaultTheme.colors,
+    primary: baseColors.yellow.light,
+    accent: baseColors.yellow.dark,
+    background: baseColors.yellow.normal,
+    text: '#000000',
+    card: baseColors.yellow.light,
+  },
+};
+
+export const AppTheme = { Black, White, Pink, Red, Blue, Yellow };
 
 export const ThemeName = {
   Black: 'black',
@@ -90,4 +106,5 @@ export const ThemeName = {
   Pink: 'pink',
   Red: 'red',
   Blue: 'blue',
+  Yellow: 'yellow',
 };
