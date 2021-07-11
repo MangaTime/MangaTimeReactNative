@@ -2,6 +2,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAppSelector } from '../redux/Hooks';
+import React, { useEffect } from 'react';
 import { Home } from '../Views/Home';
 import { Settings } from '../Views/Settings';
 import AppViews from './AppViews';

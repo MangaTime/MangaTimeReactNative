@@ -59,7 +59,6 @@ export const userSlice = createSlice({
     builder.addCase(loginThunk.fulfilled, (s, action) => {
       // Add user to the state array
       const state = s;
-      console.log(action.payload);
       if (action.payload.result == 'ok') {
         state.username = action.meta.arg.username;
         state.sessionToken = action.payload.token.session;
@@ -80,7 +79,6 @@ export const userSlice = createSlice({
 
     builder.addCase(logoutThunk.fulfilled, (s, action) => {
       const state = s;
-      console.log(action.payload);
       if (action.payload.result == 'ok') {
         state.username = undefined;
         state.sessionToken = undefined;
