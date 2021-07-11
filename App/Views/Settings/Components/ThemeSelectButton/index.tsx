@@ -39,6 +39,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 16,
+    marginBottom: 16,
   },
   themeButton: {
     width: 40,
