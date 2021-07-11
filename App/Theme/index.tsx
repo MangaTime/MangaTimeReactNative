@@ -66,11 +66,28 @@ const Red = {
   },
 };
 
-export const AppTheme = { Black, White, Pink, Red };
+const Blue = {
+  ...PaperDefaultTheme,
+  ...NavigationDefaultTheme,
+  dark: false,
+  colors: {
+    ...PaperDefaultTheme.colors,
+    ...NavigationDefaultTheme.colors,
+    ...PaperDefaultTheme.colors,
+    primary: baseColors.blue.light,
+    accent: baseColors.blue.dark,
+    background: baseColors.blue.normal,
+    text: '#000000',
+    card: baseColors.blue.light,
+  },
+};
+
+export const AppTheme = { Black, White, Pink, Red, Blue };
 
 export const ThemeName = {
   Black: 'black',
   White: 'white',
   Pink: 'pink',
   Red: 'red',
+  Blue: 'blue',
 };

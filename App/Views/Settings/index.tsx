@@ -99,6 +99,19 @@ export const Settings = () => {
           }
           isSelected={themeName === ThemeName.Red}
         />
+        <ThemeSelectButton
+          color={baseColors.blue.normal}
+          selectedColor={baseColors.blue.dark}
+          onPress={() =>
+            dispatch(
+              changeTheme({
+                theme: AppTheme.Blue,
+                themeName: ThemeName.Blue,
+              }),
+            )
+          }
+          isSelected={themeName === ThemeName.Blue}
+        />
       </View>
     </>
   );

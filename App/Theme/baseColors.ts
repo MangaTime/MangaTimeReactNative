@@ -19,4 +19,9 @@ export const baseColors = {
     light: '#F05545',
     dark: '#7F0000',
   },
+  blue: {
+    normal: '#03A9F4',
+    light: '#67DAFF',
+    dark: '#007AC1',
+  },
 };
