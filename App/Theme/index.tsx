@@ -1,5 +1,6 @@
 import { DefaultTheme as NavigationDefaultTheme } from '@react-navigation/native';
 import { DefaultTheme as PaperDefaultTheme } from 'react-native-paper';
+import { baseColors } from './baseColors';
 
 const Black = {
   ...PaperDefaultTheme,
@@ -9,11 +10,11 @@ const Black = {
     ...PaperDefaultTheme.colors,
     ...NavigationDefaultTheme.colors,
     ...PaperDefaultTheme.colors,
-    primary: '#212121', // Normal variant
-    accent: '#000000', // Dark variant
-    background: '#484848', // Light variant
+    primary: baseColors.black.light, // Light variant
+    accent: baseColors.black.dark, // Dark variant
+    background: baseColors.black.normal, // Normal variant
     text: '#ffffff',
-    card: '#212121', // Normal variant
+    card: baseColors.black.light, // Light variant
   },
 };
 
@@ -25,11 +26,11 @@ const White = {
     ...PaperDefaultTheme.colors,
     ...NavigationDefaultTheme.colors,
     ...PaperDefaultTheme.colors,
-    primary: '#BDBDBD',
-    accent: '#8D8D8D',
-    background: '#EFEFEF',
+    primary: baseColors.white.light,
+    accent: baseColors.white.dark,
+    background: baseColors.white.normal,
     text: '#000000',
-    card: '#BDBDBD',
+    card: baseColors.white.light,
   },
 };
 
@@ -44,3 +45,7 @@ export const CombinedDefaultThemeNavigation = {
 };
 
 export const AppTheme = { Black, White };
+export const ThemeName = {
+  Black: 'black',
+  White: 'white',
+};
