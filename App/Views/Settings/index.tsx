@@ -34,7 +34,10 @@ export const Settings = () => {
         <Appbar.Content title="Setting" />
         <Button
           mode="contained"
-          style={{ ...styles.button, ...{ backgroundColor: colors.accent } }}
+          style={{
+            ...styles.button,
+            ...{ backgroundColor: colors.accent },
+          }}
           onPress={() => console.log('test')}>
           Login
         </Button>
@@ -82,6 +85,19 @@ export const Settings = () => {
             )
           }
           isSelected={themeName === ThemeName.Pink}
+        />
+        <ThemeSelectButton
+          color={baseColors.red.normal}
+          selectedColor={baseColors.red.dark}
+          onPress={() =>
+            dispatch(
+              changeTheme({
+                theme: AppTheme.Red,
+                themeName: ThemeName.Red,
+              }),
+            )
+          }
+          isSelected={themeName === ThemeName.Red}
         />
       </View>
     </>
