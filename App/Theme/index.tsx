@@ -34,18 +34,26 @@ const White = {
   },
 };
 
-export const CombinedDefaultTheme = {
-  ...White,
-};
-
-// Because navigation is a bitch to theme
-export const CombinedDefaultThemeNavigation = {
-  ...CombinedDefaultTheme,
+const Pink = {
+  ...PaperDefaultTheme,
+  ...NavigationDefaultTheme,
   dark: false,
+  colors: {
+    ...PaperDefaultTheme.colors,
+    ...NavigationDefaultTheme.colors,
+    ...PaperDefaultTheme.colors,
+    primary: baseColors.pink.light,
+    accent: baseColors.pink.dark,
+    background: baseColors.pink.normal,
+    text: '#000000',
+    card: baseColors.pink.light,
+  },
 };
 
-export const AppTheme = { Black, White };
+export const AppTheme = { Black, White, Pink };
+
 export const ThemeName = {
   Black: 'black',
   White: 'white',
+  Pink: 'Pink',
 };

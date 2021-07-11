@@ -70,6 +70,19 @@ export const Settings = () => {
           }
           isSelected={themeName === ThemeName.Black}
         />
+        <ThemeSelectButton
+          color={baseColors.pink.normal}
+          selectedColor={baseColors.pink.dark}
+          onPress={() =>
+            dispatch(
+              changeTheme({
+                theme: AppTheme.Pink,
+                themeName: ThemeName.Pink,
+              }),
+            )
+          }
+          isSelected={themeName === ThemeName.Pink}
+        />
       </View>
     </>
   );
