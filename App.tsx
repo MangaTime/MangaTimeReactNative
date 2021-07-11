@@ -1,23 +1,14 @@
 import React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
 import { Navigator } from './App/Navigator';
-import { persistor, store } from './App/redux/store';
-import { CombinedDefaultTheme } from './App/Theme';
+import { useAppSelector } from './App/redux/Hooks';
 
 const App = () => {
+  const { theme } = useAppSelector((state) => state.persist.theme);
   return (
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <PaperProvider theme={CombinedDefaultTheme}>
-          <SafeAreaProvider>
-            <Navigator />
-          </SafeAreaProvider>
-        </PaperProvider>
-      </PersistGate>
-    </Provider>
+    <PaperProvider theme={theme}>
+      <Navigator />
+    </PaperProvider>
   );
 };
 
