@@ -10,10 +10,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { Manga } from '../../../redux/Manga/mangaReducer';
+import { Manga } from '../../../redux/Manga/interfaces';
 
 interface MangaListProps {
-  mangaList: Manga[];
+  mangaList: Manga[] | undefined;
   itemCallback: (arg: Manga) => void;
 }
 export const LargeMangaList = ({
