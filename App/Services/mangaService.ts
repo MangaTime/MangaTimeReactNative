@@ -1,11 +1,12 @@
 import client from './baseClient';
 import { components } from './mangadex';
 
-export const getUpdatedManga = async (): Promise<
-  components['schemas']['MangaList']
-> => {
+export const getUpdatedManga = async (
+  offset = 0,
+  limit = 100,
+): Promise<components['schemas']['MangaList']> => {
   return client.get(
-    '/manga?limit=3&order[updatedAt]=desc&includes[]=cover_art',
+    `/manga?limit=${limit}&offset=${offset}&order[updatedAt]=desc&includes[]=cover_art`,
   );
 };
 
@@ -29,7 +30,7 @@ export const getFollowingManga = async (
   );
   // get covers' full information (including filenames)
   const coversResponse = (await client.get(
-    `/cover?${coverIds?.map((e) => `ids[]=${e}`).join('&')}`,
+    `/cover?limit=${limit}&${coverIds?.map((e) => `ids[]=${e}`).join('&')}`,
   )) as components['schemas']['CoverList'];
   const coversList = coversResponse.results?.map((e) => e.data);
   // insert the covers' full information to the original result object at the correct places
