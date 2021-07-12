@@ -24,7 +24,6 @@ export const Home: React.FC = () => {
   );
   const updateMangaList = () => {
     dispatch(fetchUpdatedManga());
-    dispatch(fetchFollowingManga());
   };
   const getMangaDetail = (manga: Manga) => {
     dispatch(fetchMangaDetail(manga));

@@ -122,6 +122,9 @@ export const mangaPersistSlice = createSlice({
           cover_art: e.relationships?.find((e1) => e1.type === 'cover_art')
             ?.attributes?.fileName,
         };
+        console.log(
+          `https://uploads.mangadex.org/covers/${item.id}/${item.cover_art}.256.jpg`,
+        );
         return item as Manga;
       });
     });
