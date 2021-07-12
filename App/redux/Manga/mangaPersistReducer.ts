@@ -123,7 +123,7 @@ export const mangaPersistSlice = createSlice({
     builder.addCase(fetchFollowingManga.fulfilled, (s, action) => {
       // Add user to the state array
       const state = s;
-      state.followingManga = action.payload.results?.map((e) => {
+      const fetchedFollowingList = action.payload.results?.map((e) => {
         const item = {
           id: e.data?.id,
           name: e.data?.attributes?.title?.en, // get only english title and description for now
@@ -131,10 +131,19 @@ export const mangaPersistSlice = createSlice({
           cover_art: e.relationships?.find((e1) => e1.type === 'cover_art')
             ?.attributes?.fileName,
         };
-        console.log(
-          `https://uploads.mangadex.org/covers/${item.id}/${item.cover_art}.256.jpg`,
-        );
         return item as Manga;
+      });
+      fetchedFollowingList?.forEach((item) => {
+        if (!state.followingManga) state.followingManga = [];
+        const oldDataIndex = state.followingManga.findIndex(
+          (manga) => manga.id === item.id,
+        );
+        // add if not exists, update if exists, dont remove if removed on API (the sync-up function will be put in setting page)
+        if (oldDataIndex === -1) {
+          state.followingManga.push(item);
+        } else {
+          state.followingManga[oldDataIndex] = item;
+        }
       });
     });
   },
