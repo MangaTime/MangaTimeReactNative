@@ -3,20 +3,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAppSelector } from '../redux/Hooks';
 import React, { useEffect } from 'react';
-import { Home } from '../Views/Home';
 import { Settings } from '../Views/Settings';
 import AppViews from './AppViews';
+import { HomeStackScreen } from './HomeStack';
 
 const Tab = createMaterialBottomTabNavigator();
 export const Navigator = () => {
   const { theme } = useAppSelector((state) => state.persist.theme);
   const navTheme = { ...theme, dark: false };
+
   return (
     <NavigationContainer theme={navTheme}>
       <Tab.Navigator shifting>
         <Tab.Screen
           name={AppViews.HOME}
-          component={Home}
+          component={HomeStackScreen}
           options={{
             tabBarIcon: ({ color }) => (
               <Icon name="home" color={color} size={24} />
