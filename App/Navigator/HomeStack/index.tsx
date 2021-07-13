@@ -1,22 +1,11 @@
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useAppSelector } from '../redux/Hooks';
 import React, { useEffect } from 'react';
-import { Home } from '../Views/Home';
-import { Settings } from '../Views/Settings';
-import AppViews from './AppViews';
+import { Home } from '../../Views/Home';
 
-import { enableScreens } from 'react-native-screens';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
-import { MangaDetail } from '../Views/MangaDetail';
-import { MangaReader } from '../Views/MangaReader';
+import { MangaDetail } from '../../Views/MangaDetail';
+import { MangaReader } from '../../Views/MangaReader';
+import { HomeStackParamList } from './paramList';
 
-export type HomeStackParamList = {
-  Home: undefined;
-  MangaDetail: undefined;
-  MangaReader: undefined;
-};
 const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 
 export const HomeStackScreen = () => {
