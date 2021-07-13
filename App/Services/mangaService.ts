@@ -10,10 +10,18 @@ export const getUpdatedManga = async (
   );
 };
 
+export const getMangadexHomeBaseUrl = async (
+  chapterId: string,
+): Promise<{ baseUrl?: string }> => {
+  return client.get(`/at-home/server/${chapterId}`);
+};
+
 export const getMangaDetail = async (
   id: string,
-): Promise<components['schemas']['MangaDetail']> => {
-  return client.get(`/manga/${id}/aggregate`);
+): Promise<components['schemas']['ChapterList']> => {
+  return client.get(
+    `/manga/${id}/feed?translatedLanguage[]=en&limit=500&order[chapter]=desc`,
+  );
 };
 
 export const getFollowingManga = async (

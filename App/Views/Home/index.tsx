@@ -10,8 +10,17 @@ import {
 import { Manga } from '../../redux/Manga/interfaces';
 import { SmallMangaList } from '../../Components/MangaList/SmallMangaList';
 import { useEffect } from 'react';
+import { HomeStackParamList } from '../../Navigator/HomeStack/paramList';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { fetchFollowingManga } from '../../redux/Manga/mangaPersistReducer';
 
-export const Home = ({ navigation }) => {
+type HomeScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'Home'>;
+
+type Props = {
+  navigation: HomeScreenNavigationProp;
+};
+
+export const Home = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
   const recentlyUpdatedManga = useAppSelector(
     (state) => state.mangaReducer.recentlyUpdatedManga,
@@ -27,10 +36,11 @@ export const Home = ({ navigation }) => {
   );
   const updateMangaList = () => {
     dispatch(fetchUpdatedManga());
+    dispatch(fetchFollowingManga());
   };
   const getMangaDetail = (manga: Manga) => {
     dispatch(fetchMangaDetail(manga));
-    navigation.navigate('MangaDetail');
+    navigation.navigate('MangaDetail', { manga });
   };
   return (
     <SafeAreaView style={styles.container}>
