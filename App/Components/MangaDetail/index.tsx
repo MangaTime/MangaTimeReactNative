@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { useAppSelector } from '../../redux/Hooks';
 
-export const MangaDetail: React.FC = () => {
+export const MangaDetail = () => {
   const mangaDetail = useAppSelector((state) => state.mangaReducer.mangaDetail);
   if (mangaDetail)
     return (
