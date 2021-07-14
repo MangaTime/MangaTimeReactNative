@@ -1,29 +1,25 @@
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
-
 import {
   SafeAreaView,
   StyleSheet,
-  Button,
   Text,
   FlatList,
   Image,
+  Button,
 } from 'react-native';
-import { HomeStackParamList } from '../../Navigator/HomeStack/paramList';
+// import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack';
+// import { HomeStackParamList } from '../../Navigator/HomeStack/paramList';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
-import { fetchMangadexHomeBaseUrl } from '../../redux/Manga/mangaReducer';
+import {
+  fetchMangadexHomeBaseUrl,
+  loadChapter,
+} from '../../redux/Manga/mangaReducer';
 
-type MangaReaderScreenNavigationProp = StackNavigationProp<
-  HomeStackParamList,
-  'MangaReader'
->;
-
-type Props = {
-  navigation: MangaReaderScreenNavigationProp;
-};
+// type Props = NativeStackScreenProps<HomeStackParamList, 'MangaReader'>;
 
 export const MangaReader: React.FC = () => {
   const dispatch = useAppDispatch();
+  const mangaDetail = useAppSelector((state) => state.mangaReducer.mangaDetail);
   const chapterDetail = useAppSelector(
     (state) => state.mangaReducer.readingChapter,
   );
@@ -35,9 +31,47 @@ export const MangaReader: React.FC = () => {
     })();
   }, [chapterDetail, dispatch]);
 
+  const previousChapter = (shouldNavigate = false): boolean => {
+    if (mangaDetail && mangaDetail.chapters && chapterDetail)
+      for (let i = 0; i < mangaDetail.chapters.length; i++)
+        if (
+          parseFloat(mangaDetail.chapters[i].name) <
+          parseFloat(chapterDetail.name)
+        ) {
+          if (shouldNavigate) dispatch(loadChapter(mangaDetail.chapters[i]));
+          return true;
+        }
+
+    return false;
+  };
+
+  const nextChapter = (shouldNavigate = false): boolean => {
+    console.log('called');
+    if (mangaDetail && mangaDetail.chapters && chapterDetail)
+      for (let i = mangaDetail.chapters.length - 1; i >= 0; i--)
+        if (
+          parseFloat(mangaDetail.chapters[i].name) >
+          parseFloat(chapterDetail.name)
+        ) {
+          if (shouldNavigate) dispatch(loadChapter(mangaDetail.chapters[i]));
+          return true;
+        }
+
+    return false;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Manga reader</Text>
+      <Button
+        title="Next chapter"
+        disabled={!nextChapter()}
+        onPress={() => nextChapter(true)}
+      />
+      <Button
+        title="Previous chapter"
+        disabled={!previousChapter()}
+        onPress={() => previousChapter(true)}
+      />
       <FlatList
         data={chapterDetail?.pages}
         keyExtractor={(page) => page}

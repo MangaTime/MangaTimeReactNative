@@ -9,21 +9,14 @@ import {
   View,
   Button,
 } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 import { Chapter, Volume } from '../../redux/Manga/interfaces';
 import { HomeStackParamList } from '../../Navigator/HomeStack/paramList';
 import { ChapterList } from '../../Components/ChapterList';
 import { loadChapter } from '../../redux/Manga/mangaReducer';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack';
 
-type MangaDetailScreenNavigationProp = StackNavigationProp<
-  HomeStackParamList,
-  'MangaDetail'
->;
-
-type Props = {
-  navigation: MangaDetailScreenNavigationProp;
-};
+type Props = NativeStackScreenProps<HomeStackParamList, 'MangaDetail'>;
 
 export const MangaDetail = ({ navigation }: Props): ReactElement => {
   const dispatch = useAppDispatch();
