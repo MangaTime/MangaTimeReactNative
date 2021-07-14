@@ -10,20 +10,41 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { Button } from 'react-native-paper';
 import { Manga } from '../../../redux/Manga/interfaces';
 
-interface MangaListProps {
+export interface MangaListProps {
   mangaList: Manga[] | undefined;
   itemCallback: (arg: Manga) => void;
+  title: string;
+  btnMoreCallback?: () => void;
 }
 export const SmallMangaList = ({
   mangaList,
   itemCallback,
+  title = 'Manga List',
+  btnMoreCallback = undefined,
 }: MangaListProps): ReactElement => {
+  const BtnMore = () =>
+    btnMoreCallback ? (
+      <Button mode="outlined" color="#000" onPress={() => console.log('aaa')}>
+        More
+      </Button>
+    ) : (
+      <></>
+    );
   return (
     <SafeAreaView style={styles.container}>
-      <Text>SMALL</Text>
+      <View style={styles.header}>
+        <View style={styles.headerLeft}>
+          <Text style={styles.titleText}>{title}</Text>
+        </View>
+        <View style={styles.headerRight}>
+          <BtnMore />
+        </View>
+      </View>
       <FlatList
+        horizontal
         style={styles.mangaList}
         data={mangaList}
         keyExtractor={(item) => item.id}
@@ -51,20 +72,27 @@ export const SmallMangaList = ({
   );
 };
 const styles = StyleSheet.create({
-  container: { width: '100%', height: 100 },
+  container: { width: '100%', height: 250, marginTop: 20 },
+  titleText: { fontSize: 20, paddingBottom: 5, paddingLeft: 10 },
+  header: { flexDirection: 'row' },
+  headerLeft: { flex: 4 },
+  headerRight: { flex: 1 },
   mangaList: {
-    borderWidth: 1,
-  },
-  item: {
     flexDirection: 'row',
-    width: '100%',
+    // borderWidth: 1,
+  },
+  btnMore: {},
+  item: {
+    flexDirection: 'column',
+    height: 250,
+    width: 120,
     padding: 5,
   },
   mangaName: {
-    width: '80%',
+    height: '100%',
   },
   thumbnail: {
-    width: '20%',
-    height: 75,
+    width: '100%',
+    aspectRatio: 0.7,
   },
 });
