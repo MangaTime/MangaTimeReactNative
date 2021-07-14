@@ -12,7 +12,10 @@ import { SmallMangaList } from '../../Components/MangaList/SmallMangaList';
 import { useEffect } from 'react';
 import { HomeStackParamList } from '../../Navigator/HomeStack/paramList';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { fetchFollowingManga } from '../../redux/Manga/mangaPersistReducer';
+import {
+  fetchFollowingManga,
+  popFirstChapterFeed,
+} from '../../redux/Manga/mangaPersistReducer';
 
 type HomeScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'Home'>;
 
@@ -45,6 +48,7 @@ export const Home = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <AuthForm />
+      <Button onPress={() => dispatch(popFirstChapterFeed())} title="Pop" />
       <Button onPress={updateMangaList} title="Update" />
       <SmallMangaList
         mangaList={recentlyUpdatedManga}

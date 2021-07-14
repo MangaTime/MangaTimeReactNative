@@ -15,6 +15,8 @@ import {
   HeadlessUpdateMangaTask,
   initBackgroundFetch,
 } from './App/configBackgroundWork';
+import { navigationRef } from './App/Navigator/navigationRef';
+import { fetchMangaDetail, loadChapter } from './App/redux/Manga/mangaReducer';
 
 PushNotification.createChannel({
   channelId: 'channel-id', // (required)
@@ -28,10 +30,14 @@ PushNotification.createChannel({
 // Must be outside of any component LifeCycle (such as `componentDidMount`).
 PushNotification.configure({
   // (required) Called when a remote is received or opened, or local notification is opened
-  onNotification: function (notification) {
-    // TODO: process the notification (open the app -> show chapter in the reader)
-    console.log('NOTIFICATION:', notification);
-
+  onNotification: async function (notification) {
+    // TODO: use callback object in notification data?
+    // process the notification (open the app -> show chapter in the reader)
+    if (notification.id !== 0) {
+      store.dispatch(loadChapter(notification.data));
+      await store.dispatch(fetchMangaDetail(notification.data.manga));
+      navigationRef.current.navigate('MangaReader');
+    }
     // (required) Called when a remote is received or opened, or local notification is opened
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },

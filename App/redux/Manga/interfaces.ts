@@ -5,7 +5,7 @@ export interface Chapter {
   hash: string;
   pages?: string[];
   volume?: string;
-  manga?: string;
+  manga?: string | Manga;
   title?: string;
 }
 export interface Volume {
@@ -18,4 +18,5 @@ export interface Manga {
   description: string;
   cover_art: string;
   volumes?: Volume[];
+  chapters?: Chapter[];
 }

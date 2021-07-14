@@ -30,9 +30,9 @@ export const mangaPersistSlice = createSlice({
   name: 'manga',
   initialState,
   reducers: {
-    // incrementByAmount: (state, action: PayloadAction<number>) => {
-    //   state.value += action.payload;
-    // },
+    popFirstChapterFeed: (state) => {
+      state.followingFeed?.shift();
+    },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
@@ -40,28 +40,19 @@ export const mangaPersistSlice = createSlice({
     builder.addCase(fetchFollowingChapterFeed.fulfilled, (s, action) => {
       const state = s;
       // if state is not empty, compare fetched list with state, any extra objects from the fetched list is updated
-      const fetchedChapters = action.payload.results?.map(
-        (chapter): Chapter => {
-          const id = chapter.data?.id;
-          const updatedAt = chapter.data?.attributes?.updatedAt;
-          const name = chapter.data?.attributes?.chapter;
-          const pages = chapter.data?.attributes?.data;
-          const volume = chapter.data?.attributes?.volume;
-          const manga = chapter.relationships?.find(
-            (e) => e.type === 'manga',
-          )?.id;
-          const title = chapter.data?.attributes?.title;
-          return {
-            id,
-            updatedAt,
-            name,
-            pages,
-            volume,
-            manga,
-            title,
-          } as Chapter;
-        },
-      );
+      const fetchedChapters = action.payload.results?.map((item): Chapter => {
+        const chapter = {
+          id: item.data?.id,
+          updatedAt: item.data?.attributes?.updatedAt,
+          name: item.data?.attributes?.chapter,
+          hash: item.data?.attributes?.hash,
+          pages: item.data?.attributes?.data,
+          volume: item.data?.attributes?.volume,
+          manga: item.relationships?.find((e) => e.type === 'manga')?.id,
+          title: item.data?.attributes?.title,
+        };
+        return chapter as Chapter;
+      });
       fetchedChapters?.forEach((c) => {
         const chapter = c;
         if (typeof chapter.manga === 'string') {
@@ -81,7 +72,7 @@ export const mangaPersistSlice = createSlice({
               channelId: 'channel-id', // (required) channelId, if the channel doesn't exist, notification will not trigger.
               title: `${
                 typeof chapter.manga === 'object'
-                  ? chapter.manga.name
+                  ? (chapter.manga as Manga).name
                   : 'Unknown'
               }`,
               message: `Chapter ${chapter.name} ${
@@ -105,6 +96,7 @@ export const mangaPersistSlice = createSlice({
       // save the fetched list to the state
       // NOTE: for testing: shift 2 first chapters from the list, in order to show notification as "new chapter" for them
       if (!state.followingFeed) {
+        fetchedChapters?.shift();
         fetchedChapters?.shift();
         fetchedChapters?.shift();
       }
@@ -140,6 +132,6 @@ export const mangaPersistSlice = createSlice({
   },
 });
 
-// export const { increment, decrement, incrementByAmount } = mangaSlice.actions;
+export const { popFirstChapterFeed } = mangaPersistSlice.actions;
 
 export default mangaPersistSlice.reducer;

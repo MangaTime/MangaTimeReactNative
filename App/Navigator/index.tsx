@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 import { Settings } from '../Views/Settings';
 import AppViews from './AppViews';
 import { HomeStackScreen } from './HomeStack';
+import { navigationRef } from './navigationRef';
 
 const Tab = createMaterialBottomTabNavigator();
 export const Navigator = () => {
@@ -13,7 +14,7 @@ export const Navigator = () => {
   const navTheme = { ...theme, dark: false };
 
   return (
-    <NavigationContainer theme={navTheme}>
+    <NavigationContainer theme={navTheme} ref={navigationRef}>
       <Tab.Navigator shifting>
         <Tab.Screen
           name={AppViews.HOME}

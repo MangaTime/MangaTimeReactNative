@@ -70,8 +70,9 @@ export const mangaSlice = createSlice({
 
     builder.addCase(fetchMangaDetail.fulfilled, (s, action) => {
       const state = s;
-      const mangaDetail = action.meta.arg;
+      const mangaDetail = { ...action.meta.arg };
       const volumes: Volume[] = [];
+      const chapters: Chapter[] = [];
       action.payload.results?.forEach((item) => {
         const volumeName = item.data?.attributes?.volume ?? 'unknown';
         let volume: Volume | undefined = volumes.find(
@@ -96,8 +97,10 @@ export const mangaSlice = createSlice({
         };
         if (!volume.chapters) volume.chapters = [];
         volume.chapters.push(chapter);
+        chapters.push(chapter);
       });
       mangaDetail.volumes = volumes;
+      mangaDetail.chapters = chapters;
       state.mangaDetail = mangaDetail;
     });
   },
