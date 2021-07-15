@@ -3,32 +3,39 @@ import { StyleSheet, View } from 'react-native';
 
 import { Checkbox, useTheme } from 'react-native-paper';
 
-interface Props {
+export interface Props {
   Component: ReactElement;
   onChangeCallback: (isChecked: boolean) => void;
-  isShowingToggle: boolean | undefined;
+  isShowingToggle?: boolean;
+  toggleValue?: boolean;
 }
+
 export const TogglableView = ({
   Component,
   onChangeCallback,
   isShowingToggle = false,
+  toggleValue = false,
 }: Props): ReactElement => {
   const { colors, dark } = useTheme();
-  const [checked, setChecked] = useState(isShowingToggle);
+  const [checked, setChecked] = useState(toggleValue);
   return (
     <View
       style={{
         ...styles.container,
-        ...{ backgroundColor: colors.primary },
       }}>
-      <View style={isShowingToggle ? styles.containerLeft : {}}>
+      <View
+        style={{
+          ...styles.containerLeftBase,
+          ...(isShowingToggle ? styles.containerLeftToggle : {}),
+          ...{ backgroundColor: colors.primary },
+        }}>
         {Component}
       </View>
       <View style={isShowingToggle ? styles.containerRight : {}}>
         {isShowingToggle ? (
           <Checkbox
-            color={colors.accent}
-            uncheckedColor={colors.background}
+            color={colors.text}
+            uncheckedColor={colors.accent}
             status={checked ? 'checked' : 'unchecked'}
             onPress={() => {
               setChecked(!checked);
@@ -42,16 +49,18 @@ export const TogglableView = ({
     </View>
   );
 };
+
 const styles = StyleSheet.create({
-  button: { borderRadius: 20 },
   container: {
     flexDirection: 'row',
     marginTop: 16,
     marginHorizontal: 16,
+  },
+  containerLeftBase: {
     padding: 16,
     borderRadius: 10,
   },
-  containerLeft: {
+  containerLeftToggle: {
     width: '85%',
   },
   containerRight: {
@@ -59,5 +68,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  statusBarColor: { width: '100%' },
 });

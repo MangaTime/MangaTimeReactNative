@@ -1,6 +1,9 @@
 import client from './baseClient';
 import { components } from './mangadex';
 
+const wait = async (duration: number): Promise<void> => {
+  await new Promise((resolve) => setTimeout(resolve, duration));
+};
 export const getUpdatedManga = async (
   offset = 0,
   limit = 100,
@@ -8,6 +11,35 @@ export const getUpdatedManga = async (
   return client.get(
     `/manga?limit=${limit}&offset=${offset}&order[updatedAt]=desc&includes[]=cover_art`,
   );
+};
+
+export const getAddedManga = async (
+  offset = 0,
+  limit = 100,
+): Promise<components['schemas']['MangaList']> => {
+  return client.get(
+    `/manga?limit=${limit}&offset=${offset}&order[createdAt]=desc&includes[]=cover_art`,
+  );
+};
+
+export const getRandomManga = async (
+  limit = 5,
+): Promise<components['schemas']['MangaList']> => {
+  const result = {
+    results: [],
+  } as components['schemas']['MangaList'];
+  for (let i = 0; i < limit; i++) {
+    // eslint-disable-next-line no-await-in-loop
+    const randomManga = (await client.get(
+      `/manga/random?includes[]=cover_art`,
+    )) as components['schemas']['MangaResponse'];
+    if (result && result.results)
+      if (!result.results.find((e) => e.data?.id === randomManga.data?.id))
+        result.results.push(randomManga);
+    // eslint-disable-next-line no-await-in-loop
+    await wait(300);
+  }
+  return result;
 };
 
 export const getMangadexHomeBaseUrl = async (
@@ -82,7 +114,7 @@ export const getAllFollowingManga = async (): Promise<
     }
     offset += limit;
     // eslint-disable-next-line no-await-in-loop
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    await wait(300);
   }
 };
 

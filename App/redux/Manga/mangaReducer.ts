@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
+  getAddedManga,
   getMangaDetail,
   getMangadexHomeBaseUrl,
+  getRandomManga,
   getUpdatedManga,
 } from '../../Services/mangaService';
 import { Chapter, Manga, Volume } from './interfaces';
@@ -9,6 +11,7 @@ import { Chapter, Manga, Volume } from './interfaces';
 export interface MangaState {
   recentlyUpdatedManga?: Manga[];
   recentlyAddedManga?: Manga[];
+  randomManga?: Manga[];
   mangaDetail?: Manga;
   readingChapter?: Chapter;
   baseUrl?: string;
@@ -16,12 +19,27 @@ export interface MangaState {
 const initialState: MangaState = {
   recentlyUpdatedManga: [],
   recentlyAddedManga: [],
+  randomManga: [],
 };
 
 export const fetchUpdatedManga = createAsyncThunk(
   'manga/fetchUpdatedManga',
   async () => {
     return getUpdatedManga();
+  },
+);
+
+export const fetchAddedManga = createAsyncThunk(
+  'manga/fetchAddedManga',
+  async () => {
+    return getAddedManga();
+  },
+);
+
+export const fetchRandomManga = createAsyncThunk(
+  'manga/fetchRandomManga',
+  async () => {
+    return getRandomManga();
   },
 );
 
@@ -52,6 +70,34 @@ export const mangaSlice = createSlice({
     builder.addCase(fetchMangadexHomeBaseUrl.fulfilled, (s, action) => {
       const state = s;
       state.baseUrl = action.payload.baseUrl;
+    });
+
+    builder.addCase(fetchAddedManga.fulfilled, (s, action) => {
+      const state = s;
+      state.recentlyAddedManga = action.payload.results?.map((e) => {
+        const item = {
+          id: e.data?.id,
+          name: e.data?.attributes?.title?.en, // get only english title and description for now
+          description: e.data?.attributes?.description?.en,
+          cover_art: e.relationships?.find((e1) => e1.type === 'cover_art')
+            ?.attributes?.fileName,
+        };
+        return item as Manga;
+      });
+    });
+
+    builder.addCase(fetchRandomManga.fulfilled, (s, action) => {
+      const state = s;
+      state.randomManga = action.payload.results?.map((e) => {
+        const item = {
+          id: e.data?.id,
+          name: e.data?.attributes?.title?.en, // get only english title and description for now
+          description: e.data?.attributes?.description?.en,
+          cover_art: e.relationships?.find((e1) => e1.type === 'cover_art')
+            ?.attributes?.fileName,
+        };
+        return item as Manga;
+      });
     });
 
     builder.addCase(fetchUpdatedManga.fulfilled, (s, action) => {
