@@ -1,17 +1,7 @@
 import React from 'react';
-import {
-  FlatList,
-  Button,
-  SafeAreaView,
-  View,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { useAppDispatch, useAppSelector } from '../../../redux/Hooks';
+import { useAppDispatch } from '../../../redux/Hooks';
 import { loginThunk } from '../../../redux/User/userReducer';
 
 export const LoginForm = () => {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { useAppSelector } from '../../redux/Hooks';
 

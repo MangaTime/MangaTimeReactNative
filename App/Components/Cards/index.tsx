@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Avatar, Button, Card, Paragraph, Title } from 'react-native-paper';
 
