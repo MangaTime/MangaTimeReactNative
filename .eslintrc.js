@@ -14,6 +14,10 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
+    // These rules are depricated, React 17 does not require importing React
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
+
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': [0],
     'object-curly-newline': [0],
