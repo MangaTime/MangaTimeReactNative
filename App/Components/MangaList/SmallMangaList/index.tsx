@@ -54,6 +54,7 @@ export const SmallMangaList = ({
         style={styles.mangaList}
         data={mangaList}
         keyExtractor={(item) => item.id}
+        snapToInterval={180}
         renderItem={({ item }) => (
           <TouchableOpacity
             activeOpacity={0.6}
