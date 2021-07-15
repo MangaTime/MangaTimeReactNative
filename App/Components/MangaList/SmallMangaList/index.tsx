@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { Button, useTheme } from 'react-native-paper';
+import { Button, IconButton, useTheme } from 'react-native-paper';
 import { Manga } from '../../../redux/Manga/interfaces';
 
 export interface MangaListProps {
@@ -28,12 +28,12 @@ export const SmallMangaList = ({
   const { colors, dark } = useTheme();
   const BtnMore = () =>
     btnMoreCallback ? (
-      <Button
-        mode="outlined"
+      <IconButton
+        icon="chevron-triple-right"
         color={colors.text}
-        onPress={() => console.log('aaa')}>
-        More
-      </Button>
+        style={{ backgroundColor: colors.background }}
+        onPress={() => console.log('aaa')}
+      />
     ) : (
       <></>
     );
@@ -81,10 +81,10 @@ export const SmallMangaList = ({
 };
 const styles = StyleSheet.create({
   container: { width: '100%', height: 350 },
-  titleText: { fontSize: 20, paddingBottom: 10, paddingLeft: 10 },
-  header: { flexDirection: 'row' },
+  titleText: { fontSize: 20, paddingTop: 10 },
+  header: { flexDirection: 'row', paddingLeft: 10 },
   headerLeft: { flex: 4 },
-  headerRight: { flex: 1 },
+  headerRight: { flex: 1, alignItems: 'flex-end' },
   mangaList: {
     flexDirection: 'row',
     // borderWidth: 1,

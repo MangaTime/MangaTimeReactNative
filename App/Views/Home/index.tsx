@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { SafeAreaView, StyleSheet, View, StatusBar } from 'react-native';
 import { LargeMangaList } from '../../Components/MangaList/LargeMangaList';
 import { AuthForm } from '../../Components/AuthForm';
 import { SmallMangaList } from '../../Components/MangaList/SmallMangaList';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 import {
+  fetchAddedManga,
   fetchMangaDetail,
+  fetchRandomManga,
   fetchUpdatedManga,
 } from '../../redux/Manga/mangaReducer';
 import { Manga } from '../../redux/Manga/interfaces';
@@ -55,11 +57,16 @@ export const Home = ({ navigation }: Props) => {
   const recentlyUpdatedManga = useAppSelector(
     (state) => state.mangaReducer.recentlyUpdatedManga,
   );
-  // const recentlyAddedManga = useAppSelector(
-  //   (state) => state.mangaReducer.recentlyAddedManga,
-  // );
+  const recentlyAddedManga = useAppSelector(
+    (state) => state.mangaReducer.recentlyAddedManga,
+  );
+  const randomManga = useAppSelector((state) => state.mangaReducer.randomManga);
   useEffect(() => {
-    dispatch(fetchUpdatedManga());
+    (async () => {
+      await dispatch(fetchUpdatedManga());
+      await dispatch(fetchAddedManga());
+      await dispatch(fetchRandomManga());
+    })();
   }, []);
   const followingManga = useAppSelector(
     (state) => state.persist.manga.followingManga,
@@ -102,8 +109,16 @@ export const Home = ({ navigation }: Props) => {
         translucent
       />
       <Appbar>
-        {/*  */}
-        <Appbar.Content title="Home" />
+        <IconButton
+          disabled
+          icon={'book-open-page-variant'}
+          color={colors.primary}
+          onPress={() => toggleEditingVisibility()}
+        />
+        <Appbar.Content
+          title="Home"
+          titleStyle={{ marginLeft: 0, textAlign: 'center' }}
+        />
         <IconButton
           icon={isEditingVisibility ? 'playlist-check' : 'playlist-edit'}
           color={colors.text}
@@ -118,33 +133,82 @@ export const Home = ({ navigation }: Props) => {
       <Button onPress={() => dispatch(popFirstChapterFeed())} title="Pop" />
       <Button onPress={updateMangaList} title="Update" /> */}
       <ScrollView>
-        <TogglableView
-          Component={
-            <SmallMangaList
-              mangaList={recentlyUpdatedManga?.slice(0, 10)}
-              itemCallback={getMangaDetail}
-              title="Recently Updated"
-            />
-          }
-          onChangeCallback={(status) =>
-            dispatchUpdateVisibility({ recentlyUpdated: status })
-          }
-          isShowingToggle={isEditingVisibility}
-        />
-
-        <TogglableView
-          Component={
-            <SmallMangaList
-              mangaList={followingManga?.slice(0, 10)}
-              itemCallback={getMangaDetail}
-              title="Following"
-            />
-          }
-          onChangeCallback={(status) =>
-            dispatchUpdateVisibility({ following: status })
-          }
-          isShowingToggle={isEditingVisibility}
-        />
+        {isEditingVisibility || sectionsVisibility.recentlyUpdated ? (
+          <TogglableView
+            Component={
+              <SmallMangaList
+                mangaList={recentlyUpdatedManga?.slice(0, 10)}
+                itemCallback={getMangaDetail}
+                title="Recently Updated"
+                btnMoreCallback={() => console.log('aaa')}
+              />
+            }
+            onChangeCallback={(status) =>
+              dispatchUpdateVisibility({ recentlyUpdated: status })
+            }
+            isShowingToggle={isEditingVisibility}
+            toggleValue={sectionsVisibility.recentlyUpdated}
+          />
+        ) : (
+          <></>
+        )}
+        {isEditingVisibility || sectionsVisibility.following ? (
+          <TogglableView
+            Component={
+              <SmallMangaList
+                mangaList={followingManga?.slice(0, 10)}
+                itemCallback={getMangaDetail}
+                title="Following"
+                btnMoreCallback={() => console.log('aaa')}
+              />
+            }
+            onChangeCallback={(status) =>
+              dispatchUpdateVisibility({ following: status })
+            }
+            isShowingToggle={isEditingVisibility}
+            toggleValue={sectionsVisibility.following}
+          />
+        ) : (
+          <></>
+        )}
+        {isEditingVisibility || sectionsVisibility.recentlyAdded ? (
+          <TogglableView
+            Component={
+              <SmallMangaList
+                mangaList={recentlyAddedManga?.slice(0, 10)}
+                itemCallback={getMangaDetail}
+                title="Recently Added"
+                btnMoreCallback={() => console.log('aaa')}
+              />
+            }
+            onChangeCallback={(status) =>
+              dispatchUpdateVisibility({ recentlyAdded: status })
+            }
+            isShowingToggle={isEditingVisibility}
+            toggleValue={sectionsVisibility.recentlyAdded}
+          />
+        ) : (
+          <></>
+        )}
+        {isEditingVisibility || sectionsVisibility.random ? (
+          <TogglableView
+            Component={
+              <SmallMangaList
+                mangaList={randomManga?.slice(0, 10)}
+                itemCallback={getMangaDetail}
+                title="Random"
+                btnMoreCallback={() => console.log('aaa')}
+              />
+            }
+            onChangeCallback={(status) =>
+              dispatchUpdateVisibility({ random: status })
+            }
+            isShowingToggle={isEditingVisibility}
+            toggleValue={sectionsVisibility.random}
+          />
+        ) : (
+          <></>
+        )}
       </ScrollView>
       {/* </SafeAreaView> */}
     </>
