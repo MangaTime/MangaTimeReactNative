@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { Button } from 'react-native-paper';
+import { Button, useTheme } from 'react-native-paper';
 import { Manga } from '../../../redux/Manga/interfaces';
 
 export interface MangaListProps {
@@ -25,9 +25,13 @@ export const SmallMangaList = ({
   title = 'Manga List',
   btnMoreCallback = undefined,
 }: MangaListProps): ReactElement => {
+  const { colors, dark } = useTheme();
   const BtnMore = () =>
     btnMoreCallback ? (
-      <Button mode="outlined" color="#000" onPress={() => console.log('aaa')}>
+      <Button
+        mode="outlined"
+        color={colors.text}
+        onPress={() => console.log('aaa')}>
         More
       </Button>
     ) : (
@@ -37,7 +41,9 @@ export const SmallMangaList = ({
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Text style={styles.titleText}>{title}</Text>
+          <Text style={{ ...styles.titleText, color: colors.text }}>
+            {title}
+          </Text>
         </View>
         <View style={styles.headerRight}>
           <BtnMore />
@@ -63,7 +69,9 @@ export const SmallMangaList = ({
                   uri: `https://uploads.mangadex.org/covers/${item.id}/${item.cover_art}.256.jpg`,
                 }}
               />
-              <Text style={styles.mangaName}>{item.name}</Text>
+              <Text style={{ ...styles.mangaName, color: colors.text }}>
+                {item.name}
+              </Text>
             </View>
           </TouchableOpacity>
         )}
@@ -72,8 +80,8 @@ export const SmallMangaList = ({
   );
 };
 const styles = StyleSheet.create({
-  container: { width: '100%', height: 250, marginTop: 20 },
-  titleText: { fontSize: 20, paddingBottom: 5, paddingLeft: 10 },
+  container: { width: '100%', height: 350 },
+  titleText: { fontSize: 20, paddingBottom: 10, paddingLeft: 10 },
   header: { flexDirection: 'row' },
   headerLeft: { flex: 4 },
   headerRight: { flex: 1 },
@@ -84,8 +92,8 @@ const styles = StyleSheet.create({
   btnMore: {},
   item: {
     flexDirection: 'column',
-    height: 250,
-    width: 120,
+    height: 350,
+    width: 180,
     padding: 5,
   },
   mangaName: {

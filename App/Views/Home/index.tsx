@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, View, StatusBar } from 'react-native';
 import { LargeMangaList } from '../../Components/MangaList/LargeMangaList';
 import { AuthForm } from '../../Components/AuthForm';
@@ -11,7 +11,6 @@ import { Manga } from '../../redux/Manga/interfaces';
 import { SmallMangaList } from '../../Components/MangaList/SmallMangaList';
 import { useEffect } from 'react';
 import { HomeStackParamList } from '../../Navigator/HomeStack/paramList';
-import { StackNavigationProp } from '@react-navigation/stack';
 import {
   fetchFollowingManga,
   popFirstChapterFeed,
@@ -19,10 +18,26 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Appbar, Button, Title, useTheme } from 'react-native-paper';
+import {
+  Appbar,
+  Button,
+  Checkbox,
+  IconButton,
+  Title,
+  useTheme,
+} from 'react-native-paper';
 import { Text } from 'react-native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack';
+import { TogglableView } from '../../Components/TogglableView';
+import {
+  AllSections,
+  updateVisibility,
+} from '../../redux/AppSettings/appSettingsReducer';
 
-type HomeScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'Home'>;
+type HomeScreenNavigationProp = NativeStackNavigationProp<
+  HomeStackParamList,
+  'Home'
+>;
 
 type Props = {
   navigation: HomeScreenNavigationProp;
@@ -32,6 +47,11 @@ export const Home = ({ navigation }: Props) => {
   const { colors, dark } = useTheme();
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
+  const [isEditingVisibility, setIsEditingVisibility] = useState(false);
+  const sectionsVisibility = useAppSelector(
+    (state) => state.persist.appSetting.visibility,
+  );
+
   const recentlyUpdatedManga = useAppSelector(
     (state) => state.mangaReducer.recentlyUpdatedManga,
   );
@@ -39,13 +59,6 @@ export const Home = ({ navigation }: Props) => {
   //   (state) => state.mangaReducer.recentlyAddedManga,
   // );
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Button mode="contained" onPress={() => console.log('aaa')}>
-          aaaa
-        </Button>
-      ),
-    });
     dispatch(fetchUpdatedManga());
   }, []);
   const followingManga = useAppSelector(
@@ -58,6 +71,18 @@ export const Home = ({ navigation }: Props) => {
   const getMangaDetail = (manga: Manga) => {
     dispatch(fetchMangaDetail(manga));
     navigation.navigate('MangaDetail', { manga });
+  };
+
+  const toggleEditingVisibility = () => {
+    setIsEditingVisibility(!isEditingVisibility);
+  };
+  const dispatchUpdateVisibility = (updated: AllSections) => {
+    dispatch(
+      updateVisibility({
+        ...sectionsVisibility,
+        ...updated,
+      }),
+    );
   };
   return (
     <>
@@ -77,38 +102,49 @@ export const Home = ({ navigation }: Props) => {
         translucent
       />
       <Appbar>
-        <Icon size={40} name="account-circle" style={{ color: colors.text }} />
-        <Appbar.Content title="Setting" />
-        <Button
-          mode="contained"
+        {/*  */}
+        <Appbar.Content title="Home" />
+        <IconButton
+          icon={isEditingVisibility ? 'playlist-check' : 'playlist-edit'}
+          color={colors.text}
+          // background={colors.accent}
           style={{
-            ...styles.button,
-            ...{ backgroundColor: colors.accent },
+            ...{ backgroundColor: colors.background },
           }}
-          onPress={() => console.log('test')}>
-          Login
-        </Button>
+          onPress={() => toggleEditingVisibility()}
+        />
       </Appbar>
       {/* <AuthForm />
       <Button onPress={() => dispatch(popFirstChapterFeed())} title="Pop" />
       <Button onPress={updateMangaList} title="Update" /> */}
       <ScrollView>
-        <View
-          style={{
-            ...styles.container,
-            ...{ backgroundColor: colors.primary },
-          }}>
-          <SmallMangaList
-            mangaList={recentlyUpdatedManga?.slice(0, 10)}
-            itemCallback={getMangaDetail}
-            title="Recently Updated"
-          />
-          <SmallMangaList
-            mangaList={followingManga?.slice(0, 10)}
-            itemCallback={getMangaDetail}
-            title="Following"
-          />
-        </View>
+        <TogglableView
+          Component={
+            <SmallMangaList
+              mangaList={recentlyUpdatedManga?.slice(0, 10)}
+              itemCallback={getMangaDetail}
+              title="Recently Updated"
+            />
+          }
+          onChangeCallback={(status) =>
+            dispatchUpdateVisibility({ recentlyUpdated: status })
+          }
+          isShowingToggle={isEditingVisibility}
+        />
+
+        <TogglableView
+          Component={
+            <SmallMangaList
+              mangaList={followingManga?.slice(0, 10)}
+              itemCallback={getMangaDetail}
+              title="Following"
+            />
+          }
+          onChangeCallback={(status) =>
+            dispatchUpdateVisibility({ following: status })
+          }
+          isShowingToggle={isEditingVisibility}
+        />
       </ScrollView>
       {/* </SafeAreaView> */}
     </>
@@ -117,10 +153,19 @@ export const Home = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
   button: { borderRadius: 20 },
   container: {
+    flexDirection: 'row',
     marginTop: 16,
     marginHorizontal: 16,
     padding: 16,
     borderRadius: 10,
+  },
+  containerLeft: {
+    width: '85%',
+  },
+  containerRight: {
+    width: '15%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   statusBarColor: { width: '100%' },
 });
