@@ -1,4 +1,3 @@
-import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { Appbar, Button, Title, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
