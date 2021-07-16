@@ -2,6 +2,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAppSelector } from '../redux/Hooks';
+import { Browse } from '../Views/Browse';
 import { Home } from '../Views/Home';
 import { Settings } from '../Views/Settings';
 import AppViews from './AppViews';
@@ -24,7 +25,7 @@ export const Navigator = () => {
         />
         <Tab.Screen
           name={AppViews.BROWSE}
-          component={Settings}
+          component={Browse}
           options={{
             tabBarIcon: ({ color }) => (
               <Icon name="library-books" color={color} size={24} />
