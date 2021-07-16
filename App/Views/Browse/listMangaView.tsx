@@ -33,6 +33,9 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
   const dispatch = useAppDispatch();
   const { routeName, routeId }: BrowseStackParamList['ListMangaView'] =
     route.params;
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const onChangeSearch = (query: string): void => setSearchQuery(query);
 
   const getMangaDetail = (manga: Manga): void => {
     dispatch(fetchMangaDetail(manga));
@@ -123,9 +126,7 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
       ) ? (
         <Text>Route ID invalid</Text>
       ) : (
-        <>
-          <LargeMangaList mangaList={data} itemCallback={getMangaDetail} />
-        </>
+        <LargeMangaList mangaList={data} itemCallback={getMangaDetail} />
       )}
     </>
   );
