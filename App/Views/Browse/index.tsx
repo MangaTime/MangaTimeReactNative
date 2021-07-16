@@ -9,13 +9,25 @@ import {
 import { FlatList } from 'react-native-gesture-handler';
 import { Appbar, IconButton, Searchbar, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
+import { BrowseStackParamList } from '../../Navigator/BrowseStack/paramList';
 
-export const Browse = (): ReactElement => {
+type BrowseScreenNavigationProp = NativeStackNavigationProp<
+  BrowseStackParamList,
+  'ListMangaView'
+>;
+
+// type BrowseScreenRouteProp = RouteProp<BrowseStackParamList, 'ListMangaView'>;
+
+type Props = {
+  // route: BrowseScreenRouteProp;
+  navigation: BrowseScreenNavigationProp;
+};
+
+export const Browse = ({ navigation }: Props): ReactElement => {
   const { colors, dark } = useTheme();
   const insets = useSafeAreaInsets();
-  const dispatch = useAppDispatch();
   const [searchQuery, setSearchQuery] = useState('');
 
   const onChangeSearch = (query: string): void => setSearchQuery(query);
@@ -30,25 +42,45 @@ export const Browse = (): ReactElement => {
       title: 'Recently Updated',
       key: 'recentlyUpdated',
       icon: 'history',
-      callback: () => console.log('aaa'),
+      callback: () => {
+        navigation.navigate('ListMangaView', {
+          routeName: 'Recently Updated',
+          routeId: 'recentlyUpdated',
+        });
+      },
     },
     {
       title: 'Following',
       key: 'following',
       icon: 'favorite-border',
-      callback: () => console.log('aaa'),
+      callback: () => {
+        navigation.navigate('ListMangaView', {
+          routeName: 'Following',
+          routeId: 'following',
+        });
+      },
     },
     {
       title: 'Recently Added',
       key: 'recentlyAdded',
       icon: 'playlist-add',
-      callback: () => console.log('aaa'),
+      callback: () => {
+        navigation.navigate('ListMangaView', {
+          routeName: 'Following',
+          routeId: 'following',
+        });
+      },
     },
     {
       title: 'Random',
       key: 'random',
       icon: 'help-outline',
-      callback: () => console.log('aaa'),
+      callback: () => {
+        navigation.navigate('ListMangaView', {
+          routeName: 'Following',
+          routeId: 'following',
+        });
+      },
     },
   ];
 
@@ -68,14 +100,7 @@ export const Browse = (): ReactElement => {
         barStyle={!dark ? 'dark-content' : 'light-content'}
         translucent
       />
-      <Appbar
-        style={{ paddingHorizontal: 24, justifyContent: 'space-between' }}>
-        {/* <IconButton
-          disabled
-          icon="book-open-page-variant"
-          color={colors.primary}
-        /> */}
-        {/* <Appbar.Content style={{ borderColor: 'black', borderWidth: 1 }}> */}
+      <Appbar style={styles.appBar}>
         <Searchbar
           placeholder="Search"
           icon={() => (
@@ -86,13 +111,12 @@ export const Browse = (): ReactElement => {
           onChangeText={onChangeSearch}
           value={searchQuery}
         />
-        {/* </Appbar.Content> */}
         <IconButton
           icon="playlist-check"
           color={colors.text}
           style={{
             ...styles.buttonRightIcon,
-            ...{ backgroundColor: colors.primary, borderColor: colors.text },
+            ...{ backgroundColor: colors.primary },
           }}
           onPress={() => console.log('test')}
         />
@@ -125,7 +149,7 @@ export const Browse = (): ReactElement => {
   );
 };
 const styles = StyleSheet.create({
-  //   appBar: { marginLeft: 0, textAlign: 'center' },
+  appBar: { paddingHorizontal: 24, justifyContent: 'space-between' },
   searchBox: {
     borderRadius: 20,
     flex: 1,
