@@ -7,6 +7,7 @@ import { Settings } from '../Views/Settings';
 import AppViews from './AppViews';
 import { HomeStackScreen } from './HomeStack';
 import { navigationRef } from './navigationRef';
+import { BrowseStackScreen } from './BrowseStack';
 
 const Tab = createMaterialBottomTabNavigator();
 export const Navigator = () => {
@@ -27,7 +28,7 @@ export const Navigator = () => {
         />
         <Tab.Screen
           name={AppViews.BROWSE}
-          component={Browse}
+          component={BrowseStackScreen}
           options={{
             tabBarIcon: ({ color }) => (
               <Icon name="library-books" color={color} size={24} />
