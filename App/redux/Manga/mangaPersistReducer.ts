@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { Platform } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 import {
   getAllFollowingManga,
@@ -77,29 +78,31 @@ export const mangaPersistSlice = createSlice({
           ?.filter((e) => !oldIds.includes(e.id))
           .forEach((chapter) => {
             // send push notifications
-            PushNotification.localNotification({
-              channelId: 'channel-id', // (required) channelId, if the channel doesn't exist, notification will not trigger.
-              title: `${
-                typeof chapter.manga === 'object'
-                  ? chapter.manga.name
-                  : 'Unknown'
-              }`,
-              message: `Chapter ${chapter.name} ${
-                chapter.title ? `- ${chapter.title}` : ''
-              }`, // (required)
-              subText: 'New chapter',
-              group: 'new-manga', // (optional) add group to message
-              userInfo: chapter,
-            });
+            if (Platform.OS === 'android') {
+              PushNotification.localNotification({
+                channelId: 'channel-id', // (required) channelId, if the channel doesn't exist, notification will not trigger.
+                title: `${
+                  typeof chapter.manga === 'object'
+                    ? chapter.manga.name
+                    : 'Unknown'
+                }`,
+                message: `Chapter ${chapter.name} ${
+                  chapter.title ? `- ${chapter.title}` : ''
+                }`, // (required)
+                subText: 'New chapter',
+                group: 'new-manga', // (optional) add group to message
+                userInfo: chapter,
+              });
 
-            PushNotification.localNotification({
-              id: 0,
-              channelId: 'channel-id', // (required) channelId, if the channel doesn't exist, notification will not trigger.
-              message: `Summary`, // (required)
-              subText: 'New chapters',
-              group: 'new-manga', // (optional) add group to message
-              groupSummary: true,
-            });
+              PushNotification.localNotification({
+                id: 0,
+                channelId: 'channel-id', // (required) channelId, if the channel doesn't exist, notification will not trigger.
+                message: `Summary`, // (required)
+                subText: 'New chapters',
+                group: 'new-manga', // (optional) add group to message
+                groupSummary: true,
+              });
+            }
           });
       }
       // save the fetched list to the state
