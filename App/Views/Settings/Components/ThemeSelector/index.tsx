@@ -115,6 +115,15 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingLeft: 16,
     borderRadius: 10,
+    shadowColor: baseColors.black.dark,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
   },
   themeTitleContainer: {
     flexDirection: 'row',
