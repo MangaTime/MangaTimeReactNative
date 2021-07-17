@@ -112,8 +112,6 @@ export const ThemeSelector = (): ReactElement => {
 
 const styles = StyleSheet.create({
   themeSelectContainer: {
-    marginTop: 16,
-    marginHorizontal: 16,
     paddingVertical: 16,
     paddingLeft: 16,
     borderRadius: 10,
