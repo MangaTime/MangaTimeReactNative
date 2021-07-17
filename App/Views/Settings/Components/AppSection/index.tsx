@@ -12,5 +12,5 @@ export const AppSection = (): ReactElement => {
   );
 };
 const styles = StyleSheet.create({
-  container: { margin: 16 },
+  container: { marginHorizontal: 16, marginTop: 16 },
 });
