@@ -3,6 +3,7 @@ import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { Appbar, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppSection } from './Components/AppSection';
+import { UserSection } from './Components/UserSection';
 
 export const Settings = (): ReactElement => {
   const { colors, dark } = useTheme();
@@ -29,6 +30,7 @@ export const Settings = (): ReactElement => {
       </Appbar>
       <ScrollView>
         <AppSection />
+        <UserSection />
       </ScrollView>
     </>
   );
