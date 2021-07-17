@@ -1,5 +1,6 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
+import { ReactElement } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAppSelector } from '../redux/Hooks';
 import { Browse } from '../Views/Browse';
@@ -10,19 +11,20 @@ import { navigationRef } from './navigationRef';
 import { BrowseStackScreen } from './BrowseStack';
 
 const Tab = createMaterialBottomTabNavigator();
-export const Navigator = () => {
+
+export const Navigator = (): ReactElement => {
   const { theme } = useAppSelector((state) => state.persist.theme);
   const navTheme = { ...theme, dark: false };
 
   return (
     <NavigationContainer theme={navTheme} ref={navigationRef}>
-      <Tab.Navigator shifting>
+      <Tab.Navigator shifting activeColor={theme.colors.text}>
         <Tab.Screen
           name={AppViews.HOME}
           component={HomeStackScreen}
           options={{
-            tabBarIcon: ({ color }) => (
-              <Icon name="home" color={color} size={24} />
+            tabBarIcon: () => (
+              <Icon name="home" color={theme.colors.text} size={24} />
             ),
           }}
         />
@@ -30,8 +32,8 @@ export const Navigator = () => {
           name={AppViews.BROWSE}
           component={BrowseStackScreen}
           options={{
-            tabBarIcon: ({ color }) => (
-              <Icon name="library-books" color={color} size={24} />
+            tabBarIcon: () => (
+              <Icon name="library-books" color={theme.colors.text} size={24} />
             ),
           }}
         />
@@ -39,8 +41,8 @@ export const Navigator = () => {
           name={AppViews.SETTINGS}
           component={Settings}
           options={{
-            tabBarIcon: ({ color }) => (
-              <Icon name="settings" color={color} size={24} />
+            tabBarIcon: () => (
+              <Icon name="settings" color={theme.colors.text} size={24} />
             ),
           }}
         />
