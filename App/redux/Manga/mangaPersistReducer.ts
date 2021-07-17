@@ -1,11 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Platform } from 'react-native';
-import PushNotification from 'react-native-push-notification';
+
 import {
   getAllFollowingManga,
   getFollowingChapterFeed,
 } from '../../Services/mangaService';
 import { Chapter, Manga } from './interfaces';
+
+// import PushNotification from 'react-native-push-notification';
+const PushNotification =
+  Platform.OS === 'android'
+    ? require('react-native-push-notification')
+    : undefined;
 
 export interface MangaPersistState {
   followingFeed?: Chapter[];
