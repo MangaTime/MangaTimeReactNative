@@ -1,10 +1,7 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-<<<<<<< HEAD
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAppSelector } from '../redux/Hooks';
-=======
->>>>>>> bd9c2cd (new chapter notification on android)
 import React, { useEffect } from 'react';
 import { Home } from '../Views/Home';
 import { Settings } from '../Views/Settings';
