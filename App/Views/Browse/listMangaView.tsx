@@ -33,9 +33,6 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
   const dispatch = useAppDispatch();
   const { routeName, routeId }: BrowseStackParamList['ListMangaView'] =
     route.params;
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const onChangeSearch = (query: string): void => setSearchQuery(query);
 
   const getMangaDetail = (manga: Manga): void => {
     dispatch(fetchMangaDetail(manga));
@@ -82,10 +79,10 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
 
   useEffect(() => {
     if (updateDataFunction) updateDataFunction();
-  }, [updateDataFunction]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <>
-      <Text>{routeName}</Text>
       <View
         style={[
           styles.statusBarColor,
@@ -101,24 +98,24 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
         translucent
       />
       <Appbar style={styles.appBar}>
-        <Searchbar
-          placeholder="Search"
-          icon={() => (
-            <Icon name="search" size={20} color={colors.placeholder} />
-          )}
-          inputStyle={styles.searchBoxInput}
-          style={styles.searchBox}
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-        />
+        <Text
+          style={{
+            color: colors.text,
+            fontSize: 24,
+            // textTransform: 'uppercase',
+            textAlign: 'center',
+            marginRight: 20,
+          }}>
+          {routeName}
+        </Text>
         <IconButton
-          icon="playlist-check"
+          icon="magnify"
           color={colors.text}
           style={{
             ...styles.buttonRightIcon,
             ...{ backgroundColor: colors.primary },
           }}
-          onPress={() => console.log('test')}
+          onPress={() => console.log('aaa')}
         />
       </Appbar>
       {!['recentlyUpdated', 'recentlyAdded', 'following', 'random'].includes(
@@ -126,7 +123,9 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
       ) ? (
         <Text>Route ID invalid</Text>
       ) : (
-        <LargeMangaList mangaList={data} itemCallback={getMangaDetail} />
+        <>
+          <LargeMangaList mangaList={data} itemCallback={getMangaDetail} />
+        </>
       )}
     </>
   );
