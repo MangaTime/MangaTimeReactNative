@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-
 import {
   FlatList,
   SafeAreaView,
@@ -9,8 +8,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-
-import { Button, IconButton, useTheme } from 'react-native-paper';
+import { IconButton, useTheme } from 'react-native-paper';
 import { Manga } from '../../../redux/Manga/interfaces';
 
 export interface MangaListProps {
@@ -19,6 +17,7 @@ export interface MangaListProps {
   title: string;
   btnMoreCallback?: () => void;
 }
+
 export const SmallMangaList = ({
   mangaList,
   itemCallback,
@@ -26,17 +25,6 @@ export const SmallMangaList = ({
   btnMoreCallback = undefined,
 }: MangaListProps): ReactElement => {
   const { colors, dark } = useTheme();
-  const BtnMore = () =>
-    btnMoreCallback ? (
-      <IconButton
-        icon="chevron-triple-right"
-        color={colors.text}
-        style={{ backgroundColor: colors.background }}
-        onPress={() => console.log('aaa')}
-      />
-    ) : (
-      <></>
-    );
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -46,7 +34,14 @@ export const SmallMangaList = ({
           </Text>
         </View>
         <View style={styles.headerRight}>
-          <BtnMore />
+          {btnMoreCallback && (
+            <IconButton
+              icon="chevron-triple-right"
+              color={colors.text}
+              style={{ backgroundColor: colors.background }}
+              onPress={() => console.log('aaa')}
+            />
+          )}
         </View>
       </View>
       <FlatList
@@ -88,9 +83,7 @@ const styles = StyleSheet.create({
   headerRight: { flex: 1, alignItems: 'flex-end' },
   mangaList: {
     flexDirection: 'row',
-    // borderWidth: 1,
   },
-  btnMore: {},
   item: {
     flexDirection: 'column',
     height: 350,

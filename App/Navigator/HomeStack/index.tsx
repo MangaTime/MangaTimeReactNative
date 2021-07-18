@@ -16,9 +16,6 @@ export const HomeStackScreen = () => {
       screenOptions={({ route }) => ({
         headerShown: false,
         statusBarTranslucent: true,
-        // headerTopInsetEnabled: true,
-        // headerTranslucent: false,
-        // headerCenter: () => <Text style={styles.title}>{route.name}</Text>,
       })}>
       <HomeStack.Screen name="Home" component={Home} />
       <HomeStack.Screen name="MangaDetail" component={MangaDetail} />

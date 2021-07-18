@@ -1,6 +1,5 @@
-import React, { ReactElement, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-
 import { Checkbox, useTheme } from 'react-native-paper';
 
 export interface Props {
@@ -18,6 +17,7 @@ export const TogglableView = ({
 }: Props): ReactElement => {
   const { colors, dark } = useTheme();
   const [checked, setChecked] = useState(toggleValue);
+
   return (
     <View
       style={{
@@ -26,13 +26,13 @@ export const TogglableView = ({
       <View
         style={{
           ...styles.containerLeftBase,
-          ...(isShowingToggle ? styles.containerLeftToggle : {}),
+          ...(isShowingToggle && styles.containerLeftToggle),
           ...{ backgroundColor: colors.primary },
         }}>
         {Component}
       </View>
       <View style={isShowingToggle ? styles.containerRight : {}}>
-        {isShowingToggle ? (
+        {isShowingToggle && (
           <Checkbox
             color={colors.text}
             uncheckedColor={colors.accent}
@@ -42,8 +42,6 @@ export const TogglableView = ({
               onChangeCallback(checked);
             }}
           />
-        ) : (
-          <></>
         )}
       </View>
     </View>

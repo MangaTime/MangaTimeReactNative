@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { ReactElement, useCallback, useState } from 'react';
 import { SafeAreaView, StyleSheet, View, StatusBar } from 'react-native';
 import { LargeMangaList } from '../../Components/MangaList/LargeMangaList';
 import { AuthForm } from '../../Components/AuthForm';
@@ -45,7 +45,7 @@ type Props = {
   navigation: HomeScreenNavigationProp;
 };
 
-export const Home = ({ navigation }: Props) => {
+export const Home = ({ navigation }: Props): ReactElement => {
   const { colors, dark } = useTheme();
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
@@ -122,18 +122,14 @@ export const Home = ({ navigation }: Props) => {
         <IconButton
           icon={isEditingVisibility ? 'playlist-check' : 'playlist-edit'}
           color={colors.text}
-          // background={colors.accent}
           style={{
             ...{ backgroundColor: colors.background },
           }}
           onPress={() => toggleEditingVisibility()}
         />
       </Appbar>
-      {/* <AuthForm />
-      <Button onPress={() => dispatch(popFirstChapterFeed())} title="Pop" />
-      <Button onPress={updateMangaList} title="Update" /> */}
       <ScrollView>
-        {isEditingVisibility || sectionsVisibility.recentlyUpdated ? (
+        {(isEditingVisibility || sectionsVisibility.recentlyUpdated) && (
           <TogglableView
             Component={
               <SmallMangaList
@@ -149,10 +145,8 @@ export const Home = ({ navigation }: Props) => {
             isShowingToggle={isEditingVisibility}
             toggleValue={sectionsVisibility.recentlyUpdated}
           />
-        ) : (
-          <></>
         )}
-        {isEditingVisibility || sectionsVisibility.following ? (
+        {(isEditingVisibility || sectionsVisibility.following) && (
           <TogglableView
             Component={
               <SmallMangaList
@@ -168,10 +162,8 @@ export const Home = ({ navigation }: Props) => {
             isShowingToggle={isEditingVisibility}
             toggleValue={sectionsVisibility.following}
           />
-        ) : (
-          <></>
         )}
-        {isEditingVisibility || sectionsVisibility.recentlyAdded ? (
+        {(isEditingVisibility || sectionsVisibility.recentlyAdded) && (
           <TogglableView
             Component={
               <SmallMangaList
@@ -187,10 +179,8 @@ export const Home = ({ navigation }: Props) => {
             isShowingToggle={isEditingVisibility}
             toggleValue={sectionsVisibility.recentlyAdded}
           />
-        ) : (
-          <></>
         )}
-        {isEditingVisibility || sectionsVisibility.random ? (
+        {(isEditingVisibility || sectionsVisibility.random) && (
           <TogglableView
             Component={
               <SmallMangaList
@@ -206,14 +196,12 @@ export const Home = ({ navigation }: Props) => {
             isShowingToggle={isEditingVisibility}
             toggleValue={sectionsVisibility.random}
           />
-        ) : (
-          <></>
         )}
       </ScrollView>
-      {/* </SafeAreaView> */}
     </>
   );
 };
+
 const styles = StyleSheet.create({
   button: { borderRadius: 20 },
   container: {

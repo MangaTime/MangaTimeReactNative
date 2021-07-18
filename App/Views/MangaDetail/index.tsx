@@ -1,5 +1,4 @@
-import React, { ReactElement, ReactComponentElement } from 'react';
-
+import { ReactElement, ReactComponentElement } from 'react';
 import {
   SafeAreaView,
   FlatList,
@@ -98,7 +97,6 @@ const styles = StyleSheet.create({
   },
   thumbnail: {
     width: '100%',
-    // height: 500,
     aspectRatio: 1,
   },
 });
