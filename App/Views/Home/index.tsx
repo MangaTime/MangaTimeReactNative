@@ -128,58 +128,61 @@ export const Home = ({ navigation }: Props): ReactElement => {
         />
       </Appbar>
       <ScrollView>
-        {(isEditingVisibility || sectionsVisibility.recentlyUpdated) && (
-          <TogglableView
-            Component={
-              <SmallMangaList
-                mangaList={recentlyUpdatedManga?.slice(0, 10)}
-                itemCallback={getMangaDetail}
-                title="Recently Updated"
-                btnMoreCallback={() => console.log('aaa')}
-              />
-            }
-            onChangeCallback={(status) =>
-              dispatchUpdateVisibility({ recentlyUpdated: status })
-            }
-            isShowingToggle={isEditingVisibility}
-            toggleValue={sectionsVisibility.recentlyUpdated}
-          />
-        )}
-        {(isEditingVisibility || sectionsVisibility.following) && (
-          <TogglableView
-            Component={
-              <SmallMangaList
-                mangaList={followingManga?.slice(0, 10)}
-                itemCallback={getMangaDetail}
-                title="Following"
-                btnMoreCallback={() => console.log('aaa')}
-              />
-            }
-            onChangeCallback={(status) =>
-              dispatchUpdateVisibility({ following: status })
-            }
-            isShowingToggle={isEditingVisibility}
-            toggleValue={sectionsVisibility.following}
-          />
-        )}
-        {(isEditingVisibility || sectionsVisibility.recentlyAdded) && (
-          <TogglableView
-            Component={
-              <SmallMangaList
-                mangaList={recentlyAddedManga?.slice(0, 10)}
-                itemCallback={getMangaDetail}
-                title="Recently Added"
-                btnMoreCallback={() => console.log('aaa')}
-              />
-            }
-            onChangeCallback={(status) =>
-              dispatchUpdateVisibility({ recentlyAdded: status })
-            }
-            isShowingToggle={isEditingVisibility}
-            toggleValue={sectionsVisibility.recentlyAdded}
-          />
-        )}
-        {(isEditingVisibility || sectionsVisibility.random) && (
+        {(isEditingVisibility || sectionsVisibility.recentlyUpdated) &&
+          recentlyUpdatedManga && (
+            <TogglableView
+              Component={
+                <SmallMangaList
+                  mangaList={recentlyUpdatedManga.slice(0, 10)}
+                  itemCallback={getMangaDetail}
+                  title="Recently Updated"
+                  btnMoreCallback={() => console.log('aaa')}
+                />
+              }
+              onChangeCallback={(status) =>
+                dispatchUpdateVisibility({ recentlyUpdated: status })
+              }
+              isShowingToggle={isEditingVisibility}
+              toggleValue={sectionsVisibility.recentlyUpdated}
+            />
+          )}
+        {(isEditingVisibility || sectionsVisibility.following) &&
+          followingManga && (
+            <TogglableView
+              Component={
+                <SmallMangaList
+                  mangaList={followingManga.slice(0, 10)}
+                  itemCallback={getMangaDetail}
+                  title="Following"
+                  btnMoreCallback={() => console.log('aaa')}
+                />
+              }
+              onChangeCallback={(status) =>
+                dispatchUpdateVisibility({ following: status })
+              }
+              isShowingToggle={isEditingVisibility}
+              toggleValue={sectionsVisibility.following}
+            />
+          )}
+        {(isEditingVisibility || sectionsVisibility.recentlyAdded) &&
+          recentlyAddedManga && (
+            <TogglableView
+              Component={
+                <SmallMangaList
+                  mangaList={recentlyAddedManga.slice(0, 10)}
+                  itemCallback={getMangaDetail}
+                  title="Recently Added"
+                  btnMoreCallback={() => console.log('aaa')}
+                />
+              }
+              onChangeCallback={(status) =>
+                dispatchUpdateVisibility({ recentlyAdded: status })
+              }
+              isShowingToggle={isEditingVisibility}
+              toggleValue={sectionsVisibility.recentlyAdded}
+            />
+          )}
+        {(isEditingVisibility || sectionsVisibility.random) && randomManga && (
           <TogglableView
             Component={
               <SmallMangaList

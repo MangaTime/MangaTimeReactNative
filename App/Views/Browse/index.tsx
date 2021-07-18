@@ -162,18 +162,18 @@ const styles = StyleSheet.create({
     // alignSelf: 'flex-end',
   },
   buttonList: {
-    paddingTop: 4,
+    marginTop: 16,
+    marginHorizontal: 16,
   },
   button: {
     flexDirection: 'row',
     padding: 12,
     borderRadius: 8,
-    marginHorizontal: 24,
-    marginVertical: 8,
+    marginBottom: 8,
   },
   buttonText: {
     flex: 1,
-    fontSize: 20,
+    fontSize: 18,
     marginHorizontal: 8,
   },
 });
