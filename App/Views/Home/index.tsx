@@ -1,6 +1,5 @@
 import { Button, SafeAreaView, StyleSheet } from 'react-native';
 import { AuthForm } from '../../Components/AuthForm';
-import { MangaDetail } from '../../Components/MangaDetail';
 import { LargeMangaList } from '../../Components/MangaList/LargeMangaList';
 import { SmallMangaList } from '../../Components/MangaList/SmallMangaList';
 import React from 'react';
@@ -10,7 +9,6 @@ import {
   fetchUpdatedManga,
 } from '../../redux/Manga/mangaReducer';
 import { Manga } from '../../redux/Manga/interfaces';
-import { fetchFollowingManga } from '../../redux/Manga/mangaPersistReducer';
 import { useEffect } from 'react';
 import { HomeStackParamList } from '../../Navigator/HomeStack/paramList';
 import { StackNavigationProp } from '@react-navigation/stack';
