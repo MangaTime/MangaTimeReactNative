@@ -12,9 +12,9 @@ import { IconButton, useTheme } from 'react-native-paper';
 import { Manga } from '../../../redux/Manga/interfaces';
 
 export interface MangaListProps {
-  mangaList: Manga[] | undefined;
+  mangaList: Manga[];
   itemCallback: (arg: Manga) => void;
-  title: string;
+  title?: string;
   btnMoreCallback?: () => void;
 }
 
