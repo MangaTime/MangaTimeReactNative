@@ -93,7 +93,6 @@ export const Home = ({ navigation }: Props): ReactElement => {
   };
   return (
     <>
-      {/* <SafeAreaView style={styles.container}> */}
       <View
         style={[
           styles.statusBarColor,
