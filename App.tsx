@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Navigator } from './App/Navigator';
 import { useAppSelector } from './App/redux/Hooks';

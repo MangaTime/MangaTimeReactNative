@@ -7,8 +7,9 @@ import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 import {
   fetchMangaDetail,
   fetchUpdatedManga,
-  Manga,
 } from '../../redux/Manga/mangaReducer';
+import { Manga } from '../../redux/Manga/interfaces';
+import { fetchFollowingManga } from '../../redux/Manga/mangaPersistReducer';
 
 export const Home: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -19,7 +20,7 @@ export const Home: React.FC = () => {
   //   (state) => state.mangaReducer.recentlyAddedManga,
   // );
   const followingManga = useAppSelector(
-    (state) => state.mangaReducer.followingManga,
+    (state) => state.persist.manga.followingManga,
   );
   const updateMangaList = () => {
     dispatch(fetchUpdatedManga());
@@ -35,10 +36,10 @@ export const Home: React.FC = () => {
         mangaList={recentlyUpdatedManga}
         itemCallback={getMangaDetail}
       />
-      {/* <SmallMangaList
+      <SmallMangaList
         mangaList={followingManga}
         itemCallback={getMangaDetail}
-      /> */}
+      />
       <LargeMangaList
         mangaList={recentlyUpdatedManga}
         itemCallback={getMangaDetail}
