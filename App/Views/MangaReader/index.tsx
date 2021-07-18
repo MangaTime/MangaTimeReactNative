@@ -1,23 +1,18 @@
-import React, { useEffect } from 'react';
+import { ReactElement, useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  Text,
   FlatList,
   Image,
   Button,
 } from 'react-native';
-// import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack';
-// import { HomeStackParamList } from '../../Navigator/HomeStack/paramList';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 import {
   fetchMangadexHomeBaseUrl,
   loadChapter,
 } from '../../redux/Manga/mangaReducer';
 
-// type Props = NativeStackScreenProps<HomeStackParamList, 'MangaReader'>;
-
-export const MangaReader: React.FC = () => {
+export const MangaReader = (): ReactElement => {
   const dispatch = useAppDispatch();
   const mangaDetail = useAppSelector((state) => state.mangaReducer.mangaDetail);
   const chapterDetail = useAppSelector(
@@ -46,7 +41,6 @@ export const MangaReader: React.FC = () => {
   };
 
   const nextChapter = (shouldNavigate = false): boolean => {
-    console.log('called');
     if (mangaDetail && mangaDetail.chapters && chapterDetail)
       for (let i = mangaDetail.chapters.length - 1; i >= 0; i--)
         if (

@@ -1,5 +1,4 @@
-import React, { ReactElement } from 'react';
-
+import { ReactElement } from 'react';
 import { FlatList, Text } from 'react-native';
 import { Chapter, Volume } from '../../redux/Manga/interfaces';
 
@@ -8,7 +7,7 @@ interface ChapterListProps {
   itemCallback: (arg: Chapter) => void;
 }
 
-export const ChapterList: React.FC<ChapterListProps> = ({
+export const ChapterList = ({
   volume,
   itemCallback,
 }: ChapterListProps): ReactElement => {
