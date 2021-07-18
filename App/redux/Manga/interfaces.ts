@@ -2,14 +2,15 @@ export interface Chapter {
   id: string;
   updatedAt: string;
   name: string;
+  hash: string;
   pages?: string[];
-  volume?: Volume | string;
-  manga?: Manga | string;
+  volume?: string;
+  manga?: string | Manga;
   title?: string;
 }
 export interface Volume {
   name: string;
-  chapters?: Chapter[] | string[];
+  chapters?: (Chapter | string)[];
 }
 export interface Manga {
   id: string;
@@ -17,4 +18,5 @@ export interface Manga {
   description: string;
   cover_art: string;
   volumes?: Volume[];
+  chapters?: Chapter[];
 }
