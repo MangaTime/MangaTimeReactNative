@@ -20,7 +20,7 @@ export const ThemeSelector = (): ReactElement => {
       }}>
       <View style={styles.themeTitleContainer}>
         <Icon
-          size={50}
+          size={24}
           name="color-lens"
           style={[styles.themeTitleIcon, { color: colors.text }]}
         />
