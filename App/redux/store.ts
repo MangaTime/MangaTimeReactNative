@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import {
   Action,
   configureStore,
@@ -19,11 +21,14 @@ import reducers from './reducers';
 
 export const store = configureStore({
   reducer: reducers,
-  middleware: getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-    },
-  }),
+  middleware: [
+    ...getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+    __DEV__ && require('redux-flipper').default(),
+  ],
 });
 
 interceptorInit(client, store);

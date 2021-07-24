@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { BrowseStackParamList } from '../../Navigator/BrowseStack/paramList';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 
 type BrowseScreenNavigationProp = NativeStackNavigationProp<
   BrowseStackParamList,
@@ -84,6 +85,8 @@ export const Browse = ({ navigation }: Props): ReactElement => {
     },
   ];
 
+  const [data, setData] = useState(entryList);
+
   return (
     <>
       <View
@@ -121,30 +124,38 @@ export const Browse = ({ navigation }: Props): ReactElement => {
           onPress={() => console.log('test')}
         />
       </Appbar>
-      <FlatList
-        style={styles.buttonList}
-        data={entryList}
-        keyExtractor={(item) => item.key}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={{
-              ...styles.button,
-              backgroundColor: colors.primary,
-            }}
-            onPress={item.callback}>
-            <Icon name={item.icon} size={24} color={colors.text} />
-            <Text style={{ ...styles.buttonText, color: colors.text }}>
-              {item.title}
-            </Text>
-            <Icon
-              name="chevron-right"
-              size={24}
-              color={colors.text}
-              // style={{ backgroundColor: 'blue' }}
-            />
-          </TouchableOpacity>
-        )}
-      />
+
+      <View style={{ flex: 1 }}>
+        <DraggableFlatList
+          style={styles.buttonList}
+          data={data}
+          keyExtractor={(item) => item.key}
+          onDragEnd={({ data }) => {
+            console.log(data);
+            setData(data);
+          }}
+          renderItem={({ item, drag }) => (
+            <TouchableOpacity
+              style={{
+                ...styles.button,
+                backgroundColor: colors.primary,
+              }}
+              onLongPress={drag}
+              onPress={item.callback}>
+              <Icon name={item.icon} size={24} color={colors.text} />
+              <Text style={{ ...styles.buttonText, color: colors.text }}>
+                {item.title}
+              </Text>
+              <Icon
+                name="chevron-right"
+                size={24}
+                color={colors.text}
+                // style={{ backgroundColor: 'blue' }}
+              />
+            </TouchableOpacity>
+          )}
+        />
+      </View>
     </>
   );
 };

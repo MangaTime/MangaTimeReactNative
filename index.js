@@ -9,6 +9,14 @@ import App from './App';
 import { name as appName } from './app.json';
 import { persistor, store } from './App/redux/store';
 import BackgroundFetch from 'react-native-background-fetch';
+
+import { LogBox } from 'react-native';
+
+// Ignore log notification by message:
+LogBox.ignoreLogs([
+  '*on the ref of an Animated component is no longer necessary.*',
+]);
+
 let PushNotification;
 let PushNotificationIOS;
 if (Platform.OS === 'android') {
