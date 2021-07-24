@@ -68,6 +68,7 @@ export const LoginModal = ({
             value={password}
             style={[styles.inputText, { color: colors.text }]}
             placeholderTextColor={colors.primary}
+            secureTextEntry
           />
         </View>
         <View style={styles.buttonsContainer}>
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   title: { marginBottom: 16, alignSelf: 'center' },
-  inputText: {},
+  inputText: { padding: 0, flex: 1 },
   inputIcon: { marginRight: 16 },
   cancelButton: {
     height: 56,
