@@ -53,7 +53,7 @@ const Pink = {
 const Red = {
   ...PaperDefaultTheme,
   ...NavigationDefaultTheme,
-  dark: false,
+  dark: true,
   colors: {
     ...PaperDefaultTheme.colors,
     ...NavigationDefaultTheme.colors,
