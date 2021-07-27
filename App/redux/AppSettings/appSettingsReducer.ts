@@ -1,33 +1,56 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  PayloadAction,
+  PayloadActionCreator,
+} from '@reduxjs/toolkit';
 
-export interface AllSections {
-  recentlyUpdated?: boolean;
-  following?: boolean;
-  recentlyAdded?: boolean;
-  random?: boolean;
+export interface Section {
+  key: string;
+  isVisible: boolean;
 }
 export interface AppSettingsSlice {
-  visibility: AllSections;
+  sections: Section[];
 }
+
 const initialState: AppSettingsSlice = {
-  visibility: {
-    recentlyAdded: true,
-    recentlyUpdated: true,
-    following: true,
-    random: true,
-  },
+  sections: [
+    {
+      key: 'recentlyAdded',
+      isVisible: true,
+    },
+    {
+      key: 'recentlyUpdated',
+      isVisible: true,
+    },
+    {
+      key: 'following',
+      isVisible: true,
+    },
+    {
+      key: 'random',
+      isVisible: true,
+    },
+  ],
 };
+
 export const appSettingsSlice = createSlice({
   name: 'appSetting',
   initialState,
   reducers: {
-    updateVisibility(s, action: PayloadAction<AllSections>) {
+    updateSections(s, action: PayloadAction<Section[]>) {
       const state = s;
-      state.visibility = action.payload;
+      state.sections = action.payload;
+    },
+    updateSectionVisibility(s, action: PayloadAction<Section>) {
+      const state = s;
+      state.sections = state.sections.map((e) =>
+        e.key === action.payload.key ? action.payload : e,
+      );
     },
   },
 });
 
-export const { updateVisibility } = appSettingsSlice.actions;
+export const { updateSections, updateSectionVisibility } =
+  appSettingsSlice.actions;
 
 export default appSettingsSlice.reducer;

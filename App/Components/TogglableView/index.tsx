@@ -38,8 +38,9 @@ export const TogglableView = ({
             uncheckedColor={colors.accent}
             status={checked ? 'checked' : 'unchecked'}
             onPress={() => {
-              setChecked(!checked);
-              onChangeCallback(checked);
+              const newValue = !checked;
+              setChecked(newValue);
+              onChangeCallback(newValue);
             }}
           />
         )}
@@ -57,6 +58,7 @@ const styles = StyleSheet.create({
   containerLeftBase: {
     padding: 16,
     borderRadius: 10,
+    width: '100%',
   },
   containerLeftToggle: {
     width: '85%',
