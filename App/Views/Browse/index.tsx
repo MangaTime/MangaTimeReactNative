@@ -20,100 +20,15 @@ import {
   updateSections,
   updateSectionVisibility,
 } from '../../redux/AppSettings/appSettingsReducer';
+import { RouteProp } from '@react-navigation/native';
+import { SectionList } from './sectionList';
 
-type BrowseScreenNavigationProp = NativeStackNavigationProp<
-  BrowseStackParamList,
-  'ListMangaView'
->;
-
-// type BrowseScreenRouteProp = RouteProp<BrowseStackParamList, 'ListMangaView'>;
-
-type Props = {
-  // route: BrowseScreenRouteProp;
-  navigation: BrowseScreenNavigationProp;
-};
-
-export const Browse = ({ navigation }: Props): ReactElement => {
-  const dispatch = useAppDispatch();
+export const Browse = (): ReactElement => {
   const { colors, dark } = useTheme();
   const insets = useSafeAreaInsets();
   const [searchQuery, setSearchQuery] = useState('');
-  const sections = useAppSelector((state) => state.persist.appSetting.sections);
-  const [isEditingVisibility, setIsEditingVisibility] = useState(false);
 
   const onChangeSearch = (query: string): void => setSearchQuery(query);
-
-  interface Entry extends Section {
-    title: string;
-    icon: string;
-    callback: () => void;
-  }
-  const entryList: Entry[] = [
-    {
-      title: 'Recently Updated',
-      key: 'recentlyUpdated',
-      icon: 'history',
-      isVisible: true,
-      callback: () => {
-        navigation.navigate('ListMangaView', {
-          routeName: 'Recently Updated',
-          routeId: 'recentlyUpdated',
-        });
-      },
-    },
-    {
-      title: 'Following',
-      key: 'following',
-      icon: 'favorite-border',
-      isVisible: true,
-      callback: () => {
-        navigation.navigate('ListMangaView', {
-          routeName: 'Following',
-          routeId: 'following',
-        });
-      },
-    },
-    {
-      title: 'Recently Added',
-      key: 'recentlyAdded',
-      icon: 'playlist-add',
-      isVisible: true,
-      callback: () => {
-        navigation.navigate('ListMangaView', {
-          routeName: 'Following',
-          routeId: 'following',
-        });
-      },
-    },
-    {
-      title: 'Random',
-      key: 'random',
-      icon: 'help-outline',
-      isVisible: true,
-      callback: () => {
-        navigation.navigate('ListMangaView', {
-          routeName: 'Following',
-          routeId: 'following',
-        });
-      },
-    },
-  ];
-
-  const sortEntryList = () => {
-    return sections
-      .map((e) => {
-        return { ...(entryList.find((e1) => e.key == e1.key) as Entry), ...e };
-      })
-      .filter((x): x is Entry => x != null);
-  };
-  let sortedEntryList = sortEntryList();
-  useEffect(() => {
-    sortedEntryList = sortEntryList();
-  }, [sections]);
-
-  const toggleEditingVisibility = () => {
-    setIsEditingVisibility(!isEditingVisibility);
-  };
 
   return (
     <>
@@ -142,7 +57,7 @@ export const Browse = ({ navigation }: Props): ReactElement => {
           onChangeText={onChangeSearch}
           value={searchQuery}
         />
-        <IconButton
+        {/* <IconButton
           icon={isEditingVisibility ? 'playlist-check' : 'playlist-edit'}
           color={colors.text}
           style={{
@@ -150,65 +65,10 @@ export const Browse = ({ navigation }: Props): ReactElement => {
             ...{ backgroundColor: colors.background },
           }}
           onPress={() => toggleEditingVisibility()}
-        />
+        /> */}
       </Appbar>
 
-      <View style={{ flex: 1 }}>
-        <DraggableFlatList
-          style={styles.buttonList}
-          data={sortedEntryList}
-          keyExtractor={(item) => item.key}
-          onDragEnd={({ data }) => {
-            console.log(data);
-            dispatch(
-              updateSections(
-                data.map((e) => ({ key: e.key, isVisible: e.isVisible })),
-              ),
-            );
-          }}
-          renderItem={({ item, drag }) => (
-            <TogglableView
-              Component={
-                <TouchableOpacity
-                  style={{
-                    ...styles.button,
-                    backgroundColor: colors.primary,
-                  }}
-                  onPressIn={isEditingVisibility ? drag : undefined}
-                  onPress={isEditingVisibility ? undefined : item.callback}>
-                  <Icon name={item.icon} size={24} color={colors.text} />
-                  <Text style={{ ...styles.buttonText, color: colors.text }}>
-                    {item.title}
-                  </Text>
-                  <Icon name="chevron-right" size={24} color={colors.text} />
-                </TouchableOpacity>
-              }
-              onChangeCallback={(status) =>
-                dispatch(
-                  updateSectionVisibility({ key: item.key, isVisible: status }),
-                )
-              }
-              isShowingToggle={isEditingVisibility}
-              toggleValue={item.isVisible}
-            />
-          )}
-          ListFooterComponent={
-            isEditingVisibility ? (
-              <Text
-                style={{
-                  ...{
-                    marginTop: 15,
-                    textAlign: 'center',
-                    width: '100%',
-                  },
-                  color: colors.text,
-                }}>
-                Drag and drop to reorder elements
-              </Text>
-            ) : null
-          }
-        />
-      </View>
+      <SectionList isEditingVisibility={false}></SectionList>
     </>
   );
 };

@@ -21,6 +21,7 @@ import {
   Section,
   updateSections,
 } from '../../redux/AppSettings/appSettingsReducer';
+import { SectionContainer } from '../../Components/SectionContainer';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   HomeStackParamList,
@@ -73,54 +74,42 @@ export const Home = ({ navigation }: Props): ReactElement => {
     showMore: () => void;
   }
 
+  const showMoreActionCreator = (id: string, name: string) => {
+    return () => {
+      navigation.navigate('ListMangaView', {
+        routeName: name,
+        routeId: id,
+      });
+    };
+  };
   const entryList: Entry[] = [
     {
       title: 'Recently Updated',
       key: 'recentlyUpdated',
       isVisible: true,
       dataSource: recentlyUpdatedManga,
-      showMore: () => {
-        // navigation.navigate('ListMangaView', {
-        //   routeName: 'Recently Updated',
-        //   routeId: 'recentlyUpdated',
-        // });
-      },
+      showMore: showMoreActionCreator('recentlyUpdated', 'Recently Updated'),
     },
     {
       title: 'Following',
       key: 'following',
       isVisible: true,
       dataSource: followingManga,
-      showMore: () => {
-        // navigation.navigate('ListMangaView', {
-        //   routeName: 'Following',
-        //   routeId: 'following',
-        // });
-      },
+      showMore: showMoreActionCreator('following', 'Following'),
     },
     {
       title: 'Recently Added',
       key: 'recentlyAdded',
       isVisible: true,
       dataSource: recentlyAddedManga,
-      showMore: () => {
-        // navigation.navigate('ListMangaView', {
-        //   routeName: 'Following',
-        //   routeId: 'following',
-        // });
-      },
+      showMore: showMoreActionCreator('recentlyAdded', 'Recently Added'),
     },
     {
       title: 'Random',
       key: 'random',
       isVisible: true,
       dataSource: randomManga,
-      showMore: () => {
-        // navigation.navigate('ListMangaView', {
-        //   routeName: 'Following',
-        //   routeId: 'following',
-        // });
-      },
+      showMore: showMoreActionCreator('random', 'Random'),
     },
   ];
   const sortEntryList = () => {
@@ -163,14 +152,16 @@ export const Home = ({ navigation }: Props): ReactElement => {
         renderItem={({ item }) =>
           item &&
           item.isVisible && (
-            <SmallMangaList
-              mangaList={
-                item.dataSource ? item.dataSource.slice(0, 10) : [] // data source
-              }
-              itemCallback={getMangaDetail} // item callback
-              title={item.title}
-              btnMoreCallback={item.showMore}
-            />
+            <SectionContainer>
+              <SmallMangaList
+                mangaList={
+                  item.dataSource ? item.dataSource.slice(0, 10) : [] // data source
+                }
+                itemCallback={getMangaDetail} // item callback
+                title={item.title}
+                btnMoreCallback={item.showMore}
+              />
+            </SectionContainer>
           )
         }
       />

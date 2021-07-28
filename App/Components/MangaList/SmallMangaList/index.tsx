@@ -39,7 +39,7 @@ export const SmallMangaList = ({
               icon="chevron-triple-right"
               color={colors.text}
               style={{ backgroundColor: colors.background }}
-              onPress={() => console.log('aaa')}
+              onPress={() => btnMoreCallback()}
             />
           )}
         </View>

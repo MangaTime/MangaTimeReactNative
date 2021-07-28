@@ -52,8 +52,8 @@ export const TogglableView = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginTop: 16,
-    marginHorizontal: 16,
+    // marginTop: 16,
+    marginBottom: 16,
   },
   containerLeftBase: {
     padding: 16,

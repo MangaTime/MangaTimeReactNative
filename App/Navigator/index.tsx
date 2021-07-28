@@ -3,12 +3,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { ReactElement } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAppSelector } from '../redux/Hooks';
-import { Browse } from '../Views/Browse';
-import { Settings } from '../Views/Settings';
 import AppViews from './AppViews';
 import { HomeStackScreen } from './HomeStack';
 import { navigationRef } from './navigationRef';
 import { BrowseStackScreen } from './BrowseStack';
+import { SettingsStackScreen } from './SettingsStack';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -39,7 +38,7 @@ export const Navigator = (): ReactElement => {
         />
         <Tab.Screen
           name={AppViews.SETTINGS}
-          component={Settings}
+          component={SettingsStackScreen}
           options={{
             tabBarIcon: () => (
               <Icon name="settings" color={theme.colors.text} size={24} />

@@ -53,19 +53,19 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
       };
       break;
     case 'following':
-      dataHookFunction = (state) => state.mangaReducer.recentlyUpdatedManga;
+      dataHookFunction = (state) => state.persist.manga.followingManga;
       updateDataFunction = () => {
         dispatch(fetchUpdatedManga());
       };
       break;
     case 'recentlyAdded':
-      dataHookFunction = (state) => state.mangaReducer.recentlyUpdatedManga;
+      dataHookFunction = (state) => state.mangaReducer.recentlyAddedManga;
       updateDataFunction = () => {
         dispatch(fetchUpdatedManga());
       };
       break;
     case 'random':
-      dataHookFunction = (state) => state.mangaReducer.recentlyUpdatedManga;
+      dataHookFunction = (state) => state.mangaReducer.randomManga;
       updateDataFunction = () => {
         dispatch(fetchUpdatedManga());
       };

@@ -6,7 +6,9 @@ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 // import { MangaReader } from '../../Views/MangaReader';
 import { BrowseStackParamList } from './paramList';
 import { Browse } from '../../Views/Browse';
-import { ListMangaView } from '../../Views/Browse/listMangaView';
+import { ListMangaView } from '../../Views/ListMangaView';
+import { MangaDetail } from '../../Views/MangaDetail';
+import { MangaReader } from '../../Views/MangaReader';
 
 const BrowseStack = createNativeStackNavigator<BrowseStackParamList>();
 
@@ -19,8 +21,8 @@ export const BrowseStackScreen = () => {
       })}>
       <BrowseStack.Screen name="Browse" component={Browse} />
       <BrowseStack.Screen name="ListMangaView" component={ListMangaView} />
-      {/* <BrowseStack.Screen name="MangaDetail" component={MangaDetail} />
-      <BrowseStack.Screen name="MangaReader" component={MangaReader} /> */}
+      <BrowseStack.Screen name="MangaDetail" component={MangaDetail} />
+      <BrowseStack.Screen name="MangaReader" component={MangaReader} />
     </BrowseStack.Navigator>
   );
 };
