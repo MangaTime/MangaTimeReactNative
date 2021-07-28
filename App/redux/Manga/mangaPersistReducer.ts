@@ -1,18 +1,10 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Platform } from 'react-native';
-
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import PushNotification from 'react-native-push-notification';
 import {
   getAllFollowingManga,
   getFollowingChapterFeed,
 } from '../../Services/mangaService';
 import { Chapter, Manga } from './interfaces';
-
-// import PushNotification from 'react-native-push-notification';
-const PushNotification =
-  Platform.OS === 'android'
-    ? // eslint-disable-next-line import-order-alphabetical/order
-      require('react-native-push-notification')
-    : undefined;
 
 export interface MangaPersistState {
   followingFeed?: Chapter[];
@@ -64,31 +56,30 @@ export const mangaPersistSlice = createSlice({
           ?.filter((e) => !oldIds.includes(e.id))
           .forEach((chapter) => {
             // send push notifications
-            if (Platform.OS === 'android') {
-              PushNotification.localNotification({
-                channelId: 'channel-id', // (required) channelId, if the channel doesn't exist, notification will not trigger.
-                title: `${
-                  typeof chapter.manga === 'object'
-                    ? (chapter.manga as Manga).name
-                    : 'Unknown'
-                }`,
-                message: `Chapter ${chapter.name} ${
-                  chapter.title ? `- ${chapter.title}` : ''
-                }`, // (required)
-                subText: 'New chapter',
-                group: 'new-manga', // (optional) add group to message
-                userInfo: chapter,
-              });
 
-              PushNotification.localNotification({
-                id: 0,
-                channelId: 'channel-id', // (required) channelId, if the channel doesn't exist, notification will not trigger.
-                message: `Summary`, // (required)
-                subText: 'New chapters',
-                group: 'new-manga', // (optional) add group to message
-                groupSummary: true,
-              });
-            }
+            PushNotification.localNotification({
+              channelId: 'channel-id', // (required) channelId, if the channel doesn't exist, notification will not trigger.
+              title: `${
+                typeof chapter.manga === 'object'
+                  ? (chapter.manga as Manga).name
+                  : 'Unknown'
+              }`,
+              message: `Chapter ${chapter.name} ${
+                chapter.title ? `- ${chapter.title}` : ''
+              }`, // (required)
+              subText: 'New chapter',
+              group: 'new-manga', // (optional) add group to message
+              userInfo: chapter,
+            });
+
+            PushNotification.localNotification({
+              id: 0,
+              channelId: 'channel-id', // (required) channelId, if the channel doesn't exist, notification will not trigger.
+              message: `Summary`, // (required)
+              subText: 'New chapters',
+              group: 'new-manga', // (optional) add group to message
+              groupSummary: true,
+            });
           });
       }
       // save the fetched list to the state
