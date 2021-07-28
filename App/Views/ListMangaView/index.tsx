@@ -1,17 +1,16 @@
 import { RouteProp } from '@react-navigation/native';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect } from 'react';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
-import { Appbar, IconButton, Searchbar, useTheme } from 'react-native-paper';
+import { Appbar, IconButton, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { LargeMangaList } from '../../Components/MangaList/LargeMangaList';
 import { BrowseStackParamList } from '../../Navigator/BrowseStack/paramList';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
+import { Manga } from '../../redux/Manga/interfaces';
 import {
   fetchMangaDetail,
   fetchUpdatedManga,
-  Manga,
 } from '../../redux/Manga/mangaReducer';
 import { RootState } from '../../redux/store';
 
@@ -47,25 +46,26 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
 
   switch (routeId) {
     case 'recentlyUpdated':
-      dataHookFunction = (state) => state.mangaReducer.recentlyUpdatedManga;
+      dataHookFunction = (state) =>
+        state.mangaReducer.recentlyUpdatedManga ?? [];
       updateDataFunction = () => {
         dispatch(fetchUpdatedManga());
       };
       break;
     case 'following':
-      dataHookFunction = (state) => state.persist.manga.followingManga;
+      dataHookFunction = (state) => state.persist.manga.followingManga ?? [];
       updateDataFunction = () => {
         dispatch(fetchUpdatedManga());
       };
       break;
     case 'recentlyAdded':
-      dataHookFunction = (state) => state.mangaReducer.recentlyAddedManga;
+      dataHookFunction = (state) => state.mangaReducer.recentlyAddedManga ?? [];
       updateDataFunction = () => {
         dispatch(fetchUpdatedManga());
       };
       break;
     case 'random':
-      dataHookFunction = (state) => state.mangaReducer.randomManga;
+      dataHookFunction = (state) => state.mangaReducer.randomManga ?? [];
       updateDataFunction = () => {
         dispatch(fetchUpdatedManga());
       };
@@ -98,23 +98,13 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
         translucent
       />
       <Appbar style={styles.appBar}>
-        <Text
-          style={{
-            color: colors.text,
-            fontSize: 24,
-            // textTransform: 'uppercase',
-            textAlign: 'center',
-            marginRight: 20,
-          }}>
+        <Text style={{ ...styles.appBarTitle, color: colors.text }}>
           {routeName}
         </Text>
         <IconButton
           icon="magnify"
           color={colors.text}
-          style={{
-            ...styles.buttonRightIcon,
-            ...{ backgroundColor: colors.primary },
-          }}
+          style={{ backgroundColor: colors.primary }}
           onPress={() => console.log('aaa')}
         />
       </Appbar>
@@ -132,15 +122,10 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
 };
 const styles = StyleSheet.create({
   appBar: { paddingHorizontal: 24, justifyContent: 'space-between' },
-  searchBox: {
-    borderRadius: 20,
-    flex: 1,
-    height: 40,
-    alignItems: 'center',
+  appBarTitle: {
+    fontSize: 24,
+    textAlign: 'center',
+    marginRight: 20,
   },
-  searchBoxInput: { fontSize: 14 },
   statusBarColor: { width: '100%' },
-  buttonRightIcon: {
-    // alignSelf: 'flex-end',
-  },
 });
