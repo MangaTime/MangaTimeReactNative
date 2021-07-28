@@ -12,6 +12,7 @@ target 'MangaTimeReactNative' do
     :hermes_enabled => false
   )
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'   
+  pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios'
 
   target 'MangaTimeReactNativeTests' do
     inherit! :complete
