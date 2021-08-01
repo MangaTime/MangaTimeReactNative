@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { ReactElement } from 'react';
-import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
-import { Appbar, Button, IconButton, useTheme } from 'react-native-paper';
+import { StatusBar, StyleSheet, View } from 'react-native';
+import { Appbar, IconButton, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SectionList } from '../Browse/sectionList';
 

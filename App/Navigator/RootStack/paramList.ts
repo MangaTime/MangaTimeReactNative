@@ -1,7 +1,7 @@
 import { Manga } from '../../redux/Manga/interfaces';
 
-export type HomeStackParamList = {
-  Home: undefined;
+export type RootStackParamList = {
+  MainTabs: undefined;
   ListMangaView: {
     routeName: string;
     routeId: string;

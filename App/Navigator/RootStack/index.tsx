@@ -4,25 +4,25 @@ import { Home } from '../../Views/Home';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { MangaDetail } from '../../Views/MangaDetail';
 import { MangaReader } from '../../Views/MangaReader';
-import { HomeStackParamList } from './paramList';
-import { Text } from 'react-native';
+import { RootStackParamList } from './paramList';
 import { StyleSheet } from 'react-native';
 import { ListMangaView } from '../../Views/ListMangaView';
+import { MainTabs } from '../MainTabs';
 
-const HomeStack = createNativeStackNavigator<HomeStackParamList>();
+const RootStack = createNativeStackNavigator<RootStackParamList>();
 
-export const HomeStackScreen = () => {
+export const RootStackScreen = () => {
   return (
-    <HomeStack.Navigator
+    <RootStack.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
         statusBarTranslucent: true,
       })}>
-      <HomeStack.Screen name="Home" component={Home} />
-      <HomeStack.Screen name="ListMangaView" component={ListMangaView} />
-      <HomeStack.Screen name="MangaDetail" component={MangaDetail} />
-      <HomeStack.Screen name="MangaReader" component={MangaReader} />
-    </HomeStack.Navigator>
+      <RootStack.Screen name="MainTabs" component={MainTabs} />
+      <RootStack.Screen name="ListMangaView" component={ListMangaView} />
+      <RootStack.Screen name="MangaDetail" component={MangaDetail} />
+      <RootStack.Screen name="MangaReader" component={MangaReader} />
+    </RootStack.Navigator>
   );
 };
 const styles = StyleSheet.create({

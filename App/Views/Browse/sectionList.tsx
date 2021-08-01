@@ -1,17 +1,7 @@
-import { ReactElement, useEffect, useState } from 'react';
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { Appbar, IconButton, Searchbar, useTheme } from 'react-native-paper';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack';
+import { ReactElement, useEffect } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { BrowseStackParamList } from '../../Navigator/BrowseStack/paramList';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { TogglableView } from '../../Components/TogglableView';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
@@ -20,7 +10,7 @@ import {
   updateSections,
   updateSectionVisibility,
 } from '../../redux/AppSettings/appSettingsReducer';
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 type Props = {
   isEditingVisibility: boolean;
@@ -69,8 +59,8 @@ export const SectionList = ({ isEditingVisibility }: Props): ReactElement => {
       isVisible: true,
       callback: () => {
         navigation.navigate('ListMangaView', {
-          routeName: 'Following',
-          routeId: 'following',
+          routeName: 'Recently Added',
+          routeId: 'recentlyAdded',
         });
       },
     },
@@ -81,8 +71,8 @@ export const SectionList = ({ isEditingVisibility }: Props): ReactElement => {
       isVisible: true,
       callback: () => {
         navigation.navigate('ListMangaView', {
-          routeName: 'Following',
-          routeId: 'following',
+          routeName: 'Random',
+          routeId: 'random',
         });
       },
     },

@@ -1,47 +1,54 @@
-import { RouteProp } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { ReactElement, useEffect } from 'react';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import { Appbar, IconButton, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack';
 import { LargeMangaList } from '../../Components/MangaList/LargeMangaList';
-import { BrowseStackParamList } from '../../Navigator/BrowseStack/paramList';
+import { MainTabsParamList } from '../../Navigator/MainTabs/paramList';
+import { RootStackParamList } from '../../Navigator/RootStack/paramList';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 import { Manga } from '../../redux/Manga/interfaces';
+import { fetchFollowingManga } from '../../redux/Manga/mangaPersistReducer';
 import {
+  fetchAddedManga,
   fetchMangaDetail,
+  fetchRandomManga,
   fetchUpdatedManga,
 } from '../../redux/Manga/mangaReducer';
 import { RootState } from '../../redux/store';
 
-type BrowseScreenNavigationProp = NativeStackNavigationProp<
-  BrowseStackParamList,
+type ListMangaViewScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<MainTabsParamList, 'Browse'>,
+  NativeStackNavigationProp<RootStackParamList>
+>;
+type ListMangaViewScreenRouteProp = RouteProp<
+  RootStackParamList,
   'ListMangaView'
 >;
 
-type BrowseScreenRouteProp = RouteProp<BrowseStackParamList, 'ListMangaView'>;
-
 type Props = {
-  route: BrowseScreenRouteProp;
-  navigation: BrowseScreenNavigationProp;
+  route: ListMangaViewScreenRouteProp;
+  navigation: ListMangaViewScreenNavigationProp;
 };
 
 export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
   const { colors, dark } = useTheme();
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
-  const { routeName, routeId }: BrowseStackParamList['ListMangaView'] =
+  const { routeName, routeId }: RootStackParamList['ListMangaView'] =
     route.params;
 
   const getMangaDetail = (manga: Manga): void => {
+    // TODO: move fetchMangaDetail to MangaDetail page
     dispatch(fetchMangaDetail(manga));
-    navigation.navigate('MangaDetail');
+    navigation.navigate('MangaDetail', { manga });
   };
 
   let dataHookFunction: (state: RootState) => Manga[];
   let updateDataFunction: (() => void) | undefined;
 
-  // TODO: data not available in master branch atm
   // TODO: add offset + limit to updateDataFunction use it to paginate the list
 
   switch (routeId) {
@@ -55,19 +62,19 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
     case 'following':
       dataHookFunction = (state) => state.persist.manga.followingManga ?? [];
       updateDataFunction = () => {
-        dispatch(fetchUpdatedManga());
+        dispatch(fetchFollowingManga());
       };
       break;
     case 'recentlyAdded':
       dataHookFunction = (state) => state.mangaReducer.recentlyAddedManga ?? [];
       updateDataFunction = () => {
-        dispatch(fetchUpdatedManga());
+        dispatch(fetchAddedManga());
       };
       break;
     case 'random':
       dataHookFunction = (state) => state.mangaReducer.randomManga ?? [];
       updateDataFunction = () => {
-        dispatch(fetchUpdatedManga());
+        dispatch(fetchRandomManga());
       };
       break;
     default:

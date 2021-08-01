@@ -1,26 +1,8 @@
 import { ReactElement, useEffect, useState } from 'react';
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { StatusBar, StyleSheet, View } from 'react-native';
 import { Appbar, IconButton, Searchbar, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { BrowseStackParamList } from '../../Navigator/BrowseStack/paramList';
-import DraggableFlatList from 'react-native-draggable-flatlist';
-import { TogglableView } from '../../Components/TogglableView';
-import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
-import {
-  Section,
-  updateSections,
-  updateSectionVisibility,
-} from '../../redux/AppSettings/appSettingsReducer';
-import { RouteProp } from '@react-navigation/native';
 import { SectionList } from './sectionList';
 
 export const Browse = (): ReactElement => {

@@ -10,22 +10,20 @@ import {
 } from '../../redux/Manga/mangaReducer';
 import { Manga } from '../../redux/Manga/interfaces';
 import { useEffect } from 'react';
-import { HomeStackParamList } from '../../Navigator/HomeStack/paramList';
 import { fetchFollowingManga } from '../../redux/Manga/mangaPersistReducer';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { FlatList } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Appbar, IconButton, useTheme } from 'react-native-paper';
+import { Appbar, useTheme } from 'react-native-paper';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack';
-import { TogglableView } from '../../Components/TogglableView';
-import {
-  Section,
-  updateSections,
-} from '../../redux/AppSettings/appSettingsReducer';
 import { SectionContainer } from '../../Components/SectionContainer';
+import { RootStackParamList } from '../../Navigator/RootStack/paramList';
+import { CompositeNavigationProp } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { MainTabsParamList } from '../../Navigator/MainTabs/paramList';
 
-type HomeScreenNavigationProp = NativeStackNavigationProp<
-  HomeStackParamList,
-  'Home'
+type HomeScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<MainTabsParamList, 'Home'>,
+  NativeStackNavigationProp<RootStackParamList>
 >;
 
 type Props = {
