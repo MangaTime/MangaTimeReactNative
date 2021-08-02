@@ -125,7 +125,7 @@ export const getMangaDetail = async (manga: Manga): Promise<Manga> => {
       const mangaDetail = { ...manga };
       const volumes: Volume[] = [];
       const chapters: Chapter[] = [];
-      (response.data as components['schemas']['ChapterList']).results?.forEach(
+      (response as components['schemas']['ChapterList']).results?.forEach(
         (item) => {
           const volumeName = item.data?.attributes?.volume ?? 'unknown';
           let volume: Volume | undefined = volumes.find(
