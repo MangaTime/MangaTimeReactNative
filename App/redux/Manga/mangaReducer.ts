@@ -6,7 +6,7 @@ import {
   getRandomManga,
   getUpdatedManga,
 } from '../../Services/mangaService';
-import { Chapter, Manga, Volume } from './interfaces';
+import { Chapter, Manga } from './interfaces';
 
 export interface MangaState {
   recentlyUpdatedManga?: Manga[];
@@ -46,7 +46,7 @@ export const fetchRandomManga = createAsyncThunk(
 export const fetchMangaDetail = createAsyncThunk(
   'manga/fetchMangaDetail',
   async (manga: Manga) => {
-    return getMangaDetail(manga.id);
+    return getMangaDetail(manga);
   },
 );
 
@@ -74,80 +74,22 @@ export const mangaSlice = createSlice({
 
     builder.addCase(fetchAddedManga.fulfilled, (s, action) => {
       const state = s;
-      state.recentlyAddedManga = action.payload.results?.map((e) => {
-        const item = {
-          id: e.data?.id,
-          name: e.data?.attributes?.title?.en, // get only english title and description for now
-          description: e.data?.attributes?.description?.en,
-          cover_art: e.relationships?.find((e1) => e1.type === 'cover_art')
-            ?.attributes?.fileName,
-        };
-        return item as Manga;
-      });
+      state.recentlyAddedManga = action.payload;
     });
 
     builder.addCase(fetchRandomManga.fulfilled, (s, action) => {
       const state = s;
-      state.randomManga = action.payload.results?.map((e) => {
-        const item = {
-          id: e.data?.id,
-          name: e.data?.attributes?.title?.en, // get only english title and description for now
-          description: e.data?.attributes?.description?.en,
-          cover_art: e.relationships?.find((e1) => e1.type === 'cover_art')
-            ?.attributes?.fileName,
-        };
-        return item as Manga;
-      });
+      state.randomManga = action.payload;
     });
 
     builder.addCase(fetchUpdatedManga.fulfilled, (s, action) => {
       const state = s;
-      state.recentlyUpdatedManga = action.payload.results?.map((e) => {
-        const item = {
-          id: e.data?.id,
-          name: e.data?.attributes?.title?.en, // get only english title and description for now
-          description: e.data?.attributes?.description?.en,
-          cover_art: e.relationships?.find((e1) => e1.type === 'cover_art')
-            ?.attributes?.fileName,
-        };
-        return item as Manga;
-      });
+      state.recentlyUpdatedManga = action.payload;
     });
 
     builder.addCase(fetchMangaDetail.fulfilled, (s, action) => {
       const state = s;
-      const mangaDetail = { ...action.meta.arg };
-      const volumes: Volume[] = [];
-      const chapters: Chapter[] = [];
-      action.payload.results?.forEach((item) => {
-        const volumeName = item.data?.attributes?.volume ?? 'unknown';
-        let volume: Volume | undefined = volumes.find(
-          (v) => v.name === volumeName,
-        );
-        if (!volume) {
-          volume = {
-            name: volumeName,
-            chapters: [],
-          };
-          volumes.push(volume);
-        }
-        const chapter: Chapter = {
-          name: item.data?.attributes?.chapter ?? 'unknown',
-          id: item.data?.id ?? 'unknown',
-          updatedAt: item.data?.attributes?.updatedAt ?? 'unknown',
-          hash: item.data?.attributes?.hash ?? '',
-          title: item.data?.attributes?.title,
-          pages: item.data?.attributes?.data,
-          volume: volume.name,
-          manga: mangaDetail.id,
-        };
-        if (!volume.chapters) volume.chapters = [];
-        volume.chapters.push(chapter);
-        chapters.push(chapter);
-      });
-      mangaDetail.volumes = volumes;
-      mangaDetail.chapters = chapters;
-      state.mangaDetail = mangaDetail;
+      state.mangaDetail = action.payload;
     });
   },
 });
