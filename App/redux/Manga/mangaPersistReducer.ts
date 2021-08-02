@@ -10,7 +10,8 @@ import { Chapter, Manga } from './interfaces';
 // import PushNotification from 'react-native-push-notification';
 const PushNotification =
   Platform.OS === 'android'
-    ? require('react-native-push-notification')
+    ? // eslint-disable-next-line import-order-alphabetical/order
+      require('react-native-push-notification')
     : undefined;
 
 export interface MangaPersistState {
@@ -46,21 +47,8 @@ export const mangaPersistSlice = createSlice({
     // move this parser code to a separate helper function
     builder.addCase(fetchFollowingChapterFeed.fulfilled, (s, action) => {
       const state = s;
-      // if state is not empty, compare fetched list with state, any extra objects from the fetched list is updated
-      const fetchedChapters = action.payload.results?.map((item): Chapter => {
-        const chapter = {
-          id: item.data?.id,
-          updatedAt: item.data?.attributes?.updatedAt,
-          name: item.data?.attributes?.chapter,
-          hash: item.data?.attributes?.hash,
-          pages: item.data?.attributes?.data,
-          volume: item.data?.attributes?.volume,
-          manga: item.relationships?.find((e) => e.type === 'manga')?.id,
-          title: item.data?.attributes?.title,
-        };
-        return chapter as Chapter;
-      });
-      fetchedChapters?.forEach((c) => {
+      const fetchedChapters = action.payload;
+      fetchedChapters.forEach((c) => {
         const chapter = c;
         if (typeof chapter.manga === 'string') {
           // get manga information from (to be) persisted following manga list
@@ -69,6 +57,7 @@ export const mangaPersistSlice = createSlice({
           chapter.manga = mangaInfo;
         }
       });
+      // if state is not empty, compare fetched list with state, any extra objects from the fetched list is updated
       if (state.followingFeed) {
         const oldIds = state.followingFeed.map((e) => e.id);
         fetchedChapters
@@ -115,17 +104,8 @@ export const mangaPersistSlice = createSlice({
     builder.addCase(fetchFollowingManga.fulfilled, (s, action) => {
       // Add user to the state array
       const state = s;
-      const fetchedFollowingList = action.payload.results?.map((e) => {
-        const item = {
-          id: e.data?.id,
-          name: e.data?.attributes?.title?.en, // get only english title and description for now
-          description: e.data?.attributes?.description?.en,
-          cover_art: e.relationships?.find((e1) => e1.type === 'cover_art')
-            ?.attributes?.fileName,
-        };
-        return item as Manga;
-      });
-      fetchedFollowingList?.forEach((item) => {
+      const fetchedFollowingList = action.payload;
+      fetchedFollowingList.forEach((item) => {
         if (!state.followingManga) state.followingManga = [];
         const oldDataIndex = state.followingManga.findIndex(
           (manga) => manga.id === item.id,

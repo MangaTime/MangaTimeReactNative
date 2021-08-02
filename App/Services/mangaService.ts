@@ -1,30 +1,96 @@
+import { Chapter, Manga, Volume } from '../redux/Manga/interfaces';
 import client from './baseClient';
 import { components } from './mangadex';
 
 const wait = async (duration: number): Promise<void> => {
   await new Promise((resolve) => setTimeout(resolve, duration));
 };
+
+const APIMangaListToLocalMangaList = (
+  apiResponse: components['schemas']['MangaList'],
+): Manga[] => {
+  console.log(apiResponse);
+  const result = apiResponse?.results?.map((e) => {
+    const item = {
+      id: e.data?.id,
+      name: e.data?.attributes?.title?.en, // get only english title and description for now
+      alternative_names: e.data?.attributes?.altTitles
+        ?.map((e1): string[] => Object.values(e1))
+        .reduce((x, y) => x.concat(y), []),
+      description: e.data?.attributes?.description?.en,
+      author: e.relationships?.find((e1) => e1.type === 'author')?.attributes
+        ?.name as string,
+      artist: e.relationships?.find((e1) => e1.type === 'artist')?.attributes
+        ?.name as string,
+      genres: e.data?.attributes?.tags
+        ?.filter((e1) => e1.attributes?.group === 'genre')
+        .map((e1) => e1.attributes?.name?.en),
+      themes: e.data?.attributes?.tags
+        ?.filter((e1) => e1.attributes?.group === 'theme')
+        .map((e1) => e1.attributes?.name?.en),
+      demographic: e.data?.attributes?.tags
+        ?.filter((e1) => e1.attributes?.group === 'format')
+        .map((e1) => e1.attributes?.name?.en),
+      cover_art: e.relationships?.find((e1) => e1.type === 'cover_art')
+        ?.attributes?.fileName,
+    };
+    return item as Manga;
+  });
+  console.log(result?.length);
+  return result ?? [];
+};
+
+const APIChapterListToLocalChapterList = (
+  apiResponse: components['schemas']['ChapterList'],
+): Chapter[] => {
+  return (
+    apiResponse?.results?.map((item): Chapter => {
+      const chapter = {
+        id: item.data?.id,
+        updatedAt: item.data?.attributes?.updatedAt,
+        name: item.data?.attributes?.chapter,
+        hash: item.data?.attributes?.hash,
+        pages: item.data?.attributes?.data,
+        volume: item.data?.attributes?.volume,
+        manga: item.relationships?.find((e) => e.type === 'manga')?.id,
+        title: item.data?.attributes?.title,
+      };
+      return chapter as Chapter;
+    }) ?? []
+  );
+};
+
 export const getUpdatedManga = async (
   offset = 0,
   limit = 100,
-): Promise<components['schemas']['MangaList']> => {
-  return client.get(
-    `/manga?limit=${limit}&offset=${offset}&order[updatedAt]=desc&includes[]=cover_art`,
-  );
+): Promise<Manga[]> => {
+  return client
+    .get(
+      `/manga?limit=${limit}&offset=${offset}&order[updatedAt]=desc&includes[]=cover_art&includes[]=author&includes[]=artist`,
+    )
+    .then((response) =>
+      APIMangaListToLocalMangaList(
+        response as components['schemas']['MangaList'],
+      ),
+    );
 };
 
 export const getAddedManga = async (
   offset = 0,
   limit = 100,
-): Promise<components['schemas']['MangaList']> => {
-  return client.get(
-    `/manga?limit=${limit}&offset=${offset}&order[createdAt]=desc&includes[]=cover_art`,
-  );
+): Promise<Manga[]> => {
+  return client
+    .get(
+      `/manga?limit=${limit}&offset=${offset}&order[createdAt]=desc&includes[]=cover_art&includes[]=author&includes[]=artist`,
+    )
+    .then((response) =>
+      APIMangaListToLocalMangaList(
+        response as components['schemas']['MangaList'],
+      ),
+    );
 };
 
-export const getRandomManga = async (
-  limit = 5,
-): Promise<components['schemas']['MangaList']> => {
+export const getRandomManga = async (limit = 5): Promise<Manga[]> => {
   const result = {
     results: [],
   } as components['schemas']['MangaList'];
@@ -39,7 +105,9 @@ export const getRandomManga = async (
     // eslint-disable-next-line no-await-in-loop
     await wait(300);
   }
-  return result;
+  return APIMangaListToLocalMangaList(
+    result as components['schemas']['MangaList'],
+  );
 };
 
 export const getMangadexHomeBaseUrl = async (
@@ -48,68 +116,81 @@ export const getMangadexHomeBaseUrl = async (
   return client.get(`/at-home/server/${chapterId}`);
 };
 
-export const getMangaDetail = async (
-  id: string,
-): Promise<components['schemas']['ChapterList']> => {
-  return client.get(
-    `/manga/${id}/feed?translatedLanguage[]=en&limit=500&order[chapter]=desc`,
-  );
+export const getMangaDetail = async (manga: Manga): Promise<Manga> => {
+  return client
+    .get(
+      `/manga/${manga.id}/feed?translatedLanguage[]=en&limit=500&order[chapter]=desc`,
+    )
+    .then((response) => {
+      const mangaDetail = { ...manga };
+      const volumes: Volume[] = [];
+      const chapters: Chapter[] = [];
+      (response.data as components['schemas']['ChapterList']).results?.forEach(
+        (item) => {
+          const volumeName = item.data?.attributes?.volume ?? 'unknown';
+          let volume: Volume | undefined = volumes.find(
+            (v) => v.name === volumeName,
+          );
+          if (!volume) {
+            volume = {
+              name: volumeName,
+              chapters: [],
+            };
+            volumes.push(volume);
+          }
+          const chapter: Chapter = {
+            name: item.data?.attributes?.chapter ?? 'unknown',
+            id: item.data?.id ?? 'unknown',
+            updatedAt: item.data?.attributes?.updatedAt ?? 'unknown',
+            hash: item.data?.attributes?.hash ?? '',
+            title: item.data?.attributes?.title,
+            pages: item.data?.attributes?.data,
+            volume: volume.name,
+            manga: mangaDetail.id,
+          };
+          if (!volume.chapters) volume.chapters = [];
+          volume.chapters.push(chapter);
+          chapters.push(chapter);
+        },
+      );
+      mangaDetail.volumes = volumes;
+      mangaDetail.chapters = chapters;
+      return mangaDetail;
+    });
 };
 
 export const getFollowingManga = async (
   offset = 0,
   limit = 100,
-): Promise<components['schemas']['MangaList']> => {
+): Promise<Manga[]> => {
   // first get the following list
   const result = (await client.get(
     `/user/follows/manga?limit=${limit}&offset=${offset}`,
   )) as components['schemas']['MangaList'];
-  // extract the covers' ids
-  const coverIds = result.results?.map(
-    (e) => e?.relationships?.find((e1) => e1.type === 'cover_art')?.id,
-  );
-  // get covers' full information (including filenames)
-  const coversResponse = (await client.get(
-    `/cover?limit=${limit}&${coverIds?.map((e) => `ids[]=${e}`).join('&')}`,
-  )) as components['schemas']['CoverList'];
-  const coversList = coversResponse.results?.map((e) => e.data);
-  // insert the covers' full information to the original result object at the correct places
-  result.results?.forEach((e) => {
-    const ele = e;
-    const coverId = ele.relationships?.find(
-      (e1) => e1.type === 'cover_art',
-    )?.id;
-    if (ele.relationships) {
-      const otherRelationship = ele.relationships.filter(
-        (e1) => e1.type !== 'cover_art',
-      );
-      const cover = coversList?.find((e1) => e1?.id === coverId);
-      ele.relationships = [...otherRelationship];
-      if (cover) ele.relationships.push(cover);
-    }
-  });
-  return result;
+  // extract manga ids
+  const mangaIds = result.results?.map((e) => e.data?.id);
+  return client
+    .get(
+      `/manga?${mangaIds
+        ?.map((e) => `ids[]=${e}`)
+        .join('&')}&includes[]=cover_art&includes[]=author&includes[]=artist`,
+    )
+    .then((response) =>
+      APIMangaListToLocalMangaList(
+        response as components['schemas']['MangaList'],
+      ),
+    );
 };
 
-export const getAllFollowingManga = async (): Promise<
-  components['schemas']['MangaList']
-> => {
-  let result: components['schemas']['MangaList'] | undefined;
+export const getAllFollowingManga = async (): Promise<Manga[]> => {
+  let result: Manga[] = [];
   let offset = 0;
   const limit = 100;
   while (true) {
     // eslint-disable-next-line no-await-in-loop
     const lastFetched = await getFollowingManga(offset, limit);
-    if (result && result.results) {
-      const allResult = lastFetched.results
-        ? result.results.concat(lastFetched.results)
-        : result.results;
-      result.results = allResult;
-    } else {
-      result = lastFetched;
-    }
-    if (!lastFetched.results || !lastFetched.limit) return result;
-    if (lastFetched.results.length < lastFetched.limit) {
+    result = result.concat(lastFetched);
+    if (lastFetched.length < limit) {
       return result;
     }
     offset += limit;
@@ -118,10 +199,14 @@ export const getAllFollowingManga = async (): Promise<
   }
 };
 
-export const getFollowingChapterFeed = async (): Promise<
-  components['schemas']['ChapterList']
-> => {
-  return client.get(
-    '/user/follows/manga/feed?order[publishAt]=desc&translatedLanguage[]=en',
-  );
+export const getFollowingChapterFeed = async (): Promise<Chapter[]> => {
+  return client
+    .get(
+      '/user/follows/manga/feed?order[publishAt]=desc&translatedLanguage[]=en',
+    )
+    .then((response) =>
+      APIChapterListToLocalChapterList(
+        response as components['schemas']['ChapterList'],
+      ),
+    );
 };
