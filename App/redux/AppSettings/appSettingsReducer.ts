@@ -1,8 +1,4 @@
-import {
-  createSlice,
-  PayloadAction,
-  PayloadActionCreator,
-} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Section {
   key: string;

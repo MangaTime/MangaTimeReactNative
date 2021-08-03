@@ -11,6 +11,7 @@ import {
   updateSectionVisibility,
 } from '../../redux/AppSettings/appSettingsReducer';
 import { useNavigation } from '@react-navigation/native';
+import { SectionListFooter } from './sectionListFooter';
 
 type Props = {
   isEditingVisibility: boolean;
@@ -91,74 +92,47 @@ export const SectionList = ({ isEditingVisibility }: Props): ReactElement => {
   }, [sections]);
 
   return (
-    <>
-      <View style={{ flex: 1 }}>
-        <DraggableFlatList
-          style={styles.buttonList}
-          data={sortedEntryList}
-          keyExtractor={(item) => item.key}
-          onDragEnd={({ data }) => {
-            console.log(data);
-            dispatch(
-              updateSections(
-                data.map((e) => ({ key: e.key, isVisible: e.isVisible })),
-              ),
-            );
-          }}
-          renderItem={({ item, drag }) => (
-            <TogglableView
-              Component={
-                <TouchableOpacity
-                  style={{
-                    ...styles.button,
-                    backgroundColor: colors.primary,
-                  }}
-                  onPressIn={isEditingVisibility ? drag : undefined}
-                  onPress={isEditingVisibility ? undefined : item.callback}>
-                  <Icon name={item.icon} size={24} color={colors.text} />
-                  <Text style={{ ...styles.buttonText, color: colors.text }}>
-                    {item.title}
-                  </Text>
-                  <Icon name="chevron-right" size={24} color={colors.text} />
-                </TouchableOpacity>
-              }
-              onChangeCallback={(status) =>
-                dispatch(
-                  updateSectionVisibility({ key: item.key, isVisible: status }),
-                )
-              }
-              isShowingToggle={isEditingVisibility}
-              toggleValue={item.isVisible}
-            />
-          )}
-          ListFooterComponent={
-            isEditingVisibility ? (
-              <View
+    <View style={styles.container}>
+      <DraggableFlatList
+        style={styles.buttonList}
+        data={sortedEntryList}
+        keyExtractor={(item) => item.key}
+        onDragEnd={({ data }) => {
+          dispatch(
+            updateSections(
+              data.map((e) => ({ key: e.key, isVisible: e.isVisible })),
+            ),
+          );
+        }}
+        renderItem={({ item, drag }) => (
+          <TogglableView
+            Component={
+              <TouchableOpacity
                 style={{
-                  ...{
-                    marginTop: 15,
-                    alignItems: 'center',
-                    width: '100%',
-                  },
-                }}>
-                <Text
-                  style={{
-                    color: colors.text,
-                  }}>
-                  Drag and drop to reorder sections.
+                  ...styles.button,
+                  backgroundColor: colors.primary,
+                }}
+                onPressIn={isEditingVisibility ? drag : undefined}
+                onPress={isEditingVisibility ? undefined : item.callback}>
+                <Icon name={item.icon} size={24} color={colors.text} />
+                <Text style={{ ...styles.buttonText, color: colors.text }}>
+                  {item.title}
                 </Text>
-                <Text
-                  style={{
-                    color: colors.text,
-                  }}>
-                  Tick checkbox to show section on Home screen.
-                </Text>
-              </View>
-            ) : null
-          }
-        />
-      </View>
-    </>
+                <Icon name="chevron-right" size={24} color={colors.text} />
+              </TouchableOpacity>
+            }
+            onChangeCallback={(status) =>
+              dispatch(
+                updateSectionVisibility({ key: item.key, isVisible: status }),
+              )
+            }
+            isShowingToggle={isEditingVisibility}
+            toggleValue={item.isVisible}
+          />
+        )}
+        ListFooterComponent={isEditingVisibility ? <SectionListFooter /> : null}
+      />
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -171,8 +145,8 @@ const styles = StyleSheet.create({
   },
   searchBoxInput: { fontSize: 14 },
   statusBarColor: { width: '100%' },
-  buttonRightIcon: {
-    // alignSelf: 'flex-end',
+  container: {
+    flex: 1,
   },
   buttonList: {
     marginTop: 16,
@@ -180,9 +154,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flexDirection: 'row',
-    // padding: 12,
     borderRadius: 8,
-    // marginBottom: 8,
   },
   buttonText: {
     flex: 1,

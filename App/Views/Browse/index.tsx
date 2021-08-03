@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { Appbar, IconButton, Searchbar, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -39,18 +39,9 @@ export const Browse = (): ReactElement => {
           onChangeText={onChangeSearch}
           value={searchQuery}
         />
-        {/* <IconButton
-          icon={isEditingVisibility ? 'playlist-check' : 'playlist-edit'}
-          color={colors.text}
-          style={{
-            ...styles.buttonRightIcon,
-            ...{ backgroundColor: colors.background },
-          }}
-          onPress={() => toggleEditingVisibility()}
-        /> */}
       </Appbar>
 
-      <SectionList isEditingVisibility={false}></SectionList>
+      <SectionList isEditingVisibility={false} />
     </>
   );
 };
@@ -64,22 +55,4 @@ const styles = StyleSheet.create({
   },
   searchBoxInput: { fontSize: 14 },
   statusBarColor: { width: '100%' },
-  buttonRightIcon: {
-    // alignSelf: 'flex-end',
-  },
-  buttonList: {
-    marginTop: 16,
-    marginHorizontal: 16,
-  },
-  button: {
-    flexDirection: 'row',
-    // padding: 12,
-    borderRadius: 8,
-    // marginBottom: 8,
-  },
-  buttonText: {
-    flex: 1,
-    fontSize: 18,
-    marginHorizontal: 8,
-  },
 });
