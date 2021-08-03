@@ -2,20 +2,12 @@ import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Title, useTheme } from 'react-native-paper';
-import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { SettingsStackParamList } from '../../../../Navigator/SettingsStack/paramList';
-import { useAppDispatch, useAppSelector } from '../../../../redux/Hooks';
-import { changeTheme } from '../../../../redux/Theme/themeReducer';
-import { AppTheme, ThemeName } from '../../../../Theme';
 import { baseColors } from '../../../../Theme/baseColors';
-import { ThemeSelectButton } from '../ThemeSelectButton';
 
 export const VisibilityAndOrdering = (): ReactElement => {
   const { colors } = useTheme();
-  const dispatch = useAppDispatch();
   const navigation = useNavigation();
-  const { themeName } = useAppSelector((state) => state.persist.theme);
   return (
     <View
       style={{

@@ -13,9 +13,7 @@ import BackgroundFetch from 'react-native-background-fetch';
 import { LogBox } from 'react-native';
 
 // Ignore log notification by message:
-LogBox.ignoreLogs([
-  '.*on the ref of an Animated component is no longer necessary.*',
-]);
+LogBox.ignoreLogs(['ReactNativeFiberHostComponent:']);
 
 let PushNotification;
 let PushNotificationIOS;

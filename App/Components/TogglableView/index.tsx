@@ -15,7 +15,7 @@ export const TogglableView = ({
   isShowingToggle = false,
   toggleValue = false,
 }: Props): ReactElement => {
-  const { colors, dark } = useTheme();
+  const { colors } = useTheme();
   const [checked, setChecked] = useState(toggleValue);
 
   return (
