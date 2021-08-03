@@ -13,6 +13,7 @@
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
 #import <UserNotifications/UserNotifications.h>
 #import <RNCPushNotificationIOS.h>
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
 
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
@@ -54,6 +55,8 @@ static void InitializeFlipper(UIApplication *application) {
   // Define UNUserNotificationCenter
    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
    center.delegate = self;
+  //register bg fetch
+  [[TSBackgroundFetch sharedInstance] didFinishLaunching];
   return YES;
 }
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
