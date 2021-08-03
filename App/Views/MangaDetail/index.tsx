@@ -56,6 +56,7 @@ export const MangaDetail = ({ navigation }: Props): ReactElement => {
                 marginBottom: 0,
                 paddingBottom: 0,
               }}>
+              <Text style={styles.mangaName}>{mangaDetail.name}</Text>
               <Image
                 accessibilityIgnoresInvertColors
                 resizeMode="contain"
@@ -64,7 +65,6 @@ export const MangaDetail = ({ navigation }: Props): ReactElement => {
                   uri: `https://uploads.mangadex.org/covers/${mangaDetail.id}/${mangaDetail.cover_art}.256.jpg`,
                 }}
               />
-              <Text style={styles.mangaName}>{mangaDetail.name}</Text>
               <View style={styles.line}>
                 <Text style={styles.label}>Alternative names: </Text>
                 <Text>{mangaDetail.alternative_names.join(', ')}</Text>
@@ -154,29 +154,33 @@ const styles = StyleSheet.create({
   volumeTitle: {
     // fontWeight: 'bold',
     fontStyle: 'italic',
-    fontSize: 18,
+    fontSize: 17,
     paddingTop: 12,
     paddingBottom: 5,
   },
-  chapterList: { paddingLeft: 20 },
+  chapterList: { paddingLeft: 20, paddingVertical: 5 },
   listItem: {
     marginHorizontal: 16,
     paddingHorizontal: 16,
   },
   mangaName: {
     fontSize: 22,
-    paddingTop: 15,
-    paddingBottom: 5,
+    // paddingHorizontal: 15,
+    paddingTop: 5,
+    paddingBottom: 10,
+    textAlign: 'center',
     fontWeight: 'bold',
   },
   line: {
     marginVertical: 5,
   },
   label: {
+    fontSize: 17,
     fontWeight: 'bold',
   },
   thumbnail: {
     width: '100%',
+    marginVertical: 10,
     aspectRatio: 1,
   },
 });
