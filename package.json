@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.5",
     "@react-native-community/masked-view": "^0.1.11",
+    "@react-native-picker/picker": "^1.16.4",
     "@react-navigation/bottom-tabs": "^5.11.11",
     "@react-navigation/material-bottom-tabs": "^5.3.15",
     "@react-navigation/native": "^5.9.4",
@@ -19,8 +20,9 @@
     "@reduxjs/toolkit": "^1.6.0",
     "axios": "^0.21.1",
     "react": "17.0.1",
-    "react-native": "0.64.1",
+    "react-native": "0.64.2",
     "react-native-background-fetch": "^4.0.3",
+    "react-native-collapsible-header-views": "^1.1.2",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-modal": "^12.0.2",
     "react-native-paper": "^4.9.2",
