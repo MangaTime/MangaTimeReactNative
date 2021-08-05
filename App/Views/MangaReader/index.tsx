@@ -13,7 +13,6 @@ import {
   View,
   StatusBar,
   Dimensions,
-  PickerIOSItem,
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
@@ -50,6 +49,7 @@ export const MangaReader = (): ReactElement => {
   const [selectedChapter, setSelectedChapter] = useState(chapterDetail?.id);
   const [readingProgress, setReadingProgress] = useState(0);
   const windowHeight = Dimensions.get('window').height;
+  const windowWidth = Dimensions.get('window').width;
 
   const [singleImageViewVisible, setSingleImageViewVisible] = useState(false);
   const [singleImageViewUrl, setSingleImageViewUrl] = useState('');
@@ -119,67 +119,48 @@ export const MangaReader = (): ReactElement => {
   return (
     <>
       <Portal>
-        <Modal
-          visible={singleImageViewVisible}
-          onDismiss={hideModal}
-          // dismissable={false}
-          style={
-            {
-              // backgroundColor: 'green',
-              // width: '100%',
-              // height: '100%',
-            }
-          }
-          contentContainerStyle={
-            {
-              // backgroundColor: 'blue',
-            }
-          }>
-          <Text
-            style={{
-              // paddingVertical: 2,
-              position: 'absolute',
-              top: -insets.top,
-              width: '100%',
-              height: insets.top,
-              textAlignVertical: 'center',
-              textAlign: 'center',
-              color: 'white',
-              backgroundColor: 'black',
-            }}>
-            Double tap image to close
-          </Text>
-          <View
-            style={{
-              overflow: 'hidden',
-              width: '100%',
-              height: '100%',
-              paddingHorizontal: 24,
-            }}>
-            <ReactNativeZoomableView
-              maxZoom={2}
-              minZoom={1}
-              zoomStep={0}
-              initialZoom={1}
-              bindToBorders={true}
-              //  onZoomAfter={this.logOutZoomState}
-              doubleTapZoomToCenter={false}
-              onDoubleTapAfter={hideModal}
-              style={
-                {
-                  // backgroundColor: 'red',
-                  // height: '90%',
-                }
-              }>
-              <Image
-                accessibilityIgnoresInvertColors
-                resizeMode="contain"
-                style={styles.mangaPage}
-                source={{
-                  uri: `${singleImageViewUrl}`,
-                }}
-              />
-            </ReactNativeZoomableView>
+        <Modal visible={singleImageViewVisible}>
+          <View>
+            <Text
+              style={{
+                position: 'absolute',
+                width: '100%',
+                textAlignVertical: 'center',
+                textAlign: 'center',
+                top: -insets.top,
+                height: insets.top,
+                color: colors.primary,
+                backgroundColor: colors.accent,
+              }}>
+              Double tap image to close
+            </Text>
+            <View
+              style={{
+                overflow: 'hidden',
+                width: '100%',
+                height: '100%',
+              }}>
+              <ReactNativeZoomableView
+                maxZoom={2}
+                minZoom={1}
+                zoomStep={0}
+                initialZoom={1.25}
+                bindToBorders={true}
+                doubleTapZoomToCenter={false}
+                onDoubleTapAfter={hideModal}
+                style={{
+                  paddingHorizontal: 24,
+                }}>
+                <Image
+                  accessibilityIgnoresInvertColors
+                  resizeMode="contain"
+                  style={styles.mangaPage}
+                  source={{
+                    uri: `${singleImageViewUrl}`,
+                  }}
+                />
+              </ReactNativeZoomableView>
+            </View>
           </View>
         </Modal>
       </Portal>
