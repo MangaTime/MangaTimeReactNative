@@ -2,6 +2,7 @@ import {
   createRef,
   ReactElement,
   RefObject,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -13,8 +14,17 @@ import {
   StatusBar,
   Dimensions,
   PickerIOSItem,
+  TouchableOpacity,
+  BackHandler,
 } from 'react-native';
-import { Button, IconButton, ProgressBar, useTheme } from 'react-native-paper';
+import {
+  Button,
+  IconButton,
+  Modal,
+  Portal,
+  ProgressBar,
+  useTheme,
+} from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 import {
   fetchMangadexHomeBaseUrl,
@@ -23,6 +33,9 @@ import {
 import { CollapsibleHeaderFlatList } from 'react-native-collapsible-header-views';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Picker } from '@react-native-picker/picker';
+import ReactNativeZoomableView from '@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView';
+import { Text } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const MangaReader = (): ReactElement => {
   const { colors, dark } = useTheme();
@@ -37,6 +50,30 @@ export const MangaReader = (): ReactElement => {
   const [selectedChapter, setSelectedChapter] = useState(chapterDetail?.id);
   const [readingProgress, setReadingProgress] = useState(0);
   const windowHeight = Dimensions.get('window').height;
+
+  const [singleImageViewVisible, setSingleImageViewVisible] = useState(false);
+  const [singleImageViewUrl, setSingleImageViewUrl] = useState('');
+
+  const showModal = () => setSingleImageViewVisible(true);
+  const hideModal = () => setSingleImageViewVisible(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        if (singleImageViewVisible) {
+          hideModal();
+          return true;
+        } else {
+          return false;
+        }
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [singleImageViewVisible]),
+  );
 
   useEffect(() => {
     (async () => {
@@ -80,87 +117,162 @@ export const MangaReader = (): ReactElement => {
     />
   ));
   return (
-    <View style={styles.container}>
-      <View
-        style={[
-          styles.statusBar,
-          {
-            backgroundColor: colors.accent,
-            height: insets.top,
-          },
-        ]}
-      />
-      <StatusBar
-        backgroundColor="transparent"
-        barStyle={!dark ? 'dark-content' : 'light-content'}
-        translucent
-      />
-
-      <CollapsibleHeaderFlatList
-        CollapsibleHeaderComponent={
-          <View style={styles.headerContainer}>
-            <View style={styles.header}>
-              <Picker
-                style={{ ...styles.chapterPicker, color: colors.text }}
-                itemStyle={{ color: colors.text }}
-                dropdownIconColor={colors.text}
-                selectedValue={selectedChapter}
-                onValueChange={(itemValue, itemIndex) => {
-                  if (mangaDetail && mangaDetail.chapters) {
-                    dispatch(loadChapter(mangaDetail.chapters[itemIndex]));
-                    setSelectedChapter(itemValue);
-                  }
-                }}>
-                {chapterList}
-              </Picker>
-              <IconButton
-                icon="chevron-left"
-                color={colors.text}
-                style={{ backgroundColor: colors.accent }}
-                disabled={!previousChapter()}
-                onPress={() => previousChapter(true)}
+    <>
+      <Portal>
+        <Modal
+          visible={singleImageViewVisible}
+          onDismiss={hideModal}
+          // dismissable={false}
+          style={
+            {
+              // backgroundColor: 'green',
+              // width: '100%',
+              // height: '100%',
+            }
+          }
+          contentContainerStyle={
+            {
+              // backgroundColor: 'blue',
+            }
+          }>
+          <Text
+            style={{
+              // paddingVertical: 2,
+              position: 'absolute',
+              top: -insets.top,
+              width: '100%',
+              height: insets.top,
+              textAlignVertical: 'center',
+              textAlign: 'center',
+              color: 'white',
+              backgroundColor: 'black',
+            }}>
+            Double tap image to close
+          </Text>
+          <View
+            style={{
+              overflow: 'hidden',
+              width: '100%',
+              height: '100%',
+              paddingHorizontal: 24,
+            }}>
+            <ReactNativeZoomableView
+              maxZoom={2}
+              minZoom={1}
+              zoomStep={0}
+              initialZoom={1}
+              bindToBorders={true}
+              //  onZoomAfter={this.logOutZoomState}
+              doubleTapZoomToCenter={false}
+              onDoubleTapAfter={hideModal}
+              style={
+                {
+                  // backgroundColor: 'red',
+                  // height: '90%',
+                }
+              }>
+              <Image
+                accessibilityIgnoresInvertColors
+                resizeMode="contain"
+                style={styles.mangaPage}
+                source={{
+                  uri: `${singleImageViewUrl}`,
+                }}
               />
-              <IconButton
-                icon="chevron-right"
-                color={colors.text}
-                style={{ backgroundColor: colors.accent }}
-                disabled={!nextChapter()}
-                onPress={() => nextChapter(true)}
+            </ReactNativeZoomableView>
+          </View>
+        </Modal>
+      </Portal>
+      <View style={styles.container}>
+        <View
+          style={[
+            styles.statusBar,
+            {
+              backgroundColor: colors.accent,
+              height: insets.top,
+            },
+          ]}
+        />
+        <StatusBar
+          backgroundColor="transparent"
+          barStyle={!dark ? 'dark-content' : 'light-content'}
+          translucent
+        />
+        <CollapsibleHeaderFlatList
+          CollapsibleHeaderComponent={
+            <View style={styles.headerContainer}>
+              <View style={styles.header}>
+                <Picker
+                  style={{ ...styles.chapterPicker, color: colors.text }}
+                  itemStyle={{ color: colors.text }}
+                  dropdownIconColor={colors.text}
+                  selectedValue={selectedChapter}
+                  onValueChange={(itemValue, itemIndex) => {
+                    if (mangaDetail && mangaDetail.chapters) {
+                      dispatch(loadChapter(mangaDetail.chapters[itemIndex]));
+                      setSelectedChapter(itemValue);
+                    }
+                  }}>
+                  {chapterList}
+                </Picker>
+                <IconButton
+                  icon="chevron-left"
+                  color={colors.text}
+                  style={{ backgroundColor: colors.accent }}
+                  disabled={!previousChapter()}
+                  onPress={() => previousChapter(true)}
+                />
+                <IconButton
+                  icon="chevron-right"
+                  color={colors.text}
+                  style={{ backgroundColor: colors.accent }}
+                  disabled={!nextChapter()}
+                  onPress={() => nextChapter(true)}
+                />
+              </View>
+
+              <ProgressBar
+                progress={readingProgress}
+                color={colors.accent}
+                style={{ position: 'absolute', bottom: -5, height: 5 }}
               />
             </View>
-
-            <ProgressBar
-              progress={readingProgress}
-              color={colors.accent}
-              style={{ position: 'absolute', bottom: -5, height: 5 }}
-            />
-          </View>
-        }
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        headerContainerBackgroundColor={colors.background}
-        headerHeight={50}
-        disableHeaderSnap={true}
-        onMomentumScrollEnd={({ nativeEvent }) => {
-          setReadingProgress(
-            nativeEvent.contentOffset.y /
-              (nativeEvent.contentSize.height - windowHeight),
-          );
-        }}
-        data={chapterDetail?.pages}
-        keyExtractor={(page) => page}
-        renderItem={(page) => (
-          <Image
-            accessibilityIgnoresInvertColors
-            resizeMode="contain"
-            style={styles.mangaPage}
-            source={{
-              uri: `${baseUrl}/data/${chapterDetail?.hash}/${page.item}`,
-            }}
-          />
-        )}
-      />
-    </View>
+          }
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          headerContainerBackgroundColor={colors.background}
+          headerHeight={50}
+          disableHeaderSnap={true}
+          onMomentumScrollEnd={({ nativeEvent }) => {
+            setReadingProgress(
+              nativeEvent.contentOffset.y /
+                (nativeEvent.contentSize.height - windowHeight),
+            );
+          }}
+          data={chapterDetail?.pages}
+          keyExtractor={(page) => page}
+          renderItem={(page) => (
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={() => {
+                setSingleImageViewUrl(
+                  `${baseUrl}/data/${chapterDetail?.hash}/${page.item}`,
+                );
+                showModal();
+              }}>
+              <Image
+                accessibilityIgnoresInvertColors
+                resizeMode="contain"
+                style={styles.mangaPage}
+                source={{
+                  uri: `${baseUrl}/data/${chapterDetail?.hash}/${page.item}`,
+                }}
+              />
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    </>
   );
 };
 const styles = StyleSheet.create({
