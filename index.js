@@ -29,6 +29,7 @@ import {
 } from './App/configBackgroundWork';
 import { navigationRef } from './App/Navigator/navigationRef';
 import { fetchMangaDetail, loadChapter } from './App/redux/Manga/mangaReducer';
+import AppViews from './App/Navigator/AppViews';
 
 if (Platform.OS === 'android') {
   PushNotification.createChannel({
@@ -49,7 +50,7 @@ if (Platform.OS === 'android') {
       if (notification.id !== 0) {
         store.dispatch(loadChapter(notification.data));
         await store.dispatch(fetchMangaDetail(notification.data.manga));
-        navigationRef.current.navigate('MangaReader');
+        navigationRef.current.navigate(AppViews.MANGA_READER);
       }
       // (required) Called when a remote is received or opened, or local notification is opened
       // notification.finish(PushNotificationIOS.FetchResult.NoData);

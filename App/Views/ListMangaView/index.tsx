@@ -6,6 +6,7 @@ import { Appbar, IconButton, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack';
 import { LargeMangaList } from '../../Components/MangaList/LargeMangaList';
+import AppViews from '../../Navigator/AppViews';
 import { MainTabsParamList } from '../../Navigator/MainTabs/paramList';
 import { RootStackParamList } from '../../Navigator/RootStack/paramList';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
@@ -43,7 +44,7 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
   const getMangaDetail = (manga: Manga): void => {
     // TODO: move fetchMangaDetail to MangaDetail page
     dispatch(fetchMangaDetail(manga));
-    navigation.navigate('MangaDetail', { manga });
+    navigation.navigate(AppViews.MANGA_DETAIL, { manga });
   };
 
   let dataHookFunction: (state: RootState) => Manga[];

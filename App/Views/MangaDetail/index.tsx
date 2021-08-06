@@ -13,6 +13,7 @@ import { ChapterList } from '../../Components/ChapterList';
 import { loadChapter } from '../../redux/Manga/mangaReducer';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack';
 import { RootStackParamList } from '../../Navigator/RootStack/paramList';
+import AppViews from '../../Navigator/AppViews';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'MangaDetail'>;
 
@@ -64,7 +65,7 @@ export const MangaDetail = ({ navigation }: Props): ReactElement => {
                 volume={vol.item}
                 itemCallback={(chapter: Chapter) => {
                   dispatch(loadChapter(chapter));
-                  navigation.navigate('MangaReader');
+                  navigation.navigate(AppViews.MANGA_READER);
                 }}
               />
             </View>

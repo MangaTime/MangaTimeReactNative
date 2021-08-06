@@ -12,7 +12,7 @@ import {
 } from '../../redux/AppSettings/appSettingsReducer';
 import { useNavigation } from '@react-navigation/native';
 import { SectionListFooter } from './sectionListFooter';
-
+import AppViews from '../../Navigator/AppViews';
 type Props = {
   isEditingVisibility: boolean;
 };
@@ -35,7 +35,7 @@ export const SectionList = ({ isEditingVisibility }: Props): ReactElement => {
       icon: 'history',
       isVisible: true,
       callback: () => {
-        navigation.navigate('ListMangaView', {
+        navigation.navigate(AppViews.LIST_MANGA_VIEW, {
           routeName: 'Recently Updated',
           routeId: 'recentlyUpdated',
         });
@@ -47,7 +47,7 @@ export const SectionList = ({ isEditingVisibility }: Props): ReactElement => {
       icon: 'favorite-border',
       isVisible: true,
       callback: () => {
-        navigation.navigate('ListMangaView', {
+        navigation.navigate(AppViews.LIST_MANGA_VIEW, {
           routeName: 'Following',
           routeId: 'following',
         });
@@ -59,7 +59,7 @@ export const SectionList = ({ isEditingVisibility }: Props): ReactElement => {
       icon: 'playlist-add',
       isVisible: true,
       callback: () => {
-        navigation.navigate('ListMangaView', {
+        navigation.navigate(AppViews.LIST_MANGA_VIEW, {
           routeName: 'Recently Added',
           routeId: 'recentlyAdded',
         });
@@ -71,7 +71,7 @@ export const SectionList = ({ isEditingVisibility }: Props): ReactElement => {
       icon: 'help-outline',
       isVisible: true,
       callback: () => {
-        navigation.navigate('ListMangaView', {
+        navigation.navigate(AppViews.LIST_MANGA_VIEW, {
           routeName: 'Random',
           routeId: 'random',
         });

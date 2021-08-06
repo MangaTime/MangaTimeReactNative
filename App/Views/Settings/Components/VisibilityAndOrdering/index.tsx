@@ -3,6 +3,7 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Title, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import AppViews from '../../../../Navigator/AppViews';
 import { baseColors } from '../../../../Theme/baseColors';
 
 export const VisibilityAndOrdering = (): ReactElement => {
@@ -26,7 +27,7 @@ export const VisibilityAndOrdering = (): ReactElement => {
         style={{ ...styles.button, backgroundColor: colors.accent }}
         color={colors.text}
         onPress={() => {
-          navigation.navigate('SectionVisibilitiesAndOrderingPage');
+          navigation.navigate(AppViews.SECTION_VISIBILITIES_AND_ORDERING);
         }}>
         Edit
       </Button>

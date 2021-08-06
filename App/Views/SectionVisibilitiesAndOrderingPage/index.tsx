@@ -4,6 +4,7 @@ import { StatusBar, StyleSheet, View } from 'react-native';
 import { Appbar, IconButton, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SectionList } from '../Browse/sectionList';
+import AppViews from '../../Navigator/AppViews';
 
 export const SectionVisibilitiesAndOrderingPage = (): ReactElement => {
   const { colors, dark } = useTheme();
@@ -32,9 +33,9 @@ export const SectionVisibilitiesAndOrderingPage = (): ReactElement => {
           style={{
             ...{ backgroundColor: colors.background },
           }}
-          onPress={() => navigation.navigate('Settings')}
+          onPress={() => navigation.navigate(AppViews.SETTINGS)}
         />
-        <Appbar.Content title="Setting" />
+        <Appbar.Content title="Settings" />
       </Appbar>
       <SectionList isEditingVisibility={true} />
     </>

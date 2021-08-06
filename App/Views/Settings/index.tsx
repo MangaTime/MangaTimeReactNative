@@ -26,7 +26,7 @@ export const Settings = (): ReactElement => {
         translucent
       />
       <Appbar dark={dark}>
-        <Appbar.Content title="Setting" />
+        <Appbar.Content title="Settings" />
       </Appbar>
       <ScrollView>
         <AppSection />

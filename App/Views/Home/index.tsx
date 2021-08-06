@@ -20,6 +20,7 @@ import { RootStackParamList } from '../../Navigator/RootStack/paramList';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { MainTabsParamList } from '../../Navigator/MainTabs/paramList';
+import AppViews from '../../Navigator/AppViews';
 
 type HomeScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabsParamList, 'Home'>,
@@ -61,7 +62,7 @@ export const Home = ({ navigation }: Props): ReactElement => {
 
   const getMangaDetail = (manga: Manga) => {
     dispatch(fetchMangaDetail(manga));
-    navigation.navigate('MangaDetail', { manga });
+    navigation.navigate(AppViews.MANGA_DETAIL, { manga });
   };
 
   interface Entry {
@@ -74,7 +75,7 @@ export const Home = ({ navigation }: Props): ReactElement => {
 
   const showMoreActionCreator = (id: string, name: string) => {
     return () => {
-      navigation.navigate('ListMangaView', {
+      navigation.navigate(AppViews.LIST_MANGA_VIEW, {
         routeName: name,
         routeId: id,
       });
@@ -157,7 +158,7 @@ export const Home = ({ navigation }: Props): ReactElement => {
                 }
                 itemCallback={getMangaDetail} // item callback
                 title={item.title}
-                btnMoreCallback={item.showMore}
+                onShowMorePress={item.showMore}
               />
             </SectionContainer>
           )

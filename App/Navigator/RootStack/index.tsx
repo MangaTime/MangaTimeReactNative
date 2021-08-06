@@ -4,6 +4,7 @@ import { MangaReader } from '../../Views/MangaReader';
 import { RootStackParamList } from './paramList';
 import { ListMangaView } from '../../Views/ListMangaView';
 import { MainTabs } from '../MainTabs';
+import AppViews from '../AppViews';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -14,10 +15,13 @@ export const RootStackScreen = () => {
         headerShown: false,
         statusBarTranslucent: true,
       })}>
-      <RootStack.Screen name="MainTabs" component={MainTabs} />
-      <RootStack.Screen name="ListMangaView" component={ListMangaView} />
-      <RootStack.Screen name="MangaDetail" component={MangaDetail} />
-      <RootStack.Screen name="MangaReader" component={MangaReader} />
+      <RootStack.Screen name={AppViews.MAIN_TABS} component={MainTabs} />
+      <RootStack.Screen
+        name={AppViews.LIST_MANGA_VIEW}
+        component={ListMangaView}
+      />
+      <RootStack.Screen name={AppViews.MANGA_DETAIL} component={MangaDetail} />
+      <RootStack.Screen name={AppViews.MANGA_READER} component={MangaReader} />
     </RootStack.Navigator>
   );
 };
