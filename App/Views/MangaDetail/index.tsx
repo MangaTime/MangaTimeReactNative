@@ -39,7 +39,6 @@ export const MangaDetail = ({ navigation }: Props): ReactElement => {
           translucent
         />
         <FlatList
-          // style={{ ...styles.container, backgroundColor: colors.primary }}
           ListHeaderComponentStyle={{
             ...styles.listHeader,
             backgroundColor: colors.primary,
@@ -96,9 +95,6 @@ export const MangaDetail = ({ navigation }: Props): ReactElement => {
           }
           data={mangaDetail.volumes}
           keyExtractor={(vol) => vol.name}
-          // ItemSeparatorComponent={() => (
-          //   <View style={styles.listSeparator}></View>
-          // )}
           renderItem={(vol) => (
             <View
               style={{
@@ -149,9 +145,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     padding: 16,
   },
-  // listSeparator: { marginLeft: 20, borderWidth: 1 },
   volumeTitle: {
-    // fontWeight: 'bold',
     fontStyle: 'italic',
     fontSize: 17,
     paddingTop: 12,
@@ -164,7 +158,6 @@ const styles = StyleSheet.create({
   },
   mangaName: {
     fontSize: 22,
-    // paddingHorizontal: 15,
     paddingTop: 5,
     paddingBottom: 10,
     textAlign: 'center',
