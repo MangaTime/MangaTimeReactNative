@@ -1,24 +1,58 @@
-import { ReactElement, useEffect } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  FlatList,
   Image,
-  Button,
+  View,
+  StatusBar,
+  Dimensions,
+  TouchableOpacity,
+  BackHandler,
 } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
-import {
-  fetchMangadexHomeBaseUrl,
-  loadChapter,
-} from '../../redux/Manga/mangaReducer';
+import { fetchMangadexHomeBaseUrl } from '../../redux/Manga/mangaReducer';
+import { CollapsibleHeaderFlatList } from 'react-native-collapsible-header-views';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
+import { SingleImageViewModal } from './Components/singleImageViewModal';
+import { ImageListHeader } from './Components/imageListHeader';
 
 export const MangaReader = (): ReactElement => {
+  const { colors, dark } = useTheme();
+  const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
-  const mangaDetail = useAppSelector((state) => state.mangaReducer.mangaDetail);
   const chapterDetail = useAppSelector(
     (state) => state.mangaReducer.readingChapter,
   );
   const baseUrl = useAppSelector((state) => state.mangaReducer.baseUrl);
+
+  const [readingProgress, setReadingProgress] = useState(0);
+  const windowHeight = Dimensions.get('window').height;
+
+  const [singleImageViewVisible, setSingleImageViewVisible] = useState(false);
+  const [singleImageViewUrl, setSingleImageViewUrl] = useState('');
+
+  const showModal = () => setSingleImageViewVisible(true);
+  const hideModal = () => setSingleImageViewVisible(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        if (singleImageViewVisible) {
+          hideModal();
+          return true;
+        } else {
+          return false;
+        }
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [singleImageViewVisible]),
+  );
+
   useEffect(() => {
     (async () => {
       if (chapterDetail)
@@ -26,67 +60,74 @@ export const MangaReader = (): ReactElement => {
     })();
   }, [chapterDetail, dispatch]);
 
-  const previousChapter = (shouldNavigate = false): boolean => {
-    if (mangaDetail && mangaDetail.chapters && chapterDetail)
-      for (let i = 0; i < mangaDetail.chapters.length; i++)
-        if (
-          parseFloat(mangaDetail.chapters[i].name) <
-          parseFloat(chapterDetail.name)
-        ) {
-          if (shouldNavigate) dispatch(loadChapter(mangaDetail.chapters[i]));
-          return true;
-        }
-
-    return false;
-  };
-
-  const nextChapter = (shouldNavigate = false): boolean => {
-    if (mangaDetail && mangaDetail.chapters && chapterDetail)
-      for (let i = mangaDetail.chapters.length - 1; i >= 0; i--)
-        if (
-          parseFloat(mangaDetail.chapters[i].name) >
-          parseFloat(chapterDetail.name)
-        ) {
-          if (shouldNavigate) dispatch(loadChapter(mangaDetail.chapters[i]));
-          return true;
-        }
-
-    return false;
-  };
-
   return (
-    <SafeAreaView style={styles.container}>
-      <Button
-        title="Next chapter"
-        disabled={!nextChapter()}
-        onPress={() => nextChapter(true)}
+    <>
+      <SingleImageViewModal
+        visible={singleImageViewVisible}
+        imageUri={singleImageViewUrl}
+        onDismiss={hideModal}
       />
-      <Button
-        title="Previous chapter"
-        disabled={!previousChapter()}
-        onPress={() => previousChapter(true)}
-      />
-      <FlatList
-        data={chapterDetail?.pages}
-        keyExtractor={(page) => page}
-        renderItem={(page) => (
-          <Image
-            accessibilityIgnoresInvertColors
-            resizeMode="contain"
-            style={styles.mangaPage}
-            source={{
-              uri: `${baseUrl}/data/${chapterDetail?.hash}/${page.item}`,
-            }}
-          />
-        )}
-      />
-    </SafeAreaView>
+      <View style={styles.container}>
+        <View
+          style={[
+            styles.statusBar,
+            {
+              backgroundColor: colors.accent,
+              height: insets.top,
+            },
+          ]}
+        />
+        <StatusBar
+          backgroundColor="transparent"
+          barStyle={!dark ? 'dark-content' : 'light-content'}
+          translucent
+        />
+        <CollapsibleHeaderFlatList
+          CollapsibleHeaderComponent={
+            <ImageListHeader readingProgress={readingProgress} />
+          }
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          headerContainerBackgroundColor={colors.background}
+          headerHeight={50}
+          disableHeaderSnap={true}
+          onMomentumScrollEnd={({ nativeEvent }) => {
+            setReadingProgress(
+              nativeEvent.contentOffset.y /
+                (nativeEvent.contentSize.height - windowHeight),
+            );
+          }}
+          data={chapterDetail?.pages}
+          keyExtractor={(page) => page}
+          renderItem={(page) => (
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={() => {
+                setSingleImageViewUrl(
+                  `${baseUrl}/data/${chapterDetail?.hash}/${page.item}`,
+                );
+                showModal();
+              }}>
+              <Image
+                accessibilityIgnoresInvertColors
+                resizeMode="contain"
+                style={styles.mangaPage}
+                source={{
+                  uri: `${baseUrl}/data/${chapterDetail?.hash}/${page.item}`,
+                }}
+              />
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    </>
   );
 };
 const styles = StyleSheet.create({
-  container: {},
+  container: { width: '100%', height: '100%' },
   mangaPage: {
     width: '100%',
     aspectRatio: 0.7,
   },
+  statusBar: { width: '100%', zIndex: 1000 },
 });
