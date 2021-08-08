@@ -15,7 +15,13 @@ export interface Volume {
 export interface Manga {
   id: string;
   name: string;
+  alternative_names: string[];
   description: string;
+  author: string;
+  artist: string;
+  genres: string[];
+  themes: string[];
+  demographic: string[];
   cover_art: string;
   volumes?: Volume[];
   chapters?: Chapter[];

@@ -1,5 +1,6 @@
-import { useAppDispatch } from '../redux/Hooks';
-import { refreshThunk, updateToken } from '../redux/User/userReducer';
+import { AxiosResponse } from 'axios';
+import { updateToken } from '../redux/User/userReducer';
+import { components } from './mangadex';
 
 export default (client: any, store: any) => {
   const addAuthHeader = (originalConfig: any): any => {
@@ -23,11 +24,11 @@ export default (client: any, store: any) => {
       .post('/auth/refresh', {
         token: refreshToken,
       })
-      .then((response: any) => {
+      .then((response: components['schemas']['RefreshResponse']) => {
         store.dispatch(
           updateToken({
-            session: response.token.session,
-            refresh: response.token.refresh,
+            session: response?.token?.session,
+            refresh: response?.token?.refresh,
           }),
         );
       })
@@ -47,7 +48,8 @@ export default (client: any, store: any) => {
     return Promise.reject(error);
     throw error;
   };
-  const onResolvedResponse = (response: any) => response.data;
+  const onResolvedResponse = (response: AxiosResponse<unknown>): unknown =>
+    response.data;
   client.interceptors.request.use(onFulfilledRequest);
   client.interceptors.response.use(onResolvedResponse, onRejectedResponse);
 };
