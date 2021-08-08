@@ -15,14 +15,14 @@ export interface MangaListProps {
   mangaList: Manga[];
   itemCallback: (arg: Manga) => void;
   title?: string;
-  btnMoreCallback?: () => void;
+  onShowMorePress?: () => void;
 }
 
 export const SmallMangaList = ({
   mangaList,
   itemCallback,
   title = 'Manga List',
-  btnMoreCallback = undefined,
+  onShowMorePress = undefined,
 }: MangaListProps): ReactElement => {
   const { colors, dark } = useTheme();
   return (
@@ -34,12 +34,12 @@ export const SmallMangaList = ({
           </Text>
         </View>
         <View style={styles.headerRight}>
-          {btnMoreCallback && (
+          {onShowMorePress && (
             <IconButton
               icon="chevron-triple-right"
               color={colors.text}
               style={{ backgroundColor: colors.background }}
-              onPress={() => console.log('aaa')}
+              onPress={onShowMorePress}
             />
           )}
         </View>

@@ -1,14 +1,15 @@
+import { useNavigation } from '@react-navigation/native';
 import { ReactElement } from 'react';
-import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
-import { Appbar, useTheme } from 'react-native-paper';
+import { StatusBar, StyleSheet, View } from 'react-native';
+import { Appbar, IconButton, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { AppSection } from './Components/AppSection';
-import { UserSection } from './Components/UserSection';
+import { SectionList } from '../Browse/sectionList';
+import AppViews from '../../Navigator/AppViews';
 
-export const Settings = (): ReactElement => {
+export const SectionVisibilitiesAndOrderingPage = (): ReactElement => {
   const { colors, dark } = useTheme();
   const insets = useSafeAreaInsets();
-
+  const navigation = useNavigation();
   return (
     <>
       <View
@@ -26,12 +27,17 @@ export const Settings = (): ReactElement => {
         translucent
       />
       <Appbar dark={dark}>
+        <IconButton
+          icon="keyboard-backspace"
+          color={colors.text}
+          style={{
+            ...{ backgroundColor: colors.background },
+          }}
+          onPress={() => navigation.navigate(AppViews.SETTINGS)}
+        />
         <Appbar.Content title="Settings" />
       </Appbar>
-      <ScrollView>
-        <AppSection />
-        <UserSection />
-      </ScrollView>
+      <SectionList isEditingVisibility={true} />
     </>
   );
 };

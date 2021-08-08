@@ -1,4 +1,4 @@
-import { ReactElement, ReactComponentElement } from 'react';
+import { ReactElement } from 'react';
 import {
   SafeAreaView,
   FlatList,
@@ -6,16 +6,16 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
-import { Chapter, Volume } from '../../redux/Manga/interfaces';
-import { HomeStackParamList } from '../../Navigator/HomeStack/paramList';
+import { Chapter } from '../../redux/Manga/interfaces';
 import { ChapterList } from '../../Components/ChapterList';
 import { loadChapter } from '../../redux/Manga/mangaReducer';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack';
+import { RootStackParamList } from '../../Navigator/RootStack/paramList';
+import AppViews from '../../Navigator/AppViews';
 
-type Props = NativeStackScreenProps<HomeStackParamList, 'MangaDetail'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'MangaDetail'>;
 
 export const MangaDetail = ({ navigation }: Props): ReactElement => {
   const dispatch = useAppDispatch();
@@ -65,7 +65,7 @@ export const MangaDetail = ({ navigation }: Props): ReactElement => {
                 volume={vol.item}
                 itemCallback={(chapter: Chapter) => {
                   dispatch(loadChapter(chapter));
-                  navigation.navigate('MangaReader');
+                  navigation.navigate(AppViews.MANGA_READER);
                 }}
               />
             </View>

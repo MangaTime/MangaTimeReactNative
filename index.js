@@ -9,6 +9,12 @@ import App from './App';
 import { name as appName } from './app.json';
 import { persistor, store } from './App/redux/store';
 import BackgroundFetch from 'react-native-background-fetch';
+
+import { LogBox } from 'react-native';
+
+// Ignore log notification by message:
+LogBox.ignoreLogs(['ReactNativeFiberHostComponent:']);
+
 let PushNotification;
 let PushNotificationIOS;
 if (Platform.OS === 'android') {
@@ -23,6 +29,7 @@ import {
 } from './App/configBackgroundWork';
 import { navigationRef } from './App/Navigator/navigationRef';
 import { fetchMangaDetail, loadChapter } from './App/redux/Manga/mangaReducer';
+import AppViews from './App/Navigator/AppViews';
 
 if (Platform.OS === 'android') {
   PushNotification.createChannel({
@@ -43,7 +50,7 @@ if (Platform.OS === 'android') {
       if (notification.id !== 0) {
         store.dispatch(loadChapter(notification.data));
         await store.dispatch(fetchMangaDetail(notification.data.manga));
-        navigationRef.current.navigate('MangaReader');
+        navigationRef.current.navigate(AppViews.MANGA_READER);
       }
       // (required) Called when a remote is received or opened, or local notification is opened
       // notification.finish(PushNotificationIOS.FetchResult.NoData);

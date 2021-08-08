@@ -1,73 +1,81 @@
-import { RouteProp } from '@react-navigation/native';
-import { ReactElement, useEffect, useState } from 'react';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { ReactElement, useEffect } from 'react';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
-import { Appbar, IconButton, Searchbar, useTheme } from 'react-native-paper';
+import { Appbar, IconButton, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { LargeMangaList } from '../../Components/MangaList/LargeMangaList';
-import { BrowseStackParamList } from '../../Navigator/BrowseStack/paramList';
+import AppViews from '../../Navigator/AppViews';
+import { MainTabsParamList } from '../../Navigator/MainTabs/paramList';
+import { RootStackParamList } from '../../Navigator/RootStack/paramList';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
+import { Manga } from '../../redux/Manga/interfaces';
+import { fetchFollowingManga } from '../../redux/Manga/mangaPersistReducer';
 import {
+  fetchAddedManga,
   fetchMangaDetail,
+  fetchRandomManga,
   fetchUpdatedManga,
-  Manga,
 } from '../../redux/Manga/mangaReducer';
 import { RootState } from '../../redux/store';
 
-type BrowseScreenNavigationProp = NativeStackNavigationProp<
-  BrowseStackParamList,
+type ListMangaViewScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<MainTabsParamList, 'Browse'>,
+  NativeStackNavigationProp<RootStackParamList>
+>;
+type ListMangaViewScreenRouteProp = RouteProp<
+  RootStackParamList,
   'ListMangaView'
 >;
 
-type BrowseScreenRouteProp = RouteProp<BrowseStackParamList, 'ListMangaView'>;
-
 type Props = {
-  route: BrowseScreenRouteProp;
-  navigation: BrowseScreenNavigationProp;
+  route: ListMangaViewScreenRouteProp;
+  navigation: ListMangaViewScreenNavigationProp;
 };
 
 export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
   const { colors, dark } = useTheme();
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
-  const { routeName, routeId }: BrowseStackParamList['ListMangaView'] =
+  const { routeName, routeId }: RootStackParamList['ListMangaView'] =
     route.params;
 
   const getMangaDetail = (manga: Manga): void => {
+    // TODO: move fetchMangaDetail to MangaDetail page
     dispatch(fetchMangaDetail(manga));
-    navigation.navigate('MangaDetail');
+    navigation.navigate(AppViews.MANGA_DETAIL, { manga });
   };
 
   let dataHookFunction: (state: RootState) => Manga[];
   let updateDataFunction: (() => void) | undefined;
 
-  // TODO: data not available in master branch atm
   // TODO: add offset + limit to updateDataFunction use it to paginate the list
 
   switch (routeId) {
     case 'recentlyUpdated':
-      dataHookFunction = (state) => state.mangaReducer.recentlyUpdatedManga;
+      dataHookFunction = (state) =>
+        state.mangaReducer.recentlyUpdatedManga ?? [];
       updateDataFunction = () => {
         dispatch(fetchUpdatedManga());
       };
       break;
     case 'following':
-      dataHookFunction = (state) => state.mangaReducer.recentlyUpdatedManga;
+      dataHookFunction = (state) => state.persist.manga.followingManga ?? [];
       updateDataFunction = () => {
-        dispatch(fetchUpdatedManga());
+        dispatch(fetchFollowingManga());
       };
       break;
     case 'recentlyAdded':
-      dataHookFunction = (state) => state.mangaReducer.recentlyUpdatedManga;
+      dataHookFunction = (state) => state.mangaReducer.recentlyAddedManga ?? [];
       updateDataFunction = () => {
-        dispatch(fetchUpdatedManga());
+        dispatch(fetchAddedManga());
       };
       break;
     case 'random':
-      dataHookFunction = (state) => state.mangaReducer.recentlyUpdatedManga;
+      dataHookFunction = (state) => state.mangaReducer.randomManga ?? [];
       updateDataFunction = () => {
-        dispatch(fetchUpdatedManga());
+        dispatch(fetchRandomManga());
       };
       break;
     default:
@@ -98,23 +106,13 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
         translucent
       />
       <Appbar style={styles.appBar}>
-        <Text
-          style={{
-            color: colors.text,
-            fontSize: 24,
-            // textTransform: 'uppercase',
-            textAlign: 'center',
-            marginRight: 20,
-          }}>
+        <Text style={{ ...styles.appBarTitle, color: colors.text }}>
           {routeName}
         </Text>
         <IconButton
           icon="magnify"
           color={colors.text}
-          style={{
-            ...styles.buttonRightIcon,
-            ...{ backgroundColor: colors.primary },
-          }}
+          style={{ backgroundColor: colors.primary }}
           onPress={() => console.log('aaa')}
         />
       </Appbar>
@@ -132,15 +130,10 @@ export const ListMangaView = ({ route, navigation }: Props): ReactElement => {
 };
 const styles = StyleSheet.create({
   appBar: { paddingHorizontal: 24, justifyContent: 'space-between' },
-  searchBox: {
-    borderRadius: 20,
-    flex: 1,
-    height: 40,
-    alignItems: 'center',
+  appBarTitle: {
+    fontSize: 24,
+    textAlign: 'center',
+    marginRight: 20,
   },
-  searchBoxInput: { fontSize: 14 },
   statusBarColor: { width: '100%' },
-  buttonRightIcon: {
-    // alignSelf: 'flex-end',
-  },
 });

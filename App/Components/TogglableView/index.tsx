@@ -15,7 +15,7 @@ export const TogglableView = ({
   isShowingToggle = false,
   toggleValue = false,
 }: Props): ReactElement => {
-  const { colors, dark } = useTheme();
+  const { colors } = useTheme();
   const [checked, setChecked] = useState(toggleValue);
 
   return (
@@ -38,8 +38,8 @@ export const TogglableView = ({
             uncheckedColor={colors.accent}
             status={checked ? 'checked' : 'unchecked'}
             onPress={() => {
+              onChangeCallback(!checked);
               setChecked(!checked);
-              onChangeCallback(checked);
             }}
           />
         )}
@@ -51,12 +51,12 @@ export const TogglableView = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginTop: 16,
-    marginHorizontal: 16,
+    marginBottom: 16,
   },
   containerLeftBase: {
     padding: 16,
     borderRadius: 10,
+    width: '100%',
   },
   containerLeftToggle: {
     width: '85%',
