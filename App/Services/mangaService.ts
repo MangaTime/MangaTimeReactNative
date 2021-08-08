@@ -1,15 +1,11 @@
 import { Chapter, Manga, Volume } from '../redux/Manga/interfaces';
 import client from './baseClient';
 import { components } from './mangadex';
-
-const wait = async (duration: number): Promise<void> => {
-  await new Promise((resolve) => setTimeout(resolve, duration));
-};
+import { wait } from './utils';
 
 const APIMangaListToLocalMangaList = (
   apiResponse: components['schemas']['MangaList'],
 ): Manga[] => {
-  console.log(apiResponse);
   const result = apiResponse?.results?.map((e) => {
     const item = {
       id: e.data?.id,
@@ -36,7 +32,6 @@ const APIMangaListToLocalMangaList = (
     };
     return item as Manga;
   });
-  console.log(result?.length);
   return result ?? [];
 };
 
