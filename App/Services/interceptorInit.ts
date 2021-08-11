@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { updateToken } from '../redux/User/userReducer';
-import { components } from './mangadex';
+import { components } from './MangaSources/MangaDex/mangadex';
 
 export default (client: any, store: any) => {
   const addAuthHeader = (originalConfig: any): any => {

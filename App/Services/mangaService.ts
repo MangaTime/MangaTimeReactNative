@@ -1,6 +1,6 @@
 import { Chapter, Manga, Volume } from '../redux/Manga/interfaces';
 import client from './baseClient';
-import { components } from './mangadex';
+import { components } from './MangaSources/MangaDex/mangadex';
 import { wait } from './utils';
 
 const APIMangaListToLocalMangaList = (
@@ -168,7 +168,9 @@ export const getFollowingManga = async (
     .get(
       `/manga?${mangaIds
         ?.map((e) => `ids[]=${e}`)
-        .join('&')}&includes[]=cover_art&includes[]=author&includes[]=artist`,
+        .join(
+          '&',
+        )}&limit=100&offset=0&includes[]=cover_art&includes[]=author&includes[]=artist`,
     )
     .then((response) =>
       APIMangaListToLocalMangaList(

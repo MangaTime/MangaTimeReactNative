@@ -1,19 +1,30 @@
+import SupportedSources from '../../Services/MangaSources/supportedSources';
+
+export interface MangaSourceInfo {
+  [key: string]: string[] | string | undefined;
+}
 export interface Chapter {
-  id: string;
+  sourceInfo: {
+    [key in keyof SupportedSources]: MangaSourceInfo;
+  };
+  // id: string; // obsolete
   updatedAt: string;
   name: string;
-  hash: string;
-  pages?: string[];
+  // hash: string;
+  // pages?: string[];
   volume?: string;
-  manga?: string | Manga;
+  // manga?: string | Manga;
   title?: string;
 }
-export interface Volume {
-  name: string;
-  chapters?: (Chapter | string)[];
-}
+// export interface Volume {
+//   name: string;
+//   chapters?: (Chapter | string)[];
+// }
 export interface Manga {
-  id: string;
+  sourceInfo: {
+    [key in keyof SupportedSources]: MangaSourceInfo;
+  };
+  // id: string; // obsolete
   name: string;
   alternative_names: string[];
   description: string;
@@ -23,6 +34,6 @@ export interface Manga {
   themes: string[];
   demographic: string[];
   cover_art: string;
-  volumes?: Volume[];
+  // volumes?: Volume[];
   chapters?: Chapter[];
 }

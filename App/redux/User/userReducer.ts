@@ -1,15 +1,18 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { login, logout, refreshToken } from '../../Services/userService';
+import SupportedSources from '../../Services/MangaSources/supportedSources';
+import {
+  LoginInformation,
+  AdditionalAuthenticationInformation,
+  ServiceAuthenticationInformation,
+} from './interfaces';
 
-export interface UserState {
-  loggedIn: boolean;
-  username?: string;
-  sessionToken?: string;
-  refreshToken?: string;
-}
+export type UserState = {
+  [key in keyof SupportedSources]?: ServiceAuthenticationInformation;
+};
 
 const initialState: UserState = {
-  loggedIn: false,
+  // loggedIn: false,
 };
 
 export const loginThunk = createAsyncThunk(

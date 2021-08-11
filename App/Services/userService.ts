@@ -1,6 +1,7 @@
 import client from './baseClient';
-import { components } from './mangadex';
+import { components } from './MangaSources/MangaDex/mangadex';
 
+// TODO: create uniform authorization object
 export const login = async (
   username: string,
   password: string,
