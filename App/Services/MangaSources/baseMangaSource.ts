@@ -1,13 +1,10 @@
 import { EnhancedStore } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { Chapter, Manga } from '../../redux/Manga/interfaces';
-import { RootState } from '../../redux/store';
 import {
-  AdditionalAuthenticationInformation,
   LoginInformation,
   ServiceAuthenticationInformation,
 } from '../../redux/User/interfaces';
-import SupportedSources from './supportedSources';
 
 export interface BaseMangaRequests {
   getUpdatedManga?: (offset: number, limit: number) => Promise<Manga[]>;
@@ -28,15 +25,18 @@ export interface BaseMangaRequests {
 export interface BaseUserRequests {
   login?: (
     loginInfo: LoginInformation,
-  ) => Promise<ServiceAuthenticationInformation | undefined>; // TODO
-  logout?: (service: keyof SupportedSources) => Promise<unknown>; // TODO
-  // refreshToken?: () => Promise<void>; // TODO
-  clientInterceptor?: (
+  ) => Promise<ServiceAuthenticationInformation | undefined>;
+  logout?: () => Promise<unknown>; 
+}
+export interface BaseClient{
+  client: AxiosInstance,
+  clientInterceptor?:(
     client: AxiosInstance,
-    store: EnhancedStore<RootState>,
+    store: EnhancedStore,
   ) => void;
 }
 export interface BaseMangaSource {
   manga: BaseMangaRequests;
   user: BaseUserRequests;
+  client: BaseClient;
 }

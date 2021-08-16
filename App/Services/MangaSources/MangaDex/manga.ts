@@ -3,7 +3,7 @@ import {
   Manga,
   // Volume
 } from '../../../redux/Manga/interfaces';
-import client from '../../baseClient';
+import client from './client';
 import { components } from './mangadex';
 import { BaseMangaRequests, BaseMangaSource } from '../baseMangaSource';
 import { wait } from '../../utils';

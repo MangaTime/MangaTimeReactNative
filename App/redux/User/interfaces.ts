@@ -4,7 +4,7 @@ export interface LoginInformation {
 }
 
 export interface AdditionalAuthenticationInformation {
-  [key: string]: string;
+  [key: string]: string| undefined;
 }
 
 export interface ServiceAuthenticationInformation {

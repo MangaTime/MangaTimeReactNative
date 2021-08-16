@@ -17,8 +17,9 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
-import client from '../Services/baseClient';
-import interceptorInit from '../Services/interceptorInit';
+// import client from '../Services/baseClient';
+import { MangaSources } from '../Services/MangaSources'; 
+// import interceptorInit from '../Services/interceptorInit';
 import reducers from './reducers';
 
 export const store = configureStore({
@@ -33,7 +34,9 @@ export const store = configureStore({
   ],
 });
 
-interceptorInit(client, store);
+Object.values(MangaSources).forEach((value)=>{
+  if(value.client.clientInterceptor) value.client.clientInterceptor(value.client.client,store)
+});
 
 export const persistor = persistStore(store);
 
