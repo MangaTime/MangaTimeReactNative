@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  getAddedManga,
-  getMangaDetail,
-  getMangadexHomeBaseUrl,
-  getRandomManga,
-  getUpdatedManga,
-} from '../../Services/mangaService';
+// import {
+//   getAddedManga,
+//   getMangaDetail,
+//   getMangadexHomeBaseUrl,
+//   getRandomManga,
+//   getUpdatedManga,
+// } from '../../Services/mangaService';
 import { Chapter, Manga } from './interfaces';
+import SupportedSources from '../../Services/MangaSources/supportedSources';
+import { MangaSources } from '../../Services/MangaSources';
 
 export interface MangaState {
   recentlyUpdatedManga?: Manga[];
@@ -22,12 +24,33 @@ const initialState: MangaState = {
   randomManga: [],
 };
 
-export const fetchUpdatedManga = createAsyncThunk(
-  'manga/fetchUpdatedManga',
-  async () => {
-    return getUpdatedManga();
-  },
-);
+export const fetchUpdatedManga = (<K extends keyof SupportedSources>() =>
+  createAsyncThunk(
+    'manga/fetchUpdatedManga',
+    async (source: K | undefined = undefined) => {
+      if (!source) {
+        return Promise.all(
+          Object.values(MangaSources).map((e) =>
+            e.manga.getUpdatedManga
+              ? e.manga.getUpdatedManga(0, 10)
+              : Promise.resolve([]),
+          ),
+        ).then((allResult) =>
+          allResult.reduce(
+            (accumulator, value) => accumulator.concat(value),
+            [],
+          ),
+        );
+
+        // return getUpdatedManga();
+      } else {
+        const mangaSource = MangaSources[source]
+        return mangaSource.manga.getUpdatedManga
+          ? mangaSource.manga.getUpdatedManga(0, 10)
+          : [];
+      }
+    },
+  ))();
 
 export const fetchAddedManga = createAsyncThunk(
   'manga/fetchAddedManga',

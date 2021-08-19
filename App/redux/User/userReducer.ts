@@ -1,12 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import { login, logout, refreshToken } from '../../Services/userService';
 import SupportedSources from '../../Services/MangaSources/supportedSources';
 import {
-  LoginInformation,
-  AdditionalAuthenticationInformation,
   ServiceAuthenticationInformation,
 } from './interfaces';
-import { components } from '../../Services/MangaSources/MangaDex/mangadex';
 import { MangaSources } from '../../Services/MangaSources';
 
 export type UserState = {
