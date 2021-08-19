@@ -1,7 +1,7 @@
 // ALWAYS HAVE GESTURE-HANDLER ON TOP
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import React from 'react';
-import { AppRegistry, LogBox, Platform } from 'react-native';
+import { AppRegistry, Platform } from 'react-native';
 import BackgroundFetch from 'react-native-background-fetch';
 import 'react-native-gesture-handler';
 import PushNotification from 'react-native-push-notification';
@@ -13,28 +13,12 @@ import { name as appName } from './app.json';
 // import PushNotificationIOS from '@react-native-community/push-notification-ios';
 // import PushNotification, { Importance } from 'react-native-push-notification';
 import {
-    HeadlessUpdateMangaTask,
-    initBackgroundFetch
+  HeadlessUpdateMangaTask,
+  initBackgroundFetch,
 } from './App/configBackgroundWork';
 import { navigationRef } from './App/Navigator/navigationRef';
 import { fetchMangaDetail, loadChapter } from './App/redux/Manga/mangaReducer';
 import { persistor, store } from './App/redux/store';
-<<<<<<< HEAD
-
-
-// Ignore log notification by message:
-LogBox.ignoreLogs(['ReactNativeFiberHostComponent:']);
-
-let PushNotification;
-let PushNotificationIOS;
-if (Platform.OS === 'android') {
-  PushNotification = require('react-native-push-notification');
-  // PushNotificationIOS = require('@react-native-community/push-notification-ios')
-}
-<<<<<<< HEAD
-=======
-import { persistor, store } from './App/redux/store';
->>>>>>> bf1179c (Add back pushNoti for ios)
 
 PushNotification.createChannel({
   channelId: 'channel-id', // (required)
