@@ -10,7 +10,10 @@ export interface MangaPersistState {
   followingFeed?: Chapter[];
   followingManga?: Manga[];
 }
-const initialState: MangaPersistState = {};
+const initialState: MangaPersistState = {
+  followingFeed: [],
+  followingManga: [],
+};
 
 export const fetchFollowingChapterFeed = createAsyncThunk(
   'manga/fetchFollowingChapterFeed',
