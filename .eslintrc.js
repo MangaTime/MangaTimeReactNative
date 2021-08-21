@@ -26,5 +26,6 @@ module.exports = {
     'react/jsx-filename-extension': [0],
     'import/no-unresolved': [0],
     'react/display-name': 'off',
+    'no-console': [1],
   },
 };
