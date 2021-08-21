@@ -49,6 +49,7 @@ export const Home = ({ navigation }: Props): ReactElement => {
   const { followingManga } = useAppSelector((state) => state.persist.manga);
 
   const updateContent = async (): Promise<void> => {
+    console.log('updateContent');
     loggedIn && (await dispatch(fetchFollowingManga()));
     await dispatch(fetchUpdatedManga());
     await dispatch(fetchAddedManga());
@@ -99,6 +100,7 @@ export const Home = ({ navigation }: Props): ReactElement => {
       dataSource: randomManga,
     },
   ];
+
   const sortEntryList = (): Section[] => {
     // Map data from redux to entryList
     const mappedSections = sections.map((e) => {
@@ -109,7 +111,11 @@ export const Home = ({ navigation }: Props): ReactElement => {
     );
     return filteredSections;
   };
-  const sortedEntryList = sortEntryList();
+  let sortedEntryList = sortEntryList();
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    sortedEntryList = sortEntryList();
+  }, [sections]);
 
   return (
     <>
