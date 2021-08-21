@@ -1,12 +1,12 @@
 import React, { ReactElement } from 'react';
 import {
   FlatList,
-  SafeAreaView,
-  View,
   Image,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
 import { Manga } from '../../../redux/Manga/interfaces';
@@ -15,7 +15,8 @@ export interface MangaListProps {
   mangaList: Manga[];
   itemCallback: (arg: Manga) => void;
   title?: string;
-  onShowMorePress?: () => void;
+  // Help me fix this pls
+  onShowMorePress?: (id: string, name: string) => void;
 }
 
 export const SmallMangaList = ({
@@ -24,7 +25,7 @@ export const SmallMangaList = ({
   title = 'Manga List',
   onShowMorePress = undefined,
 }: MangaListProps): ReactElement => {
-  const { colors, dark } = useTheme();
+  const { colors } = useTheme();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
