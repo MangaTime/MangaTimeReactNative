@@ -4,12 +4,8 @@ import {
   getFollowingChapterFeed,
 } from '../../Services/mangaService';
 import { processFollowingChapterFeed } from '../../Utils/processFollowingChapterFeed';
-import { Chapter, Manga } from './interfaces';
+import { MangaPersistState } from './interfaces';
 
-export interface MangaPersistState {
-  followingFeed?: Chapter[];
-  followingManga?: Manga[];
-}
 const initialState: MangaPersistState = {
   followingFeed: [],
   followingManga: [],
@@ -17,9 +13,9 @@ const initialState: MangaPersistState = {
 
 export const fetchFollowingChapterFeed = createAsyncThunk(
   'manga/fetchFollowingChapterFeed',
-  async () => {
+  async (state: MangaPersistState) => {
     const data = await getFollowingChapterFeed();
-    const processedData = processFollowingChapterFeed(data);
+    const processedData = processFollowingChapterFeed(data, state);
     return processedData;
   },
 );

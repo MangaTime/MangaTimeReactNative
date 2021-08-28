@@ -26,3 +26,15 @@ export interface Manga {
   volumes?: Volume[];
   chapters?: Chapter[];
 }
+export interface MangaPersistState {
+  followingFeed?: Chapter[];
+  followingManga?: Manga[];
+}
+export interface MangaState {
+  recentlyUpdatedManga?: Manga[];
+  recentlyAddedManga?: Manga[];
+  randomManga?: Manga[];
+  mangaDetail?: Manga;
+  readingChapter?: Chapter;
+  baseUrl?: string;
+}
