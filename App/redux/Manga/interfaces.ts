@@ -3,9 +3,11 @@ import SupportedSources from '../../Services/MangaSources/supportedSources';
 export interface MangaSourceInfo {
   [key: string]: string[] | string | undefined;
 }
+
 export interface Chapter {
+  type: 'chapter';
   sourceInfo: {
-    [key in keyof SupportedSources]: MangaSourceInfo;
+    [key in keyof SupportedSources]?: MangaSourceInfo;
   };
   // id: string; // obsolete
   updatedAt: string;
@@ -13,6 +15,7 @@ export interface Chapter {
   // hash: string;
   // pages?: string[];
   volume?: string;
+  manga?: Manga;
   // manga?: string | Manga;
   title?: string;
 }
@@ -21,12 +24,13 @@ export interface Chapter {
 //   chapters?: (Chapter | string)[];
 // }
 export interface Manga {
+  type: 'manga';
   sourceInfo: {
-    [key in keyof SupportedSources]: MangaSourceInfo;
+    [key in keyof SupportedSources]?: MangaSourceInfo;
   };
   // id: string; // obsolete
-  name: string;
-  alternative_names: string[];
+  names: string[];
+  // alternative_names: string[];
   description: string;
   author: string;
   artist: string;

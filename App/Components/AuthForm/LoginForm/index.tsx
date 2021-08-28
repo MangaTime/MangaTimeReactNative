@@ -10,7 +10,7 @@ export const LoginForm = () => {
   const [password, setPassword] = useState('');
   const dispatch = useAppDispatch();
   const login = () => {
-    dispatch(loginThunk({ username, password }));
+    dispatch(loginThunk({source:'MangaDex', username, password }));
   };
   return (
     <View>

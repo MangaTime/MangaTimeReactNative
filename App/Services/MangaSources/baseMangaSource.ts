@@ -1,4 +1,4 @@
-import { EnhancedStore } from '@reduxjs/toolkit';
+import { ActionCreatorWithPayload, EnhancedStore } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { Chapter, Manga } from '../../redux/Manga/interfaces';
 import {
@@ -11,6 +11,7 @@ export interface BaseMangaRequests {
   getAddedManga?: (offset: number, limit: number) => Promise<Manga[]>;
   getRandomManga?: (limit: number) => Promise<Manga[]>;
   getMangaDetail?: (manga: Manga) => Promise<Manga>;
+  loadChapter: (chapter:Chapter) => Promise<string[]>;
   getFollowingManga?: (offset: number, limit: number) => Promise<Manga[]>;
   getAllFollowingManga?: () => Promise<Manga[]>;
   getFollowingChapterFeed: (followingManga: Manga[]) => Promise<Chapter[]>;
@@ -33,6 +34,7 @@ export interface BaseClient{
   clientInterceptor?:(
     client: AxiosInstance,
     store: EnhancedStore,
+    updateStateFunction: ActionCreatorWithPayload<any, string>
   ) => void;
 }
 export interface BaseMangaSource {

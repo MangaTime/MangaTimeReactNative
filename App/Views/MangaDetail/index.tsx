@@ -19,6 +19,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'MangaDetail'>;
 
+const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
+  list.reduce((previous, currentItem) => {
+    const group = getKey(currentItem);
+    if (!previous[group]) previous[group] = [];
+    previous[group].push(currentItem);
+    return previous;
+  }, {} as Record<K, T[]>);
+
 export const MangaDetail = ({ navigation }: Props): ReactElement => {
   const { colors, dark } = useTheme();
   const dispatch = useAppDispatch();
@@ -54,19 +62,21 @@ export const MangaDetail = ({ navigation }: Props): ReactElement => {
                 marginBottom: 0,
                 paddingBottom: 0,
               }}>
-              <Text style={styles.mangaName}>{mangaDetail.name}</Text>
+              <Text style={styles.mangaName}>{mangaDetail.names[0]}</Text>
               <Image
                 accessibilityIgnoresInvertColors
                 resizeMode="contain"
                 style={styles.thumbnail}
                 source={{
-                  uri: `https://uploads.mangadex.org/covers/${mangaDetail.id}/${mangaDetail.cover_art}.256.jpg`,
+                  uri: mangaDetail.cover_art,
                 }}
               />
-              <View style={styles.line}>
-                <Text style={styles.label}>Alternative names: </Text>
-                <Text>{mangaDetail.alternative_names.join(', ')}</Text>
-              </View>
+              {mangaDetail.names.length > 1 && (
+                <View style={styles.line}>
+                  <Text style={styles.label}>Alternative names: </Text>
+                  <Text>{mangaDetail.names.slice(1).join(', ')}</Text>
+                </View>
+              )}
               <View style={styles.line}>
                 <Text style={styles.label}>Author: </Text>
                 <Text>{mangaDetail.author}</Text>
@@ -93,20 +103,20 @@ export const MangaDetail = ({ navigation }: Props): ReactElement => {
               </View>
             </View>
           }
-          data={mangaDetail.volumes}
-          keyExtractor={(vol) => vol.name}
-          renderItem={(vol) => (
+          data={Object.entries(groupBy(mangaDetail.chapters??[],(item)=>item.volume??'unknown'))}
+          keyExtractor={([volume,_]) => volume}
+          renderItem={({item:[volume, chapters]}) => (
             <View
               style={{
                 ...styles.listItem,
                 backgroundColor: colors.primary,
               }}>
               <Text style={{ ...styles.volumeTitle, color: colors.text }}>
-                Volume {vol.item.name}
+                Volume {volume}
               </Text>
               <ChapterList
                 styles={styles.chapterList}
-                volume={vol.item}
+                chapters={chapters}
                 itemCallback={(chapter: Chapter) => {
                   dispatch(loadChapter(chapter));
                   navigation.navigate(AppViews.MANGA_READER);

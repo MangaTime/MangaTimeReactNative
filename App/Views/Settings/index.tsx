@@ -30,7 +30,7 @@ export const Settings = (): ReactElement => {
       </Appbar>
       <ScrollView>
         <AppSection />
-        <UserSection />
+        <UserSection service='MangaDex' />
       </ScrollView>
     </>
   );

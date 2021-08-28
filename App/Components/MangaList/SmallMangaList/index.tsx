@@ -48,7 +48,7 @@ export const SmallMangaList = ({
         horizontal
         style={styles.mangaList}
         data={mangaList}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.names[0]}
         snapToInterval={180}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -62,11 +62,11 @@ export const SmallMangaList = ({
                 accessibilityIgnoresInvertColors
                 style={styles.thumbnail}
                 source={{
-                  uri: `https://uploads.mangadex.org/covers/${item.id}/${item.cover_art}.256.jpg`,
+                  uri: item.cover_art,
                 }}
               />
               <Text style={{ ...styles.mangaName, color: colors.text }}>
-                {item.name}
+                {item.names[0]}
               </Text>
             </View>
           </TouchableOpacity>

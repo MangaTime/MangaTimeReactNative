@@ -1,11 +1,10 @@
 import {
   Chapter,
   Manga,
-  // Volume
 } from '../../../redux/Manga/interfaces';
 import client from './client';
 import { components } from './mangadex';
-import { BaseMangaRequests, BaseMangaSource } from '../baseMangaSource';
+import { BaseMangaRequests } from '../baseMangaSource';
 import { wait } from '../../utils';
 
 const APIMangaListToLocalMangaList = (
@@ -13,17 +12,19 @@ const APIMangaListToLocalMangaList = (
 ): Manga[] => {
   const result = apiResponse?.results?.map((e) => {
     const item: Manga = {
+      type: 'manga',
       sourceInfo: {
         MangaDex: {
           id: e.data?.id,
         },
       },
       // id: e.data?.id, // obsolete
-      name: e.data?.attributes?.title?.en ?? '', // get only english title and description for now
-      alternative_names:
-        e.data?.attributes?.altTitles
+      names: [
+        e.data?.attributes?.title?.en ?? '',
+        ...(e.data?.attributes?.altTitles
           ?.map((e1): string[] => Object.values(e1))
-          .reduce((x, y) => x.concat(y), []) ?? [],
+          .reduce((x, y) => x.concat(y), []) ?? []), 
+      ].filter((e) => e !== ''),
       description: e.data?.attributes?.description?.en ?? '',
       author: e.relationships?.find((e1) => e1.type === 'author')?.attributes
         ?.name as string,
@@ -44,17 +45,27 @@ const APIMangaListToLocalMangaList = (
       cover_art: e.relationships?.find((e1) => e1.type === 'cover_art')
         ?.attributes?.fileName,
     };
+    item.cover_art = `https://uploads.mangadex.org/covers/${item.sourceInfo.MangaDex.id}/${item.cover_art}.256.jpg`;
     return item;
   });
   return result ?? [];
 };
 
+const generatePageUrls = async (chapter: Chapter) => {
+  let baseUrl = await client.get(
+    `/at-home/server/${chapter.sourceInfo.MangaDex.id}`,
+  );
+  return  (
+    chapter.sourceInfo.MangaDex.pages as string[]
+  ).map((e) => `${baseUrl}/data/${chapter.sourceInfo.MangaDex.hash}/${e}`);
+};
 const APIChapterListToLocalChapterList = (
   apiResponse: components['schemas']['ChapterList'],
 ): Chapter[] => {
   return (
     apiResponse?.results?.map((item): Chapter => {
       const chapter: Chapter = {
+        type: 'chapter',
         sourceInfo: {
           MangaDex: {
             id: item.data?.id,
@@ -65,8 +76,8 @@ const APIChapterListToLocalChapterList = (
         },
         // id: item.data?.id,
         updatedAt: item.data?.attributes?.updatedAt ?? '',
-        name: item.data?.attributes?.chapter ?? '',
-        volume: item.data?.attributes?.volume ?? '',
+        name: item.data?.attributes?.chapter ?? 'unknown',
+        volume: item.data?.attributes?.volume ?? undefined,
         title: item.data?.attributes?.title,
       };
       return chapter;
@@ -121,38 +132,8 @@ export const mangaRequests: BaseMangaRequests = {
       .get(
         `/manga/${manga.sourceInfo['MangaDex'].id}/feed?translatedLanguage[]=en&limit=500&order[chapter]=desc`,
       )
-      .then((response) => {
+      .then(async (response) => {
         const mangaDetail = { ...manga };
-        // const volumes: Volume[] = [];
-        // const chapters: Chapter[] = [];
-        // (response as components['schemas']['ChapterList']).results?.forEach(
-        //   (item) => {
-        // const volumeName = item.data?.attributes?.volume ?? 'unknown';
-        // let volume: Volume | undefined = volumes.find(
-        //   (v) => v.name === volumeName,
-        // );
-        // if (!volume) {
-        //   volume = {
-        //     name: volumeName,
-        //     chapters: [],
-        //   };
-        //   volumes.push(volume);
-        // }
-        //     const chapter: Chapter = {
-        //       name: item.data?.attributes?.chapter ?? 'unknown',
-        //       id: item.data?.id ?? 'unknown',
-        //       updatedAt: item.data?.attributes?.updatedAt ?? 'unknown',
-        //       hash: item.data?.attributes?.hash ?? '',
-        //       title: item.data?.attributes?.title,
-        //       pages: item.data?.attributes?.data,
-        //       volume: volume.name,
-        //       manga: mangaDetail.sourceInfo['MangaDex'].id,
-        //     };
-        //     // if (!volume.chapters) volume.chapters = [];
-        //     // volume.chapters.push(chapter);
-        //     chapters.push(chapter);
-        //   },
-        // );
         const chapters = APIChapterListToLocalChapterList(
           response as components['schemas']['ChapterList'],
         );
@@ -160,6 +141,9 @@ export const mangaRequests: BaseMangaRequests = {
         mangaDetail.chapters = chapters;
         return mangaDetail;
       });
+  },
+  async loadChapter(chapter:Chapter) : Promise<string[]> {
+    return generatePageUrls(chapter);
   },
   async getFollowingManga(offset: number, limit: number): Promise<Manga[]> {
     // first get the following list

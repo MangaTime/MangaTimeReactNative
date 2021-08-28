@@ -31,7 +31,7 @@ export const LargeMangaList = ({
       style={{ ...styles.mangaList }}
       data={mangaList}
       numColumns={numberOfColumns}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.names[0]}
       renderItem={({ item }) => (
         <TouchableOpacity
           style={{ ...styles.item, width: `${100 / numberOfColumns}%` }}
@@ -44,7 +44,7 @@ export const LargeMangaList = ({
             accessibilityIgnoresInvertColors
             style={styles.thumbnail}
             source={{
-              uri: `https://uploads.mangadex.org/covers/${item.id}/${item.cover_art}.256.jpg`,
+              uri: item.cover_art,
             }}
           />
           <Text
@@ -57,7 +57,7 @@ export const LargeMangaList = ({
               color: colors.text,
               fontSize: 18,
             }}>
-            {item.name}
+            {item.names[0]}
           </Text>
         </TouchableOpacity>
       )}

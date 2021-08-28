@@ -10,12 +10,13 @@ import {
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
-import { fetchMangadexHomeBaseUrl } from '../../redux/Manga/mangaReducer';
 import { CollapsibleHeaderFlatList } from 'react-native-collapsible-header-views';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { SingleImageViewModal } from './Components/singleImageViewModal';
 import { ImageListHeader } from './Components/imageListHeader';
+import { MangaSources } from '../../Services/MangaSources';
+import SupportedSources from '../../Services/MangaSources/supportedSources';
 
 export const MangaReader = (): ReactElement => {
   const { colors, dark } = useTheme();
@@ -24,7 +25,17 @@ export const MangaReader = (): ReactElement => {
   const chapterDetail = useAppSelector(
     (state) => state.mangaReducer.readingChapter,
   );
-  const baseUrl = useAppSelector((state) => state.mangaReducer.baseUrl);
+  const [pages, setPages] = useState<string[]>([]);
+  useEffect(() => {
+    (async () => {
+      if (chapterDetail) {
+        let first = Object.keys(
+          chapterDetail.sourceInfo,
+        )[0] as keyof SupportedSources;
+        setPages(await MangaSources[first].manga.loadChapter(chapterDetail));
+      }
+    })();
+  }, [chapterDetail]);
 
   const [readingProgress, setReadingProgress] = useState(0);
   const windowHeight = Dimensions.get('window').height;
@@ -53,12 +64,12 @@ export const MangaReader = (): ReactElement => {
     }, [singleImageViewVisible]),
   );
 
-  useEffect(() => {
-    (async () => {
-      if (chapterDetail)
-        await dispatch(fetchMangadexHomeBaseUrl(chapterDetail));
-    })();
-  }, [chapterDetail, dispatch]);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (chapterDetail)
+  //       await dispatch(fetchMangadexHomeBaseUrl(chapterDetail));
+  //   })();
+  // }, [chapterDetail, dispatch]);
 
   return (
     <>
@@ -97,14 +108,14 @@ export const MangaReader = (): ReactElement => {
                 (nativeEvent.contentSize.height - windowHeight),
             );
           }}
-          data={chapterDetail?.pages}
+          data={pages}
           keyExtractor={(page) => page}
           renderItem={(page) => (
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={() => {
                 setSingleImageViewUrl(
-                  `${baseUrl}/data/${chapterDetail?.hash}/${page.item}`,
+                  page.item,
                 );
                 showModal();
               }}>
@@ -113,7 +124,7 @@ export const MangaReader = (): ReactElement => {
                 resizeMode="contain"
                 style={styles.mangaPage}
                 source={{
-                  uri: `${baseUrl}/data/${chapterDetail?.hash}/${page.item}`,
+                  uri: page.item,
                 }}
               />
             </TouchableOpacity>

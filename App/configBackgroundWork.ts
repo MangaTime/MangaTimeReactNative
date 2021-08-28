@@ -10,7 +10,7 @@ export const UpdateManga = async (store: EnhancedStore) => {
   type MyThunkDispatch = ThunkDispatch<{}, {}, AnyAction>;
   const thunkDispatch = store.dispatch as MyThunkDispatch;
   await thunkDispatch(fetchFollowingManga());
-  await thunkDispatch(fetchFollowingChapterFeed());
+  await thunkDispatch(fetchFollowingChapterFeed(['MangaDex']));
 };
 
 export const HeadlessUpdateMangaTask = async (

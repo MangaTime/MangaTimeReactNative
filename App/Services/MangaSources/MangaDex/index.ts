@@ -1,20 +1,21 @@
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
-import { updateToken } from '../../../redux/User/userReducer';
-import { BaseMangaSource } from '../baseMangaSource';
+import { BaseMangaSource } from '../baseMangaSource'; 
 import serviceSpecificClient from './client';
 import { mangaRequests } from './manga';
 import { components } from './mangadex';
-import { userRequests } from './user';
+import { userRequests } from './user';  
 
 export const MangaDexSource: BaseMangaSource = {
   manga: mangaRequests,
   user: userRequests,
   client: {
-    client:serviceSpecificClient,
-    clientInterceptor: (client, store) =>{
+    client: serviceSpecificClient,
+    clientInterceptor: (client, store, updateStateFunction) => {
       const addAuthHeader = (originalConfig: any): any => {
         let config = { ...originalConfig };
-        const sessionToken = store.getState().persist.user.MangaDex?.additional.sessionToken;
+        const sessionToken =
+          store.getState().persist.user.MangaDex?.additional.sessionToken;
         if (sessionToken) {
           const authHeader = { Authorization: `Bearer ${sessionToken}` };
           config = {
@@ -28,23 +29,43 @@ export const MangaDexSource: BaseMangaSource = {
         return config;
       };
       const refreshAccessToken = async (): Promise<any> => {
-        const refreshToken = store.getState().persist.user.MangaDex?.additional.sessionToken;
-        return (client
-          .post('/auth/refresh', {
+        const refreshToken =
+          store.getState().persist.user.MangaDex?.additional.refreshToken;
+          const password =
+          store.getState().persist.user.MangaDex?.login.password;
+          const username =
+          store.getState().persist.user.MangaDex?.login.username;
+        return (
+          client.post('/auth/refresh', {
             token: refreshToken,
-          }) as Promise<components['schemas']['RefreshResponse']>)
+          }) as Promise<components['schemas']['RefreshResponse']>
+        )
           .then((response: components['schemas']['RefreshResponse']) => {
             store.dispatch(
-              updateToken({
+              updateStateFunction({
                 source: 'MangaDex',
-                session: response?.token?.session,
-                refresh: response?.token?.refresh,
+                additionalData:{
+                  session: response?.token?.session,
+                  refresh: response?.token?.refresh,
+                }
               }),
             );
           })
-          .catch(function () {
-            store.dispatch(updateToken({source:'MangaDex'}));
-          });
+          .catch(()=>userRequests.login?.({password,username})?.then((response)=>{
+            store.dispatch(
+              updateStateFunction({
+                source: 'MangaDex',
+                additionalData: response?.additional
+              }),
+            );
+          }).catch(()=>{
+            store.dispatch(
+              updateStateFunction({
+                source: 'MangaDex',
+                logout: true
+              }),
+            );
+          }));
       };
       const onFulfilledRequest = addAuthHeader;
       const onRejectedResponse = async (error: any): Promise<any> => {
@@ -52,7 +73,7 @@ export const MangaDexSource: BaseMangaSource = {
         if (error.response.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
           await refreshAccessToken();
-    
+
           return client(addAuthHeader(originalRequest));
         }
         return Promise.reject(error);
@@ -61,6 +82,6 @@ export const MangaDexSource: BaseMangaSource = {
         response.data;
       client.interceptors.request.use(onFulfilledRequest);
       client.interceptors.response.use(onResolvedResponse, onRejectedResponse);
-    }
-  }
+    },
+  },
 };

@@ -36,7 +36,7 @@ export const Home = ({ navigation }: Props): ReactElement => {
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const sections = useAppSelector((state) => state.persist.appSetting.sections);
-  const isLoggedIn = useAppSelector((state) => state.persist.user.loggedIn);
+  // const isLoggedIn = useAppSelector((state) => state.persist.user);
 
   // get sections' content from state
   const recentlyUpdatedManga = useAppSelector(
@@ -53,7 +53,7 @@ export const Home = ({ navigation }: Props): ReactElement => {
   // update content by calling API
   useEffect(() => {
     (async () => {
-      if (isLoggedIn) await dispatch(fetchFollowingManga());
+      await dispatch(fetchFollowingManga());
       await dispatch(fetchUpdatedManga());
       await dispatch(fetchAddedManga());
       await dispatch(fetchRandomManga());
@@ -150,7 +150,9 @@ export const Home = ({ navigation }: Props): ReactElement => {
         keyExtractor={(item) => item.key}
         renderItem={({ item }) =>
           item &&
-          item.isVisible && (
+          item.isVisible &&
+          item.dataSource &&
+          item.dataSource.length>0 && (
             <SectionContainer>
               <SmallMangaList
                 mangaList={
