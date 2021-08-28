@@ -2,20 +2,20 @@ import { ReactElement } from 'react';
 import {
   FlatList,
   Image,
+  StatusBar,
   StyleSheet,
   Text,
   View,
-  StatusBar,
 } from 'react-native';
-import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
-import { Chapter } from '../../redux/Manga/interfaces';
-import { ChapterList } from '../../Components/ChapterList';
-import { loadChapter } from '../../redux/Manga/mangaReducer';
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack';
-import { RootStackParamList } from '../../Navigator/RootStack/paramList';
-import AppViews from '../../Navigator/AppViews';
 import { useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack';
+import { ChapterList } from '../../Components/ChapterList';
+import AppViews from '../../Navigator/AppViews';
+import { RootStackParamList } from '../../Navigator/RootStack/paramList';
+import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
+import { Chapter } from '../../redux/Manga/interfaces';
+import { loadChapter } from '../../redux/Manga/mangaReducer';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'MangaDetail'>;
 
@@ -23,7 +23,7 @@ export const MangaDetail = ({ navigation }: Props): ReactElement => {
   const { colors, dark } = useTheme();
   const dispatch = useAppDispatch();
   const insets = useSafeAreaInsets();
-  const mangaDetail = useAppSelector((state) => state.mangaReducer.mangaDetail);
+  const mangaDetail = useAppSelector((state) => state.manga.mangaDetail);
   if (mangaDetail) {
     return (
       <>

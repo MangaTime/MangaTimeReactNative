@@ -20,6 +20,6 @@ const persistReducers = {
 const persist = persistCombineReducers(persistConfig, persistReducers);
 const reducers = {
   persist,
-  mangaReducer,
+  manga: mangaReducer,
 };
 export default reducers;

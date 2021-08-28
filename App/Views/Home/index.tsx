@@ -45,7 +45,7 @@ export const Home = ({ navigation }: Props): ReactElement => {
   const { sections } = useAppSelector((state) => state.persist.appSetting);
   const { loggedIn } = useAppSelector((state) => state.persist.user);
   const { recentlyUpdatedManga, recentlyAddedManga, randomManga } =
-    useAppSelector((state) => state.mangaReducer);
+    useAppSelector((state) => state.manga);
   const { followingManga } = useAppSelector((state) => state.persist.manga);
 
   const updateContent = async (): Promise<void> => {
