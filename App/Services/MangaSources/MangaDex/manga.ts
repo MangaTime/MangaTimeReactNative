@@ -45,19 +45,19 @@ const APIMangaListToLocalMangaList = (
       cover_art: e.relationships?.find((e1) => e1.type === 'cover_art')
         ?.attributes?.fileName,
     };
-    item.cover_art = `https://uploads.mangadex.org/covers/${item.sourceInfo.MangaDex.id}/${item.cover_art}.256.jpg`;
+    item.cover_art = `https://uploads.mangadex.org/covers/${item.sourceInfo.MangaDex?.id}/${item.cover_art}.256.jpg`;
     return item;
   });
   return result ?? [];
 };
 
 const generatePageUrls = async (chapter: Chapter) => {
-  let baseUrl = await client.get(
-    `/at-home/server/${chapter.sourceInfo.MangaDex.id}`,
-  );
+  let baseUrl = (await client.get(
+    `/at-home/server/${chapter.sourceInfo.MangaDex?.id}`,
+  ) as {baseUrl:string}).baseUrl;
   return  (
-    chapter.sourceInfo.MangaDex.pages as string[]
-  ).map((e) => `${baseUrl}/data/${chapter.sourceInfo.MangaDex.hash}/${e}`);
+    chapter.sourceInfo.MangaDex?.pages as string[]
+  ).map((e) => `${baseUrl}/data/${chapter.sourceInfo.MangaDex?.hash}/${e}`);
 };
 const APIChapterListToLocalChapterList = (
   apiResponse: components['schemas']['ChapterList'],
@@ -130,7 +130,7 @@ export const mangaRequests: BaseMangaRequests = {
   async getMangaDetail(manga: Manga): Promise<Manga> {
     return client
       .get(
-        `/manga/${manga.sourceInfo['MangaDex'].id}/feed?translatedLanguage[]=en&limit=500&order[chapter]=desc`,
+        `/manga/${manga.sourceInfo['MangaDex']?.id}/feed?translatedLanguage[]=en&limit=500&order[chapter]=desc`,
       )
       .then(async (response) => {
         const mangaDetail = { ...manga };

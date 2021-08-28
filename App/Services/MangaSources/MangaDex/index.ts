@@ -31,41 +31,31 @@ export const MangaDexSource: BaseMangaSource = {
       const refreshAccessToken = async (): Promise<any> => {
         const refreshToken =
           store.getState().persist.user.MangaDex?.additional.refreshToken;
-          const password =
-          store.getState().persist.user.MangaDex?.login.password;
-          const username =
-          store.getState().persist.user.MangaDex?.login.username;
         return (
           client.post('/auth/refresh', {
             token: refreshToken,
           }) as Promise<components['schemas']['RefreshResponse']>
         )
           .then((response: components['schemas']['RefreshResponse']) => {
+            console.log(response);
             store.dispatch(
               updateStateFunction({
                 source: 'MangaDex',
                 additionalData:{
-                  session: response?.token?.session,
-                  refresh: response?.token?.refresh,
+                  sessionToken: response?.token?.session,
+                  refreshToken: response?.token?.refresh,
                 }
               }),
             );
           })
-          .catch(()=>userRequests.login?.({password,username})?.then((response)=>{
-            store.dispatch(
-              updateStateFunction({
-                source: 'MangaDex',
-                additionalData: response?.additional
-              }),
-            );
-          }).catch(()=>{
+          .catch(()=>{
             store.dispatch(
               updateStateFunction({
                 source: 'MangaDex',
                 logout: true
               }),
             );
-          }));
+          });
       };
       const onFulfilledRequest = addAuthHeader;
       const onRejectedResponse = async (error: any): Promise<any> => {
