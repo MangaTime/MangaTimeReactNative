@@ -46,6 +46,7 @@ export const ImageListHeader = ({ readingProgress }: Props): ReactElement => {
 
   const chapterList = mangaDetail?.chapters?.map((chapter) => (
     <Picker.Item
+      key={chapter.id}
       label={`${chapter.name} - ${chapter.title}`}
       value={`${chapter.id}`}
     />
