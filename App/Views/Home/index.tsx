@@ -49,7 +49,6 @@ export const Home = ({ navigation }: Props): ReactElement => {
   const { followingManga } = useAppSelector((state) => state.persist.manga);
 
   const updateContent = async (): Promise<void> => {
-    console.log('updateContent');
     loggedIn && (await dispatch(fetchFollowingManga()));
     await dispatch(fetchUpdatedManga());
     await dispatch(fetchAddedManga());
