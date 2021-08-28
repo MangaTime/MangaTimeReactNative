@@ -15,8 +15,7 @@ export interface MangaListProps {
   mangaList: Manga[];
   itemCallback: (arg: Manga) => void;
   title?: string;
-  // Help me fix this pls
-  onShowMorePress?: (id: string, name: string) => void;
+  onShowMorePress?: () => void;
 }
 
 export const SmallMangaList = ({
