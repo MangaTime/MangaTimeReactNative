@@ -7,15 +7,16 @@ import { processFollowingChapterFeed } from '../../Utils/processFollowingChapter
 import { MangaPersistState } from './interfaces';
 
 const initialState: MangaPersistState = {
-  followingFeed: [],
-  followingManga: [],
+  followingFeed: null,
+  followingManga: null,
 };
 
 export const fetchFollowingChapterFeed = createAsyncThunk(
   'manga/fetchFollowingChapterFeed',
-  async (state: MangaPersistState) => {
+  async (_, { getState }) => {
+    const { persist } = getState() as any;
     const data = await getFollowingChapterFeed();
-    const processedData = processFollowingChapterFeed(data, state);
+    const processedData = processFollowingChapterFeed(data, persist.manga);
     return processedData;
   },
 );

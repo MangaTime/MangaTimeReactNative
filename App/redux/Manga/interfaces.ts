@@ -27,8 +27,8 @@ export interface Manga {
   chapters?: Chapter[];
 }
 export interface MangaPersistState {
-  followingFeed?: Chapter[];
-  followingManga?: Manga[];
+  followingFeed?: Chapter[] | null;
+  followingManga?: Manga[] | null;
 }
 export interface MangaState {
   recentlyUpdatedManga?: Manga[];
