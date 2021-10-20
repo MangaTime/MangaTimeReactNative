@@ -1,12 +1,12 @@
 import React, { ReactElement } from 'react';
 import {
   FlatList,
-  SafeAreaView,
-  View,
   Image,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import { IconButton, useTheme } from 'react-native-paper';
 import { Manga } from '../../../redux/Manga/interfaces';
@@ -24,7 +24,7 @@ export const SmallMangaList = ({
   title = 'Manga List',
   onShowMorePress = undefined,
 }: MangaListProps): ReactElement => {
-  const { colors, dark } = useTheme();
+  const { colors } = useTheme();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>

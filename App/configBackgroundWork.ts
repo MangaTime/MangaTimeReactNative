@@ -1,5 +1,5 @@
-import BackgroundFetch from 'react-native-background-fetch';
 import { AnyAction, EnhancedStore, ThunkDispatch } from '@reduxjs/toolkit';
+import BackgroundFetch from 'react-native-background-fetch';
 import {
   fetchFollowingChapterFeed,
   fetchFollowingManga,

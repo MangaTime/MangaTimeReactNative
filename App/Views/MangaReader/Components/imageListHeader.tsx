@@ -1,9 +1,9 @@
+import { Picker } from '@react-native-picker/picker';
 import { ReactElement, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { IconButton, ProgressBar, useTheme } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../../../redux/Hooks';
 import { loadChapter } from '../../../redux/Manga/mangaReducer';
-import { Picker } from '@react-native-picker/picker';
 
 interface Props {
   readingProgress: number;
@@ -11,10 +11,8 @@ interface Props {
 export const ImageListHeader = ({ readingProgress }: Props): ReactElement => {
   const { colors } = useTheme();
   const dispatch = useAppDispatch();
-  const mangaDetail = useAppSelector((state) => state.mangaReducer.mangaDetail);
-  const chapterDetail = useAppSelector(
-    (state) => state.mangaReducer.readingChapter,
-  );
+  const mangaDetail = useAppSelector((state) => state.manga.mangaDetail);
+  const chapterDetail = useAppSelector((state) => state.manga.readingChapter);
 
   const [selectedChapter, setSelectedChapter] = useState(chapterDetail?.id);
 
@@ -48,6 +46,7 @@ export const ImageListHeader = ({ readingProgress }: Props): ReactElement => {
 
   const chapterList = mangaDetail?.chapters?.map((chapter) => (
     <Picker.Item
+      key={chapter.id}
       label={`${chapter.name} - ${chapter.title}`}
       value={`${chapter.id}`}
     />

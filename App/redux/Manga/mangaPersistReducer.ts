@@ -1,21 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import PushNotification from 'react-native-push-notification';
 import {
   getAllFollowingManga,
   getFollowingChapterFeed,
 } from '../../Services/mangaService';
-import { Chapter, Manga } from './interfaces';
+import { processFollowingChapterFeed } from '../../Utils/processFollowingChapterFeed';
+import { MangaPersistState } from './interfaces';
 
-export interface MangaPersistState {
-  followingFeed?: Chapter[];
-  followingManga?: Manga[];
-}
-const initialState: MangaPersistState = {};
+const initialState: MangaPersistState = {
+  followingFeed: null,
+  followingManga: null,
+};
 
 export const fetchFollowingChapterFeed = createAsyncThunk(
   'manga/fetchFollowingChapterFeed',
-  async () => {
-    return getFollowingChapterFeed();
+  async (_, { getState }) => {
+    const { persist } = getState() as any;
+    const data = await getFollowingChapterFeed();
+    const processedData = processFollowingChapterFeed(data, persist.manga);
+    return processedData;
   },
 );
 
@@ -35,60 +37,9 @@ export const mangaPersistSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Add reducers for additional action types here, and handle loading state as needed
-    // move this parser code to a separate helper function
     builder.addCase(fetchFollowingChapterFeed.fulfilled, (s, action) => {
       const state = s;
       const fetchedChapters = action.payload;
-      fetchedChapters.forEach((c) => {
-        const chapter = c;
-        if (typeof chapter.manga === 'string') {
-          // get manga information from (to be) persisted following manga list
-          const mangaId = chapter.manga;
-          const mangaInfo = state.followingManga?.find((e) => e.id === mangaId);
-          chapter.manga = mangaInfo;
-        }
-      });
-      // if state is not empty, compare fetched list with state, any extra objects from the fetched list is updated
-      if (state.followingFeed) {
-        const oldIds = state.followingFeed.map((e) => e.id);
-        fetchedChapters
-          ?.filter((e) => !oldIds.includes(e.id))
-          .forEach((chapter) => {
-            // send push notifications
-
-            PushNotification.localNotification({
-              channelId: 'channel-id', // (required) channelId, if the channel doesn't exist, notification will not trigger.
-              title: `${
-                typeof chapter.manga === 'object'
-                  ? (chapter.manga as Manga).name
-                  : 'Unknown'
-              }`,
-              message: `Chapter ${chapter.name} ${
-                chapter.title ? `- ${chapter.title}` : ''
-              }`, // (required)
-              subText: 'New chapter',
-              group: 'new-manga', // (optional) add group to message
-              userInfo: chapter,
-            });
-
-            PushNotification.localNotification({
-              id: 0,
-              channelId: 'channel-id', // (required) channelId, if the channel doesn't exist, notification will not trigger.
-              message: `Summary`, // (required)
-              subText: 'New chapters',
-              group: 'new-manga', // (optional) add group to message
-              groupSummary: true,
-            });
-          });
-      }
-      // save the fetched list to the state
-      // NOTE: for testing: shift 2 first chapters from the list, in order to show notification as "new chapter" for them
-      if (!state.followingFeed) {
-        fetchedChapters?.shift();
-        fetchedChapters?.shift();
-        fetchedChapters?.shift();
-      }
       state.followingFeed = fetchedChapters;
     });
 

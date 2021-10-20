@@ -1,30 +1,28 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
-  StyleSheet,
-  Image,
-  View,
-  StatusBar,
-  Dimensions,
-  TouchableOpacity,
   BackHandler,
+  Dimensions,
+  Image,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import { CollapsibleHeaderFlatList } from 'react-native-collapsible-header-views';
 import { useTheme } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 import { fetchMangadexHomeBaseUrl } from '../../redux/Manga/mangaReducer';
-import { CollapsibleHeaderFlatList } from 'react-native-collapsible-header-views';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useFocusEffect } from '@react-navigation/native';
-import { SingleImageViewModal } from './Components/singleImageViewModal';
 import { ImageListHeader } from './Components/imageListHeader';
+import { SingleImageViewModal } from './Components/singleImageViewModal';
 
 export const MangaReader = (): ReactElement => {
   const { colors, dark } = useTheme();
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
-  const chapterDetail = useAppSelector(
-    (state) => state.mangaReducer.readingChapter,
-  );
-  const baseUrl = useAppSelector((state) => state.mangaReducer.baseUrl);
+  const chapterDetail = useAppSelector((state) => state.manga.readingChapter);
+  const baseUrl = useAppSelector((state) => state.manga.baseUrl);
 
   const [readingProgress, setReadingProgress] = useState(0);
   const windowHeight = Dimensions.get('window').height;

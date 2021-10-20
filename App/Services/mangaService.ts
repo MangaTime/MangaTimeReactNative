@@ -1,7 +1,7 @@
 import { Chapter, Manga, Volume } from '../redux/Manga/interfaces';
+import { wait } from '../Utils';
 import client from './baseClient';
 import { components } from './mangadex';
-import { wait } from './utils';
 
 const APIMangaListToLocalMangaList = (
   apiResponse: components['schemas']['MangaList'],

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   getAddedManga,
   getMangaDetail,
@@ -6,16 +6,8 @@ import {
   getRandomManga,
   getUpdatedManga,
 } from '../../Services/mangaService';
-import { Chapter, Manga } from './interfaces';
+import { Chapter, Manga, MangaState } from './interfaces';
 
-export interface MangaState {
-  recentlyUpdatedManga?: Manga[];
-  recentlyAddedManga?: Manga[];
-  randomManga?: Manga[];
-  mangaDetail?: Manga;
-  readingChapter?: Chapter;
-  baseUrl?: string;
-}
 const initialState: MangaState = {
   recentlyUpdatedManga: [],
   recentlyAddedManga: [],
