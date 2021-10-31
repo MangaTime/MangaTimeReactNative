@@ -1,98 +1,99 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { login, logout, refreshToken } from '../../Services/userService';
+import SupportedSources from '../../Services/MangaSources/supportedSources';
+import { ServiceAuthenticationInformation } from './interfaces';
+import { MangaSources } from '../../Services/MangaSources';
 
-export interface UserState {
-  loggedIn: boolean;
-  username?: string;
-  sessionToken?: string;
-  refreshToken?: string;
-}
-
-const initialState: UserState = {
-  loggedIn: false,
+export type UserState = {
+  [key in keyof SupportedSources]?: ServiceAuthenticationInformation;
 };
 
-export const loginThunk = createAsyncThunk(
-  'user/login',
-  async ({ username, password }: { username: string; password: string }) => {
-    const response = await login(username, password);
-    return response;
-  },
-);
+const initialState: UserState = {
+  // loggedIn: false,
+};
 
-export const logoutThunk = createAsyncThunk('user/logout', async () => {
-  const response = await logout();
-  return response;
-});
+interface LoginPayload<K extends keyof SupportedSources> {
+  source: K;
+  username: string;
+  password: string;
+}
+interface LogoutPayload<K extends keyof SupportedSources> {
+  source: K;
+}
+export const loginThunk = (<K extends keyof SupportedSources>() =>
+  createAsyncThunk<
+    ServiceAuthenticationInformation | undefined,
+    LoginPayload<K>,
+    {}
+  >('user/login', async ({ source, username, password }: LoginPayload<K>) => {
+    const mangaSource = MangaSources[source];
+    if (mangaSource.user.login) {
+      return mangaSource.user.login({ username, password });
+    }
+  }))();
 
-export const refreshThunk = createAsyncThunk(
-  'user/refresh',
-  async ({ token }: { token: string }) => {
-    const response = await refreshToken(token);
-    return response;
-  },
-);
+export const logoutThunk = (<K extends keyof SupportedSources>() =>
+  createAsyncThunk<unknown, LogoutPayload<K>, {}>(
+    'user/logout',
+    async ({ source }: LogoutPayload<K>) => {
+      const mangaSource = MangaSources[source];
+      if (mangaSource.user.logout) {
+        return mangaSource.user.logout();
+      }
+    },
+  ))();
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    updateToken: (
+    updateAdditionalData: <K extends keyof UserState>(
       s: UserState,
-      action: PayloadAction<{ session?: string; refresh?: string }>,
+      action: PayloadAction<{
+        source: K;
+        logout?: boolean;
+        additionalData: { [key: string]: string };
+      }>,
     ) => {
       const state = s;
-      state.refreshToken = action.payload.refresh;
-      state.sessionToken = action.payload.session;
-      if (!action.payload.session && !action.payload.refresh) {
-        state.loggedIn = false;
-        state.username = undefined;
+      const sourceSpecificState: ServiceAuthenticationInformation | undefined =
+        state[action.payload.source];
+      if (action.payload.logout === true) {
+        state[action.payload.source] = undefined;
+      } else {
+        if (sourceSpecificState) {
+          if (Object.keys(action.payload.additionalData).length === 0) {
+            sourceSpecificState.additional = {};
+          } else {
+            sourceSpecificState.additional = {
+              ...sourceSpecificState.additional,
+              ...action.payload.additionalData,
+            };
+          }
+        }
       }
     },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(loginThunk.fulfilled, (s, action) => {
+    builder.addCase(loginThunk.fulfilled, (s: UserState, action) => {
       // Add user to the state array
       const state = s;
-      if (action.payload.result === 'ok') {
-        state.username = action.meta.arg.username;
-        state.sessionToken = action.payload.token?.session;
-        state.refreshToken = action.payload.token?.refresh;
-        state.loggedIn = true;
-      } else {
-        state.loggedIn = false;
-      }
+      const source = action.meta.arg.source;
+      state[source] = action.payload;
     });
 
-    builder.addCase(refreshThunk.fulfilled, (s, action) => {
+    builder.addCase(logoutThunk.fulfilled, (s: UserState, action) => {
       const state = s;
-      if (action.payload.result === 'ok') {
-        state.sessionToken = action.payload.token?.session;
-        state.refreshToken = action.payload.token?.refresh;
-      }
+      state[action.meta.arg.source] = undefined;
     });
 
-    builder.addCase(logoutThunk.fulfilled, (s, action) => {
+    builder.addCase(logoutThunk.rejected, (s: UserState, action) => {
       const state = s;
-      if (action.payload.result === 'ok') {
-        state.username = undefined;
-        state.sessionToken = undefined;
-        state.refreshToken = undefined;
-        state.loggedIn = false;
-      }
-    });
-
-    builder.addCase(logoutThunk.rejected, (s) => {
-      const state = s;
-      state.username = undefined;
-      state.sessionToken = undefined;
-      state.refreshToken = undefined;
-      state.loggedIn = false;
+      state[action.meta.arg.source] = undefined;
     });
   },
 });
 
-export const { updateToken } = userSlice.actions;
+export const { updateAdditionalData } = userSlice.actions;
 
 export default userSlice.reducer;

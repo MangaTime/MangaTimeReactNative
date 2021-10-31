@@ -9,18 +9,21 @@ import {
 import Modal from 'react-native-modal';
 import { Title, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import SupportedSources from '../../../../Services/MangaSources/supportedSources';
 
-interface LoginModalProps {
+interface LoginModalProps <K extends keyof SupportedSources>{
   isVisible: boolean;
   setModal: (value: boolean) => void;
   modalPrimaryAction: (username: string, password: string) => void;
+  service: K;
 }
 
-export const LoginModal = ({
+export const LoginModal = <K extends keyof SupportedSources>({
   isVisible,
   setModal,
   modalPrimaryAction,
-}: LoginModalProps): ReactElement => {
+  service
+}: LoginModalProps<K>): ReactElement => {
   const { colors } = useTheme();
   const [password, setPassword] = useState<string>('');
   const [username, setUsername] = useState<string>('');
@@ -31,7 +34,7 @@ export const LoginModal = ({
       onBackdropPress={() => setModal(false)}
       onBackButtonPress={() => setModal(false)}>
       <View style={[styles.container, { backgroundColor: colors.primary }]}>
-        <Title style={styles.title}>Login to MangaDex</Title>
+        <Title style={styles.title}>Login to {service}</Title>
         <View
           style={[
             styles.inputContainer,

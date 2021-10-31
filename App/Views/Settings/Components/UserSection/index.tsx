@@ -4,22 +4,26 @@ import { Button, Title, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAppDispatch, useAppSelector } from '../../../../redux/Hooks';
 import { loginThunk, logoutThunk } from '../../../../redux/User/userReducer';
+import SupportedSources from '../../../../Services/MangaSources/supportedSources';
 import { baseColors } from '../../../../Theme/baseColors';
 import { LoginModal } from '../LoginModal';
 import { SectionTitle } from '../SectionTitle';
 
-export const UserSection = (): ReactElement => {
+interface IProps<K extends keyof SupportedSources> {
+  service: K;
+}
+export const UserSection = <K extends keyof SupportedSources>({service}: IProps<K>): ReactElement => {
   const dispatch = useAppDispatch();
   const { colors } = useTheme();
   const [modal, setModal] = useState(false);
   const { user } = useAppSelector((state) => state.persist);
-
+  const serviceSpecificUserState = user[service];
   const handleLogin = (username: string, password: string): void => {
-    dispatch(loginThunk({ username, password }));
+    dispatch(loginThunk({ source:service, username, password }));
     setModal(false);
   };
   const handleLogout = (): void => {
-    dispatch(logoutThunk());
+    dispatch(logoutThunk({source:service}));
   };
 
   return (
@@ -35,14 +39,14 @@ export const UserSection = (): ReactElement => {
               style={[styles.icon, { color: colors.text }]}
             />
             <Title>
-              {user.sessionToken ? user.username : 'Login to sync your data'}
+              {service} - {serviceSpecificUserState ? serviceSpecificUserState.login.username : 'Login to sync your data'}
             </Title>
           </View>
           <Button
-            onPress={user.sessionToken ? handleLogout : () => setModal(true)}
+            onPress={serviceSpecificUserState ? handleLogout : () => setModal(true)}
             mode="contained"
             style={[styles.button, { backgroundColor: colors.accent }]}>
-            {user.sessionToken ? 'Log out' : 'Login'}
+            {serviceSpecificUserState ? 'Log out' : 'Login'}
           </Button>
         </View>
       </View>
@@ -50,6 +54,7 @@ export const UserSection = (): ReactElement => {
         isVisible={modal}
         setModal={setModal}
         modalPrimaryAction={handleLogin}
+        service={service}
       />
     </>
   );
