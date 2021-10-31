@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 import {
   FlatList,
   Image,
@@ -27,12 +27,28 @@ const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
     return previous;
   }, {} as Record<K, T[]>);
 
+const compareFunction = (a: string, b:string) => {
+  if(a=='unknown') return -1;
+  if(b=='unknown') return +1;
+  const intCompare = -parseInt(a) + parseInt(b);
+  if (intCompare != NaN) return intCompare;
+  return a > b ? -1 : 1;
+};
 export const MangaDetail = ({ navigation }: Props): ReactElement => {
   const { colors, dark } = useTheme();
   const dispatch = useAppDispatch();
   const insets = useSafeAreaInsets();
   const mangaDetail = useAppSelector((state) => state.mangaReducer.mangaDetail);
   if (mangaDetail) {
+    const volumeList = Object.entries(
+      groupBy(mangaDetail.chapters ?? [], (item) => item.volume ?? 'unknown'),
+    );
+    volumeList.sort((a, b) => compareFunction(a[0],b[0]));
+    volumeList.forEach((volume) => {
+      const chapterList = volume[1];
+      chapterList.sort((a,b)=>compareFunction(a.name, b.name));
+    });
+
     return (
       <>
         <View
@@ -103,9 +119,9 @@ export const MangaDetail = ({ navigation }: Props): ReactElement => {
               </View>
             </View>
           }
-          data={Object.entries(groupBy(mangaDetail.chapters??[],(item)=>item.volume??'unknown'))}
-          keyExtractor={([volume,_]) => volume}
-          renderItem={({item:[volume, chapters]}) => (
+          data={volumeList}
+          keyExtractor={([volume, _]) => volume}
+          renderItem={({ item: [volume, chapters] }) => (
             <View
               style={{
                 ...styles.listItem,

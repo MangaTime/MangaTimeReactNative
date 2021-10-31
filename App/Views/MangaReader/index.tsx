@@ -30,7 +30,7 @@ export const MangaReader = (): ReactElement => {
     (async () => {
       if (chapterDetail) {
         let first = Object.keys(
-          chapterDetail.sourceInfo,
+          chapterDetail.sourceInfo[0],
         )[0] as keyof SupportedSources;
         setPages(await MangaSources[first].manga.loadChapter(chapterDetail));
       }

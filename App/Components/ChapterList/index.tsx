@@ -17,10 +17,10 @@ export const ChapterList = ({
     return (
       <FlatList
         data={chapters}
-        keyExtractor={(chapter) => chapter.name}
+        keyExtractor={(chapter) => chapter.name + chapter}
         renderItem={(chapter) => (
           <TouchableOpacity onPress={() => itemCallback(chapter.item)}>
-            <Text style={styles}>Chapter {chapter.item.name}</Text>
+            <Text style={styles}>Chapter {chapter.item.name} {chapter.item.title?`- ${chapter.item.title}`:''}</Text>
           </TouchableOpacity>
         )}
       />

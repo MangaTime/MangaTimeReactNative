@@ -8,7 +8,7 @@ export interface Chapter {
   type: 'chapter';
   sourceInfo: {
     [key in keyof SupportedSources]?: MangaSourceInfo;
-  };
+  }[];
   // id: string; // obsolete
   updatedAt: string;
   name: string;

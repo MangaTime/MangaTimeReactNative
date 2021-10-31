@@ -53,10 +53,14 @@ export const Home = ({ navigation }: Props): ReactElement => {
   // update content by calling API
   useEffect(() => {
     (async () => {
-      await dispatch(fetchFollowingManga());
-      await dispatch(fetchUpdatedManga());
-      await dispatch(fetchAddedManga());
-      await dispatch(fetchRandomManga());
+      if (sections.find((e) => e.key === 'following')?.isVisible)
+        await dispatch(fetchFollowingManga());
+      if (sections.find((e) => e.key === 'recentlyUpdated')?.isVisible)
+        await dispatch(fetchUpdatedManga());
+      if (sections.find((e) => e.key === 'recentlyAdded')?.isVisible)
+        await dispatch(fetchAddedManga());
+      if (sections.find((e) => e.key === 'random')?.isVisible)
+        await dispatch(fetchRandomManga());
     })();
   }, []);
 
@@ -152,7 +156,7 @@ export const Home = ({ navigation }: Props): ReactElement => {
           item &&
           item.isVisible &&
           item.dataSource &&
-          item.dataSource.length>0 && (
+          item.dataSource.length > 0 && (
             <SectionContainer>
               <SmallMangaList
                 mangaList={

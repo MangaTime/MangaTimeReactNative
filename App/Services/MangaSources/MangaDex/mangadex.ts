@@ -4,25 +4,25 @@
  */
 
 export interface paths {
-  '/ping': {
+  "/ping": {
     get: {
       responses: {
         /** Pong */
         200: {
           content: {
-            'application/json': string;
+            "application/json": string;
           };
         };
       };
     };
   };
-  '/manga': {
+  "/manga": {
     /** Search a list of Manga. */
-    get: operations['get-search-manga'];
+    get: operations["get-search-manga"];
     /** Create a new Manga. */
-    post: operations['post-manga'];
+    post: operations["post-manga"];
   };
-  '/manga/{id}/aggregate': {
+  "/manga/{id}/aggregate": {
     get: {
       parameters: {
         path: {
@@ -30,14 +30,15 @@ export interface paths {
           id: string;
         };
         query: {
-          'translatedLanguage[]'?: string[];
+          "translatedLanguage[]"?: string[];
+          "groups[]"?: string[];
         };
       };
       responses: {
         /** OK */
         200: {
           content: {
-            'application/json': {
+            "application/json": {
               result?: string;
               volumes?: {
                 [key: string]: {
@@ -46,6 +47,7 @@ export interface paths {
                   chapters?: {
                     [key: string]: {
                       chapter?: string;
+                      id?: string;
                       count?: number;
                     };
                   };
@@ -63,11 +65,11 @@ export interface paths {
       };
     };
   };
-  '/manga/{id}': {
+  "/manga/{id}": {
     /** View Manga. */
-    get: operations['get-manga-id'];
-    put: operations['put-manga-id'];
-    delete: operations['delete-manga-id'];
+    get: operations["get-manga-id"];
+    put: operations["put-manga-id"];
+    delete: operations["delete-manga-id"];
     parameters: {
       path: {
         /** Manga ID */
@@ -75,37 +77,37 @@ export interface paths {
       };
     };
   };
-  '/auth/login': {
-    post: operations['post-auth-login'];
+  "/auth/login": {
+    post: operations["post-auth-login"];
   };
-  '/auth/check': {
-    get: operations['get-auth-check'];
+  "/auth/check": {
+    get: operations["get-auth-check"];
   };
-  '/auth/logout': {
-    post: operations['post-auth-logout'];
+  "/auth/logout": {
+    post: operations["post-auth-logout"];
   };
-  '/auth/refresh': {
-    post: operations['post-auth-refresh'];
+  "/auth/refresh": {
+    post: operations["post-auth-refresh"];
   };
-  '/account/create': {
-    post: operations['post-account-create'];
+  "/account/create": {
+    post: operations["post-account-create"];
   };
-  '/account/activate/{code}': {
-    get: operations['get-account-activate-code'];
+  "/account/activate/{code}": {
+    post: operations["get-account-activate-code"];
     parameters: {
       path: {
         code: string;
       };
     };
   };
-  '/group': {
-    get: operations['get-search-group'];
-    post: operations['post-group'];
+  "/group": {
+    get: operations["get-search-group"];
+    post: operations["post-group"];
   };
-  '/group/{id}': {
-    get: operations['get-group-id'];
-    put: operations['put-group-id'];
-    delete: operations['delete-group-id'];
+  "/group/{id}": {
+    get: operations["get-group-id"];
+    put: operations["put-group-id"];
+    delete: operations["delete-group-id"];
     parameters: {
       path: {
         /** Scanlation Group ID */
@@ -113,23 +115,23 @@ export interface paths {
       };
     };
   };
-  '/group/{id}/follow': {
-    post: operations['post-group-id-follow'];
-    delete: operations['delete-group-id-follow'];
+  "/group/{id}/follow": {
+    post: operations["post-group-id-follow"];
+    delete: operations["delete-group-id-follow"];
     parameters: {
       path: {
         id: string;
       };
     };
   };
-  '/list': {
-    post: operations['post-list'];
+  "/list": {
+    post: operations["post-list"];
   };
-  '/list/{id}': {
-    get: operations['get-list-id'];
+  "/list/{id}": {
+    get: operations["get-list-id"];
     /** The size of the body is limited to 8KB. */
-    put: operations['put-list-id'];
-    delete: operations['delete-list-id'];
+    put: operations["put-list-id"];
+    delete: operations["delete-list-id"];
     parameters: {
       path: {
         /** CustomList ID */
@@ -137,9 +139,9 @@ export interface paths {
       };
     };
   };
-  '/manga/{id}/list/{listId}': {
-    post: operations['post-manga-id-list-listId'];
-    delete: operations['delete-manga-id-list-listId'];
+  "/manga/{id}/list/{listId}": {
+    post: operations["post-manga-id-list-listId"];
+    delete: operations["delete-manga-id-list-listId"];
     parameters: {
       path: {
         /** Manga ID */
@@ -149,13 +151,13 @@ export interface paths {
       };
     };
   };
-  '/user/list': {
+  "/user/list": {
     /** This will list public and private CustomList */
-    get: operations['get-user-list'];
+    get: operations["get-user-list"];
   };
-  '/user/{id}/list': {
+  "/user/{id}/list": {
     /** This will list only public CustomList */
-    get: operations['get-user-id-list'];
+    get: operations["get-user-id-list"];
     parameters: {
       path: {
         /** User ID */
@@ -163,11 +165,12 @@ export interface paths {
       };
     };
   };
-  '/user': {
-    get: operations['get-user'];
+  "/user": {
+    get: operations["get-user"];
   };
-  '/user/{id}': {
-    get: operations['get-user-id'];
+  "/user/{id}": {
+    get: operations["get-user-id"];
+    delete: operations["delete-user-id"];
     parameters: {
       path: {
         /** User ID */
@@ -175,21 +178,30 @@ export interface paths {
       };
     };
   };
-  '/user/password': {
-    post: operations['post-user-password'];
+  "/user/delete/{code}": {
+    post: operations["post-user-delete-code"];
+    parameters: {
+      path: {
+        /** User delete code */
+        code: string;
+      };
+    };
   };
-  '/user/email': {
-    post: operations['post-user-email'];
+  "/user/password": {
+    post: operations["post-user-password"];
   };
-  '/chapter': {
+  "/user/email": {
+    post: operations["post-user-email"];
+  };
+  "/chapter": {
     /** Chapter list. If you want the Chapters of a given Manga, please check the feed endpoints. */
-    get: operations['get-chapter'];
-    parameters: unknown;
+    get: operations["get-chapter"];
+    parameters: {};
   };
-  '/chapter/{id}': {
-    get: operations['get-chapter-id'];
-    put: operations['put-chapter-id'];
-    delete: operations['delete-chapter-id'];
+  "/chapter/{id}": {
+    get: operations["get-chapter-id"];
+    put: operations["put-chapter-id"];
+    delete: operations["delete-chapter-id"];
     parameters: {
       path: {
         /** Chapter ID */
@@ -197,50 +209,50 @@ export interface paths {
       };
     };
   };
-  '/user/follows/manga/feed': {
-    get: operations['get-user-follows-manga-feed'];
+  "/user/follows/manga/feed": {
+    get: operations["get-user-follows-manga-feed"];
   };
-  '/list/{id}/feed': {
-    get: operations['get-list-id-feed'];
+  "/list/{id}/feed": {
+    get: operations["get-list-id-feed"];
     parameters: {
       path: {
         id: string;
       };
     };
   };
-  '/manga/{id}/follow': {
-    post: operations['post-manga-id-follow'];
-    delete: operations['delete-manga-id-follow'];
+  "/manga/{id}/follow": {
+    post: operations["post-manga-id-follow"];
+    delete: operations["delete-manga-id-follow"];
     parameters: {
       path: {
         id: string;
       };
     };
   };
-  '/cover': {
-    get: operations['get-cover'];
+  "/cover": {
+    get: operations["get-cover"];
   };
-  '/cover/{mangaId}': {
-    post: operations['upload-cover'];
+  "/cover/{mangaId}": {
+    post: operations["upload-cover"];
   };
-  '/cover/{coverId}': {
-    get: operations['get-cover-id'];
-    put: operations['edit-cover'];
-    delete: operations['delete-cover'];
+  "/cover/{coverId}": {
+    get: operations["get-cover-id"];
+    put: operations["edit-cover"];
+    delete: operations["delete-cover"];
     parameters: {
       path: {
         coverId: string;
       };
     };
   };
-  '/author': {
-    get: operations['get-author'];
-    post: operations['post-author'];
+  "/author": {
+    get: operations["get-author"];
+    post: operations["post-author"];
   };
-  '/author/{id}': {
-    get: operations['get-author-id'];
-    put: operations['put-author-id'];
-    delete: operations['delete-author-id'];
+  "/author/{id}": {
+    get: operations["get-author-id"];
+    put: operations["put-author-id"];
+    delete: operations["delete-author-id"];
     parameters: {
       path: {
         /** Author ID */
@@ -248,11 +260,11 @@ export interface paths {
       };
     };
   };
-  '/legacy/mapping': {
-    post: operations['post-legacy-mapping'];
+  "/legacy/mapping": {
+    post: operations["post-legacy-mapping"];
   };
-  '/manga/{id}/feed': {
-    get: operations['get-manga-id-feed'];
+  "/manga/{id}/feed": {
+    get: operations["get-manga-id-feed"];
     parameters: {
       path: {
         /** Manga ID */
@@ -260,35 +272,37 @@ export interface paths {
       };
     };
   };
-  '/manga/{id}/read': {
+  "/manga/{id}/read": {
     /** A list of chapter ids that are marked as read for the specified manga */
-    get: operations['get-manga-chapter-readmarkers'];
+    get: operations["get-manga-chapter-readmarkers"];
+    /** Send a lot of chapter ids for one manga to mark as read and/or unread */
+    post: operations["post-manga-chapter-readmarkers"];
     parameters: {
       path: {
         id: string;
       };
     };
   };
-  '/manga/read': {
+  "/manga/read": {
     /** A list of chapter ids that are marked as read for the given manga ids */
-    get: operations['get-manga-chapter-readmarkers-2'];
+    get: operations["get-manga-chapter-readmarkers-2"];
   };
-  '/chapter/{id}/read': {
+  "/chapter/{id}/read": {
     /** Mark chapter as read for the current user */
-    post: operations['chapter-id-read'];
+    post: operations["chapter-id-read"];
     /** Mark chapter as unread for the current user */
-    delete: operations['chapter-id-unread'];
+    delete: operations["chapter-id-unread"];
     parameters: {
       path: {
         id: string;
       };
     };
   };
-  '/manga/random': {
-    get: operations['get-manga-random'];
+  "/manga/random": {
+    get: operations["get-manga-random"];
   };
-  '/at-home/server/{chapterId}': {
-    get: operations['get-at-home-server-chapterId'];
+  "/at-home/server/{chapterId}": {
+    get: operations["get-at-home-server-chapterId"];
     parameters: {
       path: {
         /** Chapter ID */
@@ -296,74 +310,198 @@ export interface paths {
       };
     };
   };
-  '/manga/tag': {
-    get: operations['get-manga-tag'];
+  "/manga/tag": {
+    get: operations["get-manga-tag"];
   };
-  '/account/activate/resend': {
-    post: operations['post-account-activate-resend'];
+  "/account/activate/resend": {
+    post: operations["post-account-activate-resend"];
   };
-  '/account/recover': {
-    post: operations['post-account-recover'];
+  "/account/recover": {
+    /** You can only request Account Recovery once per Hour for the same Email Address */
+    post: operations["post-account-recover"];
   };
-  '/account/recover/{code}': {
-    post: operations['post-account-recover-code'];
+  "/account/recover/{code}": {
+    post: operations["post-account-recover-code"];
     parameters: {
       path: {
         code: string;
       };
     };
   };
-  '/user/me': {
-    get: operations['get-user-me'];
+  "/user/me": {
+    get: operations["get-user-me"];
   };
-  '/user/follows/group': {
-    get: operations['get-user-follows-group'];
+  "/user/follows/group": {
+    get: operations["get-user-follows-group"];
   };
-  '/user/follows/user': {
-    get: operations['get-user-follows-user'];
+  "/user/follows/group/{id}": {
+    get: operations["get-user-follows-group-id"];
+    parameters: {
+      path: {
+        /** Scanlation Group id */
+        id: string;
+      };
+    };
   };
-  '/user/follows/manga': {
-    get: operations['get-user-follows-manga'];
+  "/user/follows/user": {
+    get: operations["get-user-follows-user"];
   };
-  '/manga/status': {
-    get: operations['get-manga-status'];
+  "/user/follows/user/{id}": {
+    get: operations["get-user-follows-group-id"];
+    parameters: {
+      path: {
+        /** User id */
+        id: string;
+      };
+    };
   };
-  '/manga/{id}/status': {
-    get: operations['get-manga-id-status'];
-    post: operations['post-manga-id-status'];
+  "/user/follows/manga": {
+    get: operations["get-user-follows-manga"];
+  };
+  "/user/follows/manga/{id}": {
+    get: operations["get-user-follows-manga-id"];
+    parameters: {
+      path: {
+        /** Manga id */
+        id: string;
+      };
+    };
+  };
+  "/manga/status": {
+    get: operations["get-manga-status"];
+  };
+  "/manga/{id}/status": {
+    get: operations["get-manga-id-status"];
+    post: operations["post-manga-id-status"];
     parameters: {
       path: {
         id: string;
       };
     };
   };
-  '/captcha/solve': {
+  "/manga/draft/{id}": {
+    get: operations["get-manga-id-draft"];
+    parameters: {
+      path: {
+        id: string;
+      };
+      query: {
+        "includes[]"?: string[];
+      };
+    };
+  };
+  "/manga/draft/{id}/commit": {
+    post: operations["commit-manga-draft"];
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+  };
+  "/manga/draft": {
+    get: operations["get-manga-drafts"];
+    parameters: {
+      query: {
+        limit?: number;
+        offset?: number;
+        user?: string;
+        state?: "draft" | "submitted" | "rejected";
+        order?: {
+          title?: "asc" | "desc";
+          year?: "asc" | "desc";
+          createdAt?: "asc" | "desc";
+          updatedAt?: "asc" | "desc";
+        };
+        "includes[]"?: string[];
+      };
+    };
+  };
+  "/captcha/solve": {
     /**
      * Captchas can be solved explicitly through this endpoint, another way is to add a `X-Captcha-Result` header to any request. The same logic will verify the captcha and is probably more convenient because it takes one less request.
      *
      * Authentication is optional. Captchas are tracked for both the client ip and for the user id, if you are logged in you want to send your session token but that is not required.
      */
-    post: operations['post-captcha-solve'];
+    post: operations["post-captcha-solve"];
   };
-  '/report/reasons/{category}': {
-    get: operations['get-report-reasons-by-category'];
+  "/report/reasons/{category}": {
+    get: operations["get-report-reasons-by-category"];
     parameters: {
       path: {
-        category: 'manga' | 'chapter' | 'scanlation_group' | 'user';
+        category: "manga" | "chapter" | "scanlation_group" | "user";
       };
     };
   };
-  '/report': {
-    post: operations['post-report'];
+  "/report": {
+    post: operations["post-report"];
+  };
+  "/upload": {
+    get: operations["get-upload-session"];
+  };
+  "/upload/begin": {
+    post: operations["begin-upload-session"];
+  };
+  "/upload/{uploadSessionId}": {
+    post: operations["put-upload-session-file"];
+    delete: operations["abandon-upload-session"];
+    parameters: {
+      path: {
+        uploadSessionId: string;
+      };
+    };
+  };
+  "/upload/{uploadSessionId}/commit": {
+    post: operations["commit-upload-session"];
+    parameters: {
+      path: {
+        uploadSessionId: string;
+      };
+    };
+  };
+  "/upload/{uploadSessionId}/{uploadSessionFileId}": {
+    delete: operations["delete-uploaded-session-file"];
+    parameters: {
+      path: {
+        uploadSessionId: string;
+        uploadSessionFileId: string;
+      };
+    };
+  };
+  "/upload/{uploadSessionId}/batch": {
+    delete: operations["delete-uploaded-session-files"];
+    parameters: {
+      path: {
+        uploadSessionId: string;
+      };
+    };
+  };
+  "/manga/{mangaId}/relation": {
+    get: operations["get-manga-relation"];
+    /** Create a new Manga relation. */
+    post: operations["post-manga-relation"];
+    parameters: {
+      path: {
+        mangaId: string;
+      };
+    };
+  };
+  "/manga/{mangaId}/relation/{id}": {
+    delete: operations["delete-manga-relation-id"];
+    parameters: {
+      path: {
+        mangaId: string;
+        id: string;
+      };
+    };
   };
 }
 
 export interface components {
   schemas: {
     MangaRequest: {
-      title?: components['schemas']['LocalizedString'];
-      altTitles?: components['schemas']['LocalizedString'][];
-      description?: components['schemas']['LocalizedString'];
+      title?: components["schemas"]["LocalizedString"];
+      altTitles?: components["schemas"]["LocalizedString"][];
+      description?: components["schemas"]["LocalizedString"];
       authors?: string[];
       artists?: string[];
       links?: { [key: string]: string };
@@ -371,47 +509,65 @@ export interface components {
       lastVolume?: string | null;
       lastChapter?: string | null;
       publicationDemographic?:
-        | ('shounen' | 'shoujo' | 'josei' | 'seinen')
+        | ("shounen" | "shoujo" | "josei" | "seinen")
         | null;
-      status?: ('ongoing' | 'completed' | 'hiatus' | 'cancelled') | null;
+      status?: "ongoing" | "completed" | "hiatus" | "cancelled";
       /** Year of release */
       year?: number | null;
-      contentRating?:
-        | ('safe' | 'suggestive' | 'erotica' | 'pornographic')
-        | null;
+      contentRating?: "safe" | "suggestive" | "erotica" | "pornographic";
+      tags?: string[];
       modNotes?: string | null;
       version?: number;
     };
     LocalizedString: { [key: string]: string };
     MangaResponse: {
-      result?: 'ok' | 'error';
-      data?: components['schemas']['Manga'];
-      relationships?: components['schemas']['Relationship'][];
+      result?: "ok" | "error";
+      response?: string;
+      data?: components["schemas"]["Manga"];
     };
     ChapterResponse: {
-      result?: 'ok' | 'error';
-      data?: components['schemas']['Chapter'];
-      relationships?: components['schemas']['Relationship'][];
+      result?: "ok" | "error";
+      response?: string;
+      data?: components["schemas"]["Chapter"];
     };
     Relationship: {
       id?: string;
       type?: string;
+      /** Related Manga type, only present if you are on a Manga entity and a Manga relationship */
+      related?:
+        | "monochrome"
+        | "main_story"
+        | "adapted_from"
+        | "based_on"
+        | "prequel"
+        | "side_story"
+        | "doujinshi"
+        | "same_franchise"
+        | "shared_universe"
+        | "sequel"
+        | "spin_off"
+        | "alternate_story"
+        | "preserialization"
+        | "colored"
+        | "serialization";
       /** If Reference Expansion is applied, contains objects attributes */
-      attributes?: { [key: string]: any } | null;
+      attributes?: { [key: string]: unknown } | null;
     };
     Chapter: {
       id?: string;
-      type?: 'chapter';
-      attributes?: components['schemas']['ChapterAttributes'];
+      type?: "chapter";
+      attributes?: components["schemas"]["ChapterAttributes"];
+      relationships?: components["schemas"]["Relationship"][];
     };
     Manga: {
       id?: string;
-      type?: 'manga';
-      attributes?: components['schemas']['MangaAttributes'];
+      type?: "manga";
+      attributes?: components["schemas"]["MangaAttributes"];
+      relationships?: components["schemas"]["Relationship"][];
     };
     ErrorResponse: {
       result?: string;
-      errors?: components['schemas']['Error'][];
+      errors?: components["schemas"]["Error"][];
     };
     Error: {
       id?: string;
@@ -428,44 +584,48 @@ export interface components {
       data?: string[];
       dataSaver?: string[];
       uploader?: string;
+      /** While hash, data and dataSaver attributes are empty, denotes a chapter that links to an external source. */
+      externalUrl?: string | null;
       version?: number;
       createdAt?: string;
       updatedAt?: string;
       publishAt?: string;
     };
     MangaAttributes: {
-      title?: components['schemas']['LocalizedString'];
-      altTitles?: components['schemas']['LocalizedString'][];
-      description?: components['schemas']['LocalizedString'];
+      title?: components["schemas"]["LocalizedString"];
+      altTitles?: components["schemas"]["LocalizedString"][];
+      description?: components["schemas"]["LocalizedString"];
       isLocked?: boolean;
       links?: { [key: string]: string };
       originalLanguage?: string;
       lastVolume?: string | null;
       lastChapter?: string | null;
-      publicationDemographic?: string | null;
+      publicationDemographic?:
+        | ("shounen" | "shoujo" | "josei" | "seinen")
+        | null;
       status?: string | null;
       /** Year of release */
       year?: number | null;
-      contentRating?: string | null;
-      tags?: components['schemas']['Tag'][];
+      contentRating?: "safe" | "suggestive" | "erotica" | "pornographic";
+      tags?: components["schemas"]["Tag"][];
+      state?: "draft" | "submitted" | "published" | "rejected";
       version?: number;
       createdAt?: string;
       updatedAt?: string;
     };
-    MangaCreate: components['schemas']['MangaRequest'] & { [key: string]: any };
-    MangaEdit: components['schemas']['MangaRequest'] & { [key: string]: any };
-    ChapterEdit: components['schemas']['ChapterRequest'] & {
-      [key: string]: any;
-    };
+    MangaCreate: components["schemas"]["MangaRequest"] & unknown;
+    MangaEdit: components["schemas"]["MangaRequest"] & unknown;
+    ChapterEdit: components["schemas"]["ChapterRequest"] & unknown;
     Response: {
-      result?: 'ok' | 'error';
+      result?: "ok" | "error";
     };
     Login: {
-      username: string;
+      username?: string;
+      email?: string;
       password: string;
     };
     LoginResponse: {
-      result?: 'ok' | 'error';
+      result?: "ok" | "error";
       token?: {
         session?: string;
         refresh?: string;
@@ -478,13 +638,13 @@ export interface components {
       permissions?: string[];
     };
     LogoutResponse: {
-      result?: 'ok' | 'error';
+      result?: "ok" | "error";
     };
     RefreshToken: {
       token: string;
     };
     RefreshResponse: {
-      result: 'ok' | 'error';
+      result: "ok" | "error";
       token?: {
         session?: string;
         refresh?: string;
@@ -492,7 +652,7 @@ export interface components {
       message?: string;
     };
     AccountActivateResponse: {
-      result?: 'ok';
+      result?: "ok";
     };
     CreateAccount: {
       username: string;
@@ -500,85 +660,107 @@ export interface components {
       email: string;
     };
     ScanlationGroupResponse: {
-      result?: 'ok';
-      data?: components['schemas']['ScanlationGroup'];
-      relationships?: {
-        id?: string;
-        type?: string;
-      }[];
+      result?: "ok";
+      response?: string;
+      data?: components["schemas"]["ScanlationGroup"];
     };
     ScanlationGroup: {
       id?: string;
-      type?: 'scanlation_group';
-      attributes?: components['schemas']['ScanlationGroupAttributes'];
+      type?: "scanlation_group";
+      attributes?: components["schemas"]["ScanlationGroupAttributes"];
+      relationships?: components["schemas"]["Relationship"][];
     };
     ScanlationGroupAttributes: {
       name?: string;
-      leader?: components['schemas']['User'];
+      altNames?: components["schemas"]["LocalizedString"][];
+      website?: string | null;
+      ircServer?: string | null;
+      ircChannel?: string | null;
+      discord?: string | null;
+      contactEmail?: string | null;
+      description?: string | null;
+      twitter?: string | null;
+      focusedLanguage?: string[] | null;
       locked?: boolean;
+      official?: boolean;
       version?: number;
       createdAt?: string;
       updatedAt?: string;
     };
     User: {
       id?: string;
-      type?: 'user';
-      attributes?: components['schemas']['UserAttributes'];
+      type?: "user";
+      attributes?: components["schemas"]["UserAttributes"];
+      relationships?: components["schemas"]["Relationship"][];
     };
     UserAttributes: {
       username?: string;
+      roles?: string[];
       version?: number;
     };
     CreateScanlationGroup: {
       name: string;
-      leader?: string;
-      members?: string[];
-      version?: number;
+      website?: string | null;
+      ircServer?: string | null;
+      ircChannel?: string | null;
+      discord?: string | null;
+      contactEmail?: string | null;
+      description?: string | null;
+      twitter?: string | null;
     };
     ScanlationGroupEdit: {
       name?: string;
       leader?: string;
       members?: string[];
+      website?: string | null;
+      ircServer?: string | null;
+      ircChannel?: string | null;
+      discord?: string | null;
+      contactEmail?: string | null;
+      description?: string | null;
+      twitter?: string | null;
+      focusedLanguages?: string[] | null;
       locked?: boolean;
       version: number;
     };
     CustomListCreate: {
       name: string;
-      visibility?: 'public' | 'private';
+      visibility?: "public" | "private";
       manga?: string[];
       version?: number;
     };
     CustomListEdit: {
       name?: string;
-      visibility?: 'public' | 'private';
+      visibility?: "public" | "private";
       manga?: string[];
       version: number;
     };
     CustomListResponse: {
-      result?: 'ok' | 'error';
-      data?: components['schemas']['CustomList'];
-      relationships?: components['schemas']['Relationship'][];
+      result?: "ok" | "error";
+      response?: string;
+      data?: components["schemas"]["CustomList"];
     };
     CustomList: {
       id?: string;
-      type?: 'custom_list';
-      attributes?: components['schemas']['CustomListAttributes'];
+      type?: "custom_list";
+      attributes?: components["schemas"]["CustomListAttributes"];
+      relationships?: components["schemas"]["Relationship"][];
     };
     CustomListAttributes: {
       name?: string;
-      visibility?: 'private' | 'public';
-      owner?: components['schemas']['User'];
+      visibility?: "private" | "public";
       version?: number;
     };
     CoverResponse: {
       result?: string;
-      data?: components['schemas']['Cover'];
-      relationships?: components['schemas']['Relationship'][];
+      response?: string;
+      data?: components["schemas"]["Cover"];
     };
     Cover: {
       id?: string;
-      type?: 'cover_art';
-      attributes?: components['schemas']['CoverAttributes'];
+      type?: "cover_art";
+      attributes?: components["schemas"]["CoverAttributes"];
+      relationships?: components["schemas"]["Relationship"][];
     };
     CoverAttributes: {
       volume?: string | null;
@@ -595,69 +777,111 @@ export interface components {
     };
     AuthorResponse: {
       result?: string;
-      data?: components['schemas']['Author'];
-      relationships?: components['schemas']['Relationship'][];
+      response?: string;
+      data?: components["schemas"]["Author"];
     };
     Author: {
       id?: string;
-      type?: 'author';
-      attributes?: components['schemas']['AuthorAttributes'];
+      type?: "author";
+      attributes?: components["schemas"]["AuthorAttributes"];
+      relationships?: components["schemas"]["Relationship"][];
     };
     AuthorAttributes: {
       name?: string;
       imageUrl?: string;
       biography?: { [key: string]: string };
+      twitter?: string | null;
+      pixiv?: string | null;
+      melonBook?: string | null;
+      fanBox?: string | null;
+      booth?: string | null;
+      nicoVideo?: string | null;
+      skeb?: string | null;
+      fantia?: string | null;
+      tumblr?: string | null;
+      youtube?: string | null;
+      website?: string | null;
       version?: number;
       createdAt?: string;
       updatedAt?: string;
     };
     AuthorEdit: {
       name?: string;
+      twitter?: string | null;
+      pixiv?: string | null;
+      melonBook?: string | null;
+      fanBox?: string | null;
+      booth?: string | null;
+      nicoVideo?: string | null;
+      skeb?: string | null;
+      fantia?: string | null;
+      tumblr?: string | null;
+      youtube?: string | null;
+      website?: string | null;
       version: number;
     };
     AuthorCreate: {
       name: string;
+      twitter?: string | null;
+      pixiv?: string | null;
+      melonBook?: string | null;
+      fanBox?: string | null;
+      booth?: string | null;
+      nicoVideo?: string | null;
+      skeb?: string | null;
+      fantia?: string | null;
+      tumblr?: string | null;
+      youtube?: string | null;
+      website?: string | null;
       version?: number;
     };
     MappingIdBody: {
-      type?: 'group' | 'manga' | 'chapter' | 'tag';
+      type?: "group" | "manga" | "chapter" | "tag";
       ids?: number[];
     };
     MappingIdResponse: {
-      result?: 'ok';
-      data?: components['schemas']['MappingId'];
-      relationships?: components['schemas']['Relationship'][];
+      result?: string;
+      response?: string;
+      data?: components["schemas"]["MappingId"][];
+      limit?: number;
+      offset?: number;
+      total?: number;
     };
     MappingId: {
       id?: string;
-      type?: 'mapping_id';
-      attributes?: components['schemas']['MappingIdAttributes'];
+      type?: "mapping_id";
+      attributes?: components["schemas"]["MappingIdAttributes"];
+      relationships?: components["schemas"]["Relationship"][];
     };
     MappingIdAttributes: {
-      type?: 'manga' | 'chapter' | 'group' | 'tag';
+      type?: "manga" | "chapter" | "group" | "tag";
       legacyId?: number;
       newId?: string;
     };
     TagResponse: {
-      result?: 'ok';
-      data?: components['schemas']['Tag'];
-      relationships?: components['schemas']['Relationship'][];
+      result?: string;
+      response?: string;
+      data?: components["schemas"]["Tag"][];
+      limit?: number;
+      offset?: number;
+      total?: number;
     };
     Tag: {
       id?: string;
-      type?: 'tag';
-      attributes?: components['schemas']['TagAttributes'];
+      type?: "tag";
+      attributes?: components["schemas"]["TagAttributes"];
+      relationships?: components["schemas"]["Relationship"][];
     };
     TagAttributes: {
-      name?: components['schemas']['LocalizedString'];
-      description?: components['schemas']['LocalizedString'];
+      name?: components["schemas"]["LocalizedString"];
+      description?: components["schemas"]["LocalizedString"];
       group?: string;
       version?: number;
     };
     UserResponse: {
-      result?: 'ok';
-      data?: components['schemas']['User'];
-      relationships?: components['schemas']['Relationship'][];
+      result?: "ok";
+      response?: string;
+      data?: components["schemas"]["User"];
     };
     SendAccountActivationCode: {
       email: string;
@@ -668,244 +892,364 @@ export interface components {
     UpdateMangaStatus: {
       status:
         | (
-            | 'reading'
-            | 'on_hold'
-            | 'plan_to_read'
-            | 'dropped'
-            | 're_reading'
-            | 'completed'
+            | "reading"
+            | "on_hold"
+            | "plan_to_read"
+            | "dropped"
+            | "re_reading"
+            | "completed"
           )
         | null;
     };
     ChapterRequest: {
-      title?: string;
+      title?: string | null;
       volume?: string | null;
       chapter?: string | null;
       translatedLanguage?: string;
-      data?: string[];
-      dataSaver?: string[];
+      groups?: string[];
       version?: number;
     };
     CoverList: {
-      results?: components['schemas']['CoverResponse'][];
+      result?: string;
+      response?: string;
+      data?: components["schemas"]["Cover"][];
       limit?: number;
       offset?: number;
       total?: number;
     };
     AuthorList: {
-      results?: components['schemas']['AuthorResponse'][];
+      result?: string;
+      response?: string;
+      data?: components["schemas"]["Author"][];
       limit?: number;
       offset?: number;
       total?: number;
     };
-    MangaDetail: {
-      result?: string;
-      volumes?: {
-        [key: string]: {
-          volume?: string;
-          count?: number;
-          chapters?: {
-            [key: string]: {
-              chapter?: string;
-              count?: number;
-            };
-          };
-        };
-      };
-    };
     ChapterList: {
-      results?: components['schemas']['ChapterResponse'][];
+      result?: string;
+      response?: string;
+      data?: components["schemas"]["Chapter"][];
       limit?: number;
       offset?: number;
       total?: number;
     };
     ScanlationGroupList: {
-      results?: components['schemas']['ScanlationGroupResponse'][];
+      result?: string;
+      response?: string;
+      data?: components["schemas"]["ScanlationGroup"][];
       limit?: number;
       offset?: number;
       total?: number;
     };
+    MangaRelationCreate: components["schemas"]["MangaRelationRequest"] &
+      unknown;
+    MangaRelationRequest: {
+      targetManga?: string;
+      relation?:
+        | "monochrome"
+        | "main_story"
+        | "adapted_from"
+        | "based_on"
+        | "prequel"
+        | "side_story"
+        | "doujinshi"
+        | "same_franchise"
+        | "shared_universe"
+        | "sequel"
+        | "spin_off"
+        | "alternate_story"
+        | "preserialization"
+        | "colored"
+        | "serialization";
+    };
+    MangaRelationList: {
+      result?: string;
+      response?: string;
+      data?: components["schemas"]["MangaRelation"][];
+      limit?: number;
+      offset?: number;
+      total?: number;
+    };
+    MangaRelationResponse: {
+      result?: "ok" | "error";
+      response?: string;
+      data?: components["schemas"]["MangaRelation"];
+    };
+    MangaRelation: {
+      id?: string;
+      type?: "manga_relation";
+      attributes?: components["schemas"]["MangaRelationAttributes"];
+      relationships?: components["schemas"]["Relationship"][];
+    };
+    MangaRelationAttributes: {
+      relation?:
+        | "monochrome"
+        | "main_story"
+        | "adapted_from"
+        | "based_on"
+        | "prequel"
+        | "side_story"
+        | "doujinshi"
+        | "same_franchise"
+        | "shared_universe"
+        | "sequel"
+        | "spin_off"
+        | "alternate_story"
+        | "preserialization"
+        | "colored"
+        | "serialization";
+      version?: number;
+    };
     MangaList: {
-      results?: components['schemas']['MangaResponse'][];
+      result?: string;
+      response?: string;
+      data?: components["schemas"]["Manga"][];
       limit?: number;
       offset?: number;
       total?: number;
     };
     CustomListList: {
-      results?: components['schemas']['CustomListResponse'][];
+      result?: string;
+      response?: string;
+      data?: components["schemas"]["CustomList"][];
       limit?: number;
       offset?: number;
       total?: number;
     };
     UserList: {
-      results?: components['schemas']['UserResponse'][];
+      result?: string;
+      response?: string;
+      data?: components["schemas"]["User"][];
       limit?: number;
       offset?: number;
       total?: number;
+    };
+    UploadSession: {
+      id?: string;
+      type?: "upload_session";
+      attributes?: components["schemas"]["UploadSessionAttributes"];
+    };
+    UploadSessionAttributes: {
+      isCommitted?: boolean;
+      isProcessed?: boolean;
+      isDeleted?: boolean;
+      version?: number;
+      createdAt?: string;
+      updatedAt?: string;
+    };
+    UploadSessionFile: {
+      id?: string;
+      type?: "upload_session_file";
+      attributes?: components["schemas"]["UploadSessionFileAttributes"];
+    };
+    UploadSessionFileAttributes: {
+      originalFileName?: string;
+      fileHash?: string;
+      fileSize?: number;
+      mimeType?: string;
+      version?: number;
+    };
+    ChapterReadMarkerBatch: (unknown | unknown | unknown) & {
+      chapterIdsRead?: string[];
+      chapterIdsUnread?: string[];
+    };
+    BeginUploadSession: {
+      groups: string[];
+      manga: string;
+    };
+    CommitUploadSession: {
+      chapterDraft?: components["schemas"]["ChapterDraft"];
+      /** ordered list of Upload Session File ids */
+      pageOrder?: string[];
+    };
+    ChapterDraft: {
+      volume: string | null;
+      chapter: string | null;
+      title: string | null;
+      translatedLanguage: string;
+      externalUrl?: string | null;
+      publishAt?: string;
     };
   };
 }
 
 export interface operations {
   /** Search a list of Manga. */
-  'get-search-manga': {
+  "get-search-manga": {
     parameters: {
       query: {
         limit?: number;
         offset?: number;
         title?: string;
-        'authors[]'?: string[];
-        'artists[]'?: string[];
+        "authors[]"?: string[];
+        "artists[]"?: string[];
         /** Year of release */
         year?: number;
-        'includedTags[]'?: string[];
-        includedTagsMode?: 'AND' | 'OR';
-        'excludedTags[]'?: string[];
-        excludedTagsMode?: 'AND' | 'OR';
-        'status[]'?: ('ongoing' | 'completed' | 'hiatus' | 'cancelled')[];
-        'originalLanguage[]'?: string[];
-        'publicationDemographic[]'?: (
-          | 'shounen'
-          | 'shoujo'
-          | 'josei'
-          | 'seinen'
-          | 'none'
+        "includedTags[]"?: string[];
+        includedTagsMode?: "AND" | "OR";
+        "excludedTags[]"?: string[];
+        excludedTagsMode?: "AND" | "OR";
+        "status[]"?: ("ongoing" | "completed" | "hiatus" | "cancelled")[];
+        "originalLanguage[]"?: string[];
+        "excludedOriginalLanguage[]"?: string[];
+        "availableTranslatedLanguage[]"?: string[];
+        "publicationDemographic[]"?: (
+          | "shounen"
+          | "shoujo"
+          | "josei"
+          | "seinen"
+          | "none"
         )[];
         /** Manga ids (limited to 100 per request) */
-        'ids[]'?: string[];
-        'contentRating[]'?: (
-          | 'none'
-          | 'safe'
-          | 'suggestive'
-          | 'erotica'
-          | 'pornographic'
+        "ids[]"?: string[];
+        "contentRating[]"?: (
+          | "safe"
+          | "suggestive"
+          | "erotica"
+          | "pornographic"
         )[];
         createdAtSince?: string;
         updatedAtSince?: string;
         order?: {
-          createdAt?: 'asc' | 'desc';
-          updatedAt?: 'asc' | 'desc';
+          title?: "asc" | "desc";
+          year?: "asc" | "desc";
+          createdAt?: "asc" | "desc";
+          updatedAt?: "asc" | "desc";
+          latestUploadedChapter?: "asc" | "desc";
+          followedCount?: "asc" | "desc";
+          relevance?: "asc" | "desc";
         };
-        'includes[]'?: string[];
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** Manga list */
       200: {
         content: {
-          'application/json': components['schemas']['MangaList'];
+          "application/json": components["schemas"]["MangaList"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
   /** Create a new Manga. */
-  'post-manga': {
+  "post-manga": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
     responses: {
       /** Manga Created */
       200: {
         content: {
-          'application/json': components['schemas']['MangaResponse'];
+          "application/json": components["schemas"]["MangaResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 16KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['MangaCreate'];
+        "application/json": components["schemas"]["MangaCreate"];
       };
     };
   };
   /** View Manga. */
-  'get-manga-id': {
+  "get-manga-id": {
     parameters: {
       path: {
         /** Manga ID */
         id: string;
       };
       query: {
-        'includes[]'?: string[];
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['MangaResponse'];
+          "application/json": components["schemas"]["MangaResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Manga no content */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'put-manga-id': {
+  "put-manga-id": {
     parameters: {
       path: {
         /** Manga ID */
         id: string;
+      };
+      header: {
+        "Content-Type": string;
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['MangaResponse'];
+          "application/json": components["schemas"]["MangaResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 16KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['MangaEdit'];
+        "application/json": components["schemas"]["MangaEdit"] & {
+          artists?: string[];
+          authors?: string[];
+        };
       };
     };
   };
-  'delete-manga-id': {
+  "delete-manga-id": {
     parameters: {
       path: {
         /** Manga ID */
@@ -916,35 +1260,40 @@ export interface operations {
       /** Manga has been deleted. */
       200: {
         content: {
-          'application/json': components['schemas']['Response'];
+          "application/json": components["schemas"]["Response"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'post-auth-login': {
+  "post-auth-login": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['LoginResponse'];
+          "application/json": components["schemas"]["LoginResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Unauthorized */
@@ -953,93 +1302,103 @@ export interface operations {
     /** The size of the body is limited to 2KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['Login'];
+        "application/json": components["schemas"]["Login"];
       };
     };
   };
-  'get-auth-check': {
+  "get-auth-check": {
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['CheckResponse'];
+          "application/json": components["schemas"]["CheckResponse"];
         };
       };
     };
   };
-  'post-auth-logout': {
+  "post-auth-logout": {
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['LogoutResponse'];
+          "application/json": components["schemas"]["LogoutResponse"];
         };
       };
       /** Service Unavailable */
       503: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'post-auth-refresh': {
+  "post-auth-refresh": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['RefreshResponse'];
+          "application/json": components["schemas"]["RefreshResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Unauthorized */
       401: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 2KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['RefreshToken'];
+        "application/json": components["schemas"]["RefreshToken"];
       };
     };
   };
-  'post-account-create': {
+  "post-account-create": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
     responses: {
       /** Created */
       201: {
         content: {
-          'application/json': components['schemas']['UserResponse'];
+          "application/json": components["schemas"]["UserResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 4KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateAccount'];
+        "application/json": components["schemas"]["CreateAccount"];
       };
     };
   };
-  'get-account-activate-code': {
+  "get-account-activate-code": {
     parameters: {
       path: {
         code: string;
@@ -1049,115 +1408,164 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['AccountActivateResponse'];
+          "application/json": components["schemas"]["AccountActivateResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'get-search-group': {
+  "get-search-group": {
     parameters: {
       query: {
         limit?: number;
         offset?: number;
         /** ScanlationGroup ids (limited to 100 per request) */
-        'ids[]'?: string[];
+        "ids[]"?: string[];
         name?: string;
-        'includes[]'?: string[];
+        focusedLanguage?: string;
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ScanlationGroupList'];
+          "application/json": components["schemas"]["ScanlationGroupList"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'post-group': {
+  "post-group": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ScanlationGroupResponse'];
+          "application/json": components["schemas"]["ScanlationGroupResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
-    /** The size of the body is limited to 8KB. */
+    /** The size of the body is limited to 16KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateScanlationGroup'];
+        "application/json": components["schemas"]["CreateScanlationGroup"];
       };
     };
   };
-  'get-group-id': {
+  "get-group-id": {
     parameters: {
       path: {
         /** Scanlation Group ID */
         id: string;
       };
       query: {
-        'includes[]'?: string[];
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ScanlationGroupResponse'];
+          "application/json": components["schemas"]["ScanlationGroupResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** ScanlationGroup not found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'put-group-id': {
+  "put-group-id": {
+    parameters: {
+      path: {
+        /** Scanlation Group ID */
+        id: string;
+      };
+      header: {
+        "Content-Type": string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ScanlationGroupResponse"];
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+    /** The size of the body is limited to 8KB. */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ScanlationGroupEdit"];
+      };
+    };
+  };
+  "delete-group-id": {
     parameters: {
       path: {
         /** Scanlation Group ID */
@@ -1168,134 +1576,99 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ScanlationGroupResponse'];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["Response"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  "post-group-id-follow": {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  "delete-group-id-follow": {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  "post-list": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CustomListResponse"];
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 8KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['ScanlationGroupEdit'];
+        "application/json": components["schemas"]["CustomListCreate"];
       };
     };
   };
-  'delete-group-id': {
-    parameters: {
-      path: {
-        /** Scanlation Group ID */
-        id: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['Response'];
-        };
-      };
-      /** Forbidden */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-  };
-  'post-group-id-follow': {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['Response'];
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-  };
-  'delete-group-id-follow': {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['Response'];
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-  };
-  'post-list': {
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['CustomListResponse'];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-    /** The size of the body is limited to 8KB. */
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CustomListCreate'];
-      };
-    };
-  };
-  'get-list-id': {
+  "get-list-id": {
     parameters: {
       path: {
         /** CustomList ID */
@@ -1306,58 +1679,61 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['CustomListResponse'];
+          "application/json": components["schemas"]["CustomListResponse"];
         };
       };
       /** CustomList not found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
   /** The size of the body is limited to 8KB. */
-  'put-list-id': {
+  "put-list-id": {
     parameters: {
       path: {
         /** CustomList ID */
         id: string;
+      };
+      header: {
+        "Content-Type": string;
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['CustomListResponse'];
+          "application/json": components["schemas"]["CustomListResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CustomListEdit'];
+        "application/json": components["schemas"]["CustomListEdit"];
       };
     };
   };
-  'delete-list-id': {
+  "delete-list-id": {
     parameters: {
       path: {
         /** CustomList ID */
@@ -1368,54 +1744,24 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['Response'];
+          "application/json": components["schemas"]["Response"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'post-manga-id-list-listId': {
-    parameters: {
-      path: {
-        /** Manga ID */
-        id: string;
-        /** CustomList ID */
-        listId: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          'application/json': components['schemas']['Response'];
-        };
-      };
-      /** Forbidden */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-  };
-  'delete-manga-id-list-listId': {
+  "post-manga-id-list-listId": {
     parameters: {
       path: {
         /** Manga ID */
@@ -1428,25 +1774,55 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['Response'];
+          "application/json": components["schemas"]["Response"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  "delete-manga-id-list-listId": {
+    parameters: {
+      path: {
+        /** Manga ID */
+        id: string;
+        /** CustomList ID */
+        listId: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+      /** Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
   /** This will list public and private CustomList */
-  'get-user-list': {
+  "get-user-list": {
     parameters: {
       query: {
         limit?: number;
@@ -1457,13 +1833,13 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['CustomListList'];
+          "application/json": components["schemas"]["CustomListList"];
         };
       };
     };
   };
   /** This will list only public CustomList */
-  'get-user-id-list': {
+  "get-user-id-list": {
     parameters: {
       path: {
         /** User ID */
@@ -1478,21 +1854,21 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['CustomListList'];
+          "application/json": components["schemas"]["CustomListList"];
         };
       };
     };
   };
-  'get-user': {
+  "get-user": {
     parameters: {
       query: {
         limit?: number;
         offset?: number;
         /** User ids (limited to 100 per request) */
-        'ids[]'?: string[];
+        "ids[]"?: string[];
         username?: string;
         order?: {
-          username?: 'asc' | 'desc';
+          username?: "asc" | "desc";
         };
       };
     };
@@ -1500,12 +1876,12 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['UserList'];
+          "application/json": components["schemas"]["UserList"];
         };
       };
     };
   };
-  'get-user-id': {
+  "get-user-id": {
     parameters: {
       path: {
         /** User ID */
@@ -1516,70 +1892,121 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['UserResponse'];
+          "application/json": components["schemas"]["UserResponse"];
         };
       };
     };
   };
-  'post-user-password': {
+  "delete-user-id": {
+    parameters: {
+      path: {
+        /** User ID */
+        id: string;
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['Response'];
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+    };
+  };
+  "post-user-delete-code": {
+    parameters: {
+      path: {
+        /** User delete code */
+        code: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+    };
+  };
+  "post-user-password": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': {
+        "application/json": {
           oldPassword: string;
           newPassword: string;
         };
       };
     };
   };
-  'post-user-email': {
+  "post-user-email": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['Response'];
+          "application/json": components["schemas"]["Response"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': {
+        "application/json": {
           email: string;
         };
       };
     };
   };
   /** Chapter list. If you want the Chapters of a given Manga, please check the feed endpoints. */
-  'get-chapter': {
+  "get-chapter": {
     parameters: {
       query: {
         limit?: number;
         offset?: number;
         /** Chapter ids (limited to 100 per request) */
-        'ids[]'?: string[];
+        "ids[]"?: string[];
         title?: string;
-        'groups[]'?: string[];
+        "groups[]"?: string[];
         uploader?: string;
         manga?: string;
-        'volume[]'?: string | string[];
+        "volume[]"?: string | string[];
         chapter?: string | string[];
-        'translatedLanguage[]'?: string[];
+        "translatedLanguage[]"?: string[];
+        "originalLanguage[]"?: string[];
+        "excludedOriginalLanguage[]"?: string[];
+        "contentRating[]"?: (
+          | "safe"
+          | "suggestive"
+          | "erotica"
+          | "pornographic"
+        )[];
+        includeFutureUpdates?: "0" | "1";
         createdAtSince?: string;
         updatedAtSince?: string;
         publishAtSince?: string;
         order?: {
-          createdAt?: 'asc' | 'desc';
-          updatedAt?: 'asc' | 'desc';
-          publishAt?: 'asc' | 'desc';
-          volume?: 'asc' | 'desc';
-          chapter?: 'asc' | 'desc';
+          createdAt?: "asc" | "desc";
+          updatedAt?: "asc" | "desc";
+          publishAt?: "asc" | "desc";
+          volume?: "asc" | "desc";
+          chapter?: "asc" | "desc";
         };
         includes?: string[];
       };
@@ -1588,95 +2015,98 @@ export interface operations {
       /** Chapter list */
       200: {
         content: {
-          'application/json': components['schemas']['ChapterList'];
+          "application/json": components["schemas"]["ChapterList"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'get-chapter-id': {
+  "get-chapter-id": {
     parameters: {
       path: {
         /** Chapter ID */
         id: string;
       };
       query: {
-        'includes[]'?: string[];
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ChapterResponse'];
+          "application/json": components["schemas"]["ChapterResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Chapter not found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'put-chapter-id': {
+  "put-chapter-id": {
     parameters: {
       path: {
         /** Chapter ID */
         id: string;
+      };
+      header: {
+        "Content-Type": string;
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ChapterResponse'];
+          "application/json": components["schemas"]["ChapterResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 32KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['ChapterEdit'];
+        "application/json": components["schemas"]["ChapterEdit"];
       };
     };
   };
-  'delete-chapter-id': {
+  "delete-chapter-id": {
     parameters: {
       path: {
         /** Chapter ID */
@@ -1687,65 +2117,75 @@ export interface operations {
       /** Chapter has been deleted. */
       200: {
         content: {
-          'application/json': components['schemas']['Response'];
+          "application/json": components["schemas"]["Response"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'get-user-follows-manga-feed': {
+  "get-user-follows-manga-feed": {
     parameters: {
       query: {
         limit?: number;
         offset?: number;
-        'translatedLanguage[]'?: string[];
+        "translatedLanguage[]"?: string[];
+        "originalLanguage[]"?: string[];
+        "excludedOriginalLanguage[]"?: string[];
+        "contentRating[]"?: (
+          | "safe"
+          | "suggestive"
+          | "erotica"
+          | "pornographic"
+        )[];
+        includeFutureUpdates?: "0" | "1";
         createdAtSince?: string;
         updatedAtSince?: string;
         publishAtSince?: string;
         order?: {
-          createdAt?: 'asc' | 'desc';
-          updatedAt?: 'asc' | 'desc';
-          publishAt?: 'asc' | 'desc';
-          volume?: 'asc' | 'desc';
-          chapter?: 'asc' | 'desc';
+          createdAt?: "asc" | "desc";
+          updatedAt?: "asc" | "desc";
+          publishAt?: "asc" | "desc";
+          volume?: "asc" | "desc";
+          chapter?: "asc" | "desc";
         };
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ChapterList'];
+          "application/json": components["schemas"]["ChapterList"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** User not Found */
       404: unknown;
     };
   };
-  'get-list-id-feed': {
+  "get-list-id-feed": {
     parameters: {
       path: {
         id: string;
@@ -1753,50 +2193,60 @@ export interface operations {
       query: {
         limit?: number;
         offset?: number;
-        'translatedLanguage[]'?: string[];
+        "translatedLanguage[]"?: string[];
+        "originalLanguage[]"?: string[];
+        "excludedOriginalLanguage[]"?: string[];
+        "contentRating[]"?: (
+          | "safe"
+          | "suggestive"
+          | "erotica"
+          | "pornographic"
+        )[];
+        includeFutureUpdates?: "0" | "1";
         createdAtSince?: string;
         updatedAtSince?: string;
         publishAtSince?: string;
         order?: {
-          volume?: 'asc' | 'desc';
-          chapter?: 'asc' | 'desc';
+          volume?: "asc" | "desc";
+          chapter?: "asc" | "desc";
         };
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ChapterList'];
+          "application/json": components["schemas"]["ChapterList"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Unauthorized */
       401: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'post-manga-id-follow': {
+  "post-manga-id-follow": {
     parameters: {
       path: {
         id: string;
@@ -1806,18 +2256,18 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['Response'];
+          "application/json": components["schemas"]["Response"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'delete-manga-id-follow': {
+  "delete-manga-id-follow": {
     parameters: {
       path: {
         id: string;
@@ -1827,161 +2277,168 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['Response'];
+          "application/json": components["schemas"]["Response"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'get-cover': {
+  "get-cover": {
     parameters: {
       query: {
         limit?: number;
         offset?: number;
         /** Manga ids (limited to 100 per request) */
-        'manga[]'?: string[];
+        "manga[]"?: string[];
         /** Covers ids (limited to 100 per request) */
-        'ids[]'?: string[];
+        "ids[]"?: string[];
         /** User ids (limited to 100 per request) */
-        'uploaders[]'?: string[];
+        "uploaders[]"?: string[];
         order?: {
-          createdAt?: 'asc' | 'desc';
-          updatedAt?: 'asc' | 'desc';
-          volume?: 'asc' | 'desc';
+          createdAt?: "asc" | "desc";
+          updatedAt?: "asc" | "desc";
+          volume?: "asc" | "desc";
         };
-        'includes[]'?: string[];
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['CoverList'];
+          "application/json": components["schemas"]["CoverList"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'upload-cover': {
+  "upload-cover": {
     parameters: {
       path: {
         mangaId: string;
+      };
+      header: {
+        "Content-Type": string;
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['CoverResponse'];
+          "application/json": components["schemas"]["CoverResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     requestBody: {
       content: {
-        'multipart/form-data': {
+        "multipart/form-data": {
           file?: string;
+          volume?: string | null;
         };
       };
     };
   };
-  'get-cover-id': {
+  "get-cover-id": {
     parameters: {
       path: {
         coverId: string;
       };
       query: {
-        'includes[]'?: string[];
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['CoverResponse'];
+          "application/json": components["schemas"]["CoverResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** CoverArt not found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'edit-cover': {
+  "edit-cover": {
     parameters: {
       path: {
         coverId: string;
+      };
+      header: {
+        "Content-Type": string;
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['CoverResponse'];
+          "application/json": components["schemas"]["CoverResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 2KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['CoverEdit'];
+        "application/json": components["schemas"]["CoverEdit"];
       };
     };
   };
-  'delete-cover': {
+  "delete-cover": {
     parameters: {
       path: {
         coverId: string;
@@ -1991,158 +2448,166 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['Response'];
+          "application/json": components["schemas"]["Response"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'get-author': {
+  "get-author": {
     parameters: {
       query: {
         limit?: number;
         offset?: number;
         /** Author ids (limited to 100 per request) */
-        'ids[]'?: string[];
+        "ids[]"?: string[];
         name?: string;
         order?: {
-          name?: 'asc' | 'desc';
+          name?: "asc" | "desc";
         };
-        'includes[]'?: string[];
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['AuthorList'];
+          "application/json": components["schemas"]["AuthorList"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'post-author': {
+  "post-author": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['AuthorResponse'];
+          "application/json": components["schemas"]["AuthorResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 2KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['AuthorCreate'];
+        "application/json": components["schemas"]["AuthorCreate"];
       };
     };
   };
-  'get-author-id': {
+  "get-author-id": {
     parameters: {
       path: {
         /** Author ID */
         id: string;
       };
       query: {
-        'includes[]'?: string[];
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['AuthorResponse'];
+          "application/json": components["schemas"]["AuthorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Author no content */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'put-author-id': {
+  "put-author-id": {
     parameters: {
       path: {
         /** Author ID */
         id: string;
+      };
+      header: {
+        "Content-Type": string;
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['AuthorResponse'];
+          "application/json": components["schemas"]["AuthorResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 2KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['AuthorEdit'];
+        "application/json": components["schemas"]["AuthorEdit"];
       };
     };
   };
-  'delete-author-id': {
+  "delete-author-id": {
     parameters: {
       path: {
         /** Author ID */
@@ -2153,46 +2618,51 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['Response'];
+          "application/json": components["schemas"]["Response"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'post-legacy-mapping': {
+  "post-legacy-mapping": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
     responses: {
       /** This response will give you an array of mappings of resource identifiers ; the `data.attributes.newId` field corresponds to the new UUID. */
       200: {
         content: {
-          'application/json': components['schemas']['MappingIdResponse'][];
+          "application/json": components["schemas"]["MappingIdResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 10KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['MappingIdBody'];
+        "application/json": components["schemas"]["MappingIdBody"];
       };
     };
   };
-  'get-manga-id-feed': {
+  "get-manga-id-feed": {
     parameters: {
       path: {
         /** Manga ID */
@@ -2201,34 +2671,43 @@ export interface operations {
       query: {
         limit?: number;
         offset?: number;
-        'translatedLanguage[]'?: string[];
+        "translatedLanguage[]"?: string[];
+        "originalLanguage[]"?: string[];
+        "excludedOriginalLanguage[]"?: string[];
+        "contentRating[]"?: (
+          | "safe"
+          | "suggestive"
+          | "erotica"
+          | "pornographic"
+        )[];
+        includeFutureUpdates?: string;
         createdAtSince?: string;
         updatedAtSince?: string;
         publishAtSince?: string;
         order?: {
-          volume?: 'asc' | 'desc';
-          chapter?: 'asc' | 'desc';
+          volume?: "asc" | "desc";
+          chapter?: "asc" | "desc";
         };
-        'includes[]'?: string[];
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ChapterList'];
+          "application/json": components["schemas"]["ChapterList"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
   /** A list of chapter ids that are marked as read for the specified manga */
-  'get-manga-chapter-readmarkers': {
+  "get-manga-chapter-readmarkers": {
     parameters: {
       path: {
         id: string;
@@ -2238,20 +2717,44 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': {
-            result?: 'ok';
+          "application/json": {
+            result?: "ok";
             data?: string[];
           };
         };
       };
     };
   };
+  /** Send a lot of chapter ids for one manga to mark as read and/or unread */
+  "post-manga-chapter-readmarkers": {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": {
+            result?: "ok";
+          };
+        };
+      };
+    };
+    /** The size of the body is limited to 10KB. */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ChapterReadMarkerBatch"];
+      };
+    };
+  };
   /** A list of chapter ids that are marked as read for the given manga ids */
-  'get-manga-chapter-readmarkers-2': {
+  "get-manga-chapter-readmarkers-2": {
     parameters: {
       query: {
         /** Manga ids */
-        'ids[]': string[];
+        "ids[]": string[];
         /** Group results by manga ids */
         grouped?: boolean;
       };
@@ -2260,8 +2763,8 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': {
-            result?: 'ok';
+          "application/json": {
+            result?: "ok";
             data?: string[] | { [key: string]: string[] };
           };
         };
@@ -2269,7 +2772,7 @@ export interface operations {
     };
   };
   /** Mark chapter as read for the current user */
-  'chapter-id-read': {
+  "chapter-id-read": {
     parameters: {
       path: {
         id: string;
@@ -2279,15 +2782,17 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': {
-            result?: 'ok' | 'error';
+          "application/json": {
+            result?: "ok" | "error";
           };
         };
       };
+      /** Unauthorized */
+      401: unknown;
     };
   };
   /** Mark chapter as unread for the current user */
-  'chapter-id-unread': {
+  "chapter-id-unread": {
     parameters: {
       path: {
         id: string;
@@ -2297,29 +2802,31 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': {
-            result?: 'ok' | 'error';
+          "application/json": {
+            result?: "ok" | "error";
           };
         };
       };
+      /** Unauthorized */
+      401: unknown;
     };
   };
-  'get-manga-random': {
+  "get-manga-random": {
     parameters: {
       query: {
-        'includes[]'?: string[];
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['MangaResponse'];
+          "application/json": components["schemas"]["MangaResponse"];
         };
       };
     };
   };
-  'get-at-home-server-chapterId': {
+  "get-at-home-server-chapterId": {
     parameters: {
       path: {
         /** Chapter ID */
@@ -2342,7 +2849,8 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': {
+          "application/json": {
+            result?: string;
             /**
              * The base URL to construct final image URLs from.
              * The URL returned is valid for the requested chapter only, and for a duration of 15 minutes from the time of the response.
@@ -2354,103 +2862,156 @@ export interface operations {
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'get-manga-tag': {
+  "get-manga-tag": {
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['TagResponse'][];
+          "application/json": components["schemas"]["TagResponse"];
         };
       };
     };
   };
-  'post-account-activate-resend': {
+  "post-account-activate-resend": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['AccountActivateResponse'];
+          "application/json": components["schemas"]["AccountActivateResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 1KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['SendAccountActivationCode'];
+        "application/json": components["schemas"]["SendAccountActivationCode"];
       };
     };
   };
-  'post-account-recover': {
+  /** You can only request Account Recovery once per Hour for the same Email Address */
+  "post-account-recover": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['AccountActivateResponse'];
+          "application/json": components["schemas"]["AccountActivateResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': { [key: string]: any };
+          "application/json": unknown;
         };
       };
     };
     /** The size of the body is limited to 1KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['SendAccountActivationCode'];
+        "application/json": components["schemas"]["SendAccountActivationCode"];
       };
     };
   };
-  'post-account-recover-code': {
+  "post-account-recover-code": {
     parameters: {
       path: {
         code: string;
       };
+      header: {
+        "Content-Type": string;
+      };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['AccountActivateResponse'];
+          "application/json": components["schemas"]["AccountActivateResponse"];
         };
       };
       /** Bad Request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 2KB. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['RecoverCompleteBody'];
+        "application/json": components["schemas"]["RecoverCompleteBody"];
       };
     };
   };
-  'get-user-me': {
+  "get-user-me": {
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['UserResponse'];
+          "application/json": components["schemas"]["UserResponse"];
         };
       };
     };
   };
-  'get-user-follows-group': {
+  "get-user-follows-group": {
+    parameters: {
+      query: {
+        limit?: number;
+        offset?: number;
+        "includes[]"?: string[];
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ScanlationGroupList"];
+        };
+      };
+    };
+  };
+  "get-user-follows-group-id": {
+    parameters: {
+      path: {
+        /** User id */
+        id: string;
+      };
+    };
+    responses: {
+      /** The User follow that User */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+      /** The User doesn't follow that User */
+      404: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+    };
+  };
+  "get-user-follows-user": {
     parameters: {
       query: {
         limit?: number;
@@ -2461,77 +3022,84 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['ScanlationGroupList'];
+          "application/json": components["schemas"]["UserList"];
         };
       };
     };
   };
-  'get-user-follows-user': {
+  "get-user-follows-manga": {
     parameters: {
       query: {
         limit?: number;
         offset?: number;
+        "includes[]"?: string[];
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': components['schemas']['UserList'];
+          "application/json": components["schemas"]["MangaList"];
         };
       };
     };
   };
-  'get-user-follows-manga': {
+  "get-user-follows-manga-id": {
     parameters: {
-      query: {
-        limit?: number;
-        offset?: number;
+      path: {
+        /** Manga id */
+        id: string;
       };
     };
     responses: {
-      /** OK */
+      /** The User follow that Manga */
       200: {
         content: {
-          'application/json': components['schemas']['MangaList'];
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+      /** The User doesn't follow that Manga */
+      404: {
+        content: {
+          "application/json": components["schemas"]["Response"];
         };
       };
     };
   };
-  'get-manga-status': {
+  "get-manga-status": {
     parameters: {
       query: {
         /** Used to filter the list by given status */
         status?:
-          | 'reading'
-          | 'on_hold'
-          | 'plan_to_read'
-          | 'dropped'
-          | 're_reading'
-          | 'completed';
+          | "reading"
+          | "on_hold"
+          | "plan_to_read"
+          | "dropped"
+          | "re_reading"
+          | "completed";
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': {
+          "application/json": {
             result?: string;
             statuses?: {
               [key: string]:
-                | 'reading'
-                | 'on_hold'
-                | 'plan_to_read'
-                | 'dropped'
-                | 're_reading'
-                | 'completed';
+                | "reading"
+                | "on_hold"
+                | "plan_to_read"
+                | "dropped"
+                | "re_reading"
+                | "completed";
             };
           };
         };
       };
     };
   };
-  'get-manga-id-status': {
+  "get-manga-id-status": {
     parameters: {
       path: {
         id: string;
@@ -2541,33 +3109,99 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          'application/json': {
+          "application/json": {
             result?: string;
             status?:
-              | 'reading'
-              | 'on_hold'
-              | 'plan_to_read'
-              | 'dropped'
-              | 're_reading'
-              | 'completed';
+              | "reading"
+              | "on_hold"
+              | "plan_to_read"
+              | "dropped"
+              | "re_reading"
+              | "completed";
           };
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'post-manga-id-status': {
+  "post-manga-id-status": {
+    parameters: {
+      path: {
+        id: string;
+      };
+      header: {
+        "Content-Type": string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+    /** Using a `null` value in `status` field will remove the Manga reading status. The size of the body is limited to 2KB. */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateMangaStatus"];
+      };
+    };
+  };
+  "get-manga-id-draft": {
+    parameters: {
+      path: {
+        id: string;
+      };
+      query: {
+        "includes[]"?: string[];
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["MangaResponse"];
+        };
+      };
+      /** Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  "commit-manga-draft": {
     parameters: {
       path: {
         id: string;
@@ -2575,28 +3209,73 @@ export interface operations {
     };
     responses: {
       /** OK */
-      200: {
+      201: {
         content: {
-          'application/json': components['schemas']['Response'];
+          "application/json": components["schemas"]["MangaResponse"];
         };
       };
-      /** Bad Request */
+      /** BadRequest */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
-    /** Using a `null` value in `status` field will remove the Manga reading status. The size of the body is limited to 2KB. */
+    /** A Manga Draft that is to be submitted must have at least one cover, must be in the "draft" state and must be passed the correct version in the request body. */
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateMangaStatus'];
+        "application/json": {
+          version?: number;
+        };
+      };
+    };
+  };
+  "get-manga-drafts": {
+    parameters: {
+      query: {
+        limit?: number;
+        offset?: number;
+        user?: string;
+        state?: "draft" | "submitted" | "rejected";
+        order?: {
+          title?: "asc" | "desc";
+          year?: "asc" | "desc";
+          createdAt?: "asc" | "desc";
+          updatedAt?: "asc" | "desc";
+        };
+        "includes[]"?: string[];
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["MangaResponse"];
+        };
+      };
+      /** Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
       };
     };
   };
@@ -2605,49 +3284,56 @@ export interface operations {
    *
    * Authentication is optional. Captchas are tracked for both the client ip and for the user id, if you are logged in you want to send your session token but that is not required.
    */
-  'post-captcha-solve': {
+  "post-captcha-solve": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
     responses: {
       /** OK: Captcha has been solved */
       200: {
         content: {
-          'application/json': {
-            result?: 'ok' | 'error';
+          "application/json": {
+            result?: "ok" | "error";
           };
         };
       };
       /** Bad Request: Captcha challenge result was wrong, the Captcha Verification service was down or other, refer to the error message and the errorCode inside the error context */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     requestBody: {
       content: {
-        'application/json': {
+        "application/json": {
           captchaChallenge: string;
         };
       };
     };
   };
-  'get-report-reasons-by-category': {
+  "get-report-reasons-by-category": {
     parameters: {
       path: {
-        category: 'manga' | 'chapter' | 'scanlation_group' | 'user';
+        category: "manga" | "chapter" | "scanlation_group" | "user";
       };
     };
     responses: {
       /** OK */
       200: {
         content: {
-          'application/json': {
-            results?: {
+          "application/json": {
+            result?: string;
+            response?: string;
+            data?: {
               id?: string;
               type?: string;
               attributes?: {
-                reason?: components['schemas']['LocalizedString'];
+                reason?: components["schemas"]["LocalizedString"];
                 detailsRequired?: boolean;
-                category?: 'manga' | 'chapter' | 'scanlation_group' | 'user';
+                category?: "manga" | "chapter" | "scanlation_group" | "user";
                 version?: number;
               };
             }[];
@@ -2660,58 +3346,306 @@ export interface operations {
       /** Bad request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
   };
-  'post-report': {
+  "post-report": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
     responses: {
       /** Created */
       201: {
         content: {
-          'application/json': components['schemas']['Response'];
+          "application/json": components["schemas"]["Response"];
         };
       };
       /** Bad request */
       400: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Forbidden */
       403: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
       /** Not Found */
       404: {
         content: {
-          'application/json': components['schemas']['ErrorResponse'];
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
     /** The size of the body is limited to 8KB. */
     requestBody: {
       content: {
-        'application/json': {
-          category?: 'manga' | 'chapter' | 'user' | 'scanlation_group';
+        "application/json": {
+          category?: "manga" | "chapter" | "user" | "scanlation_group";
           reason?: string;
           objectId?: string;
           details?: string;
+        };
+      };
+    };
+  };
+  "get-upload-session": {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadSession"];
+        };
+      };
+      /** Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  "begin-upload-session": {
+    parameters: {
+      header: {
+        "Content-Type": string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadSession"];
+        };
+      };
+    };
+    /** The size of the body is limited to 4KB. */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["BeginUploadSession"];
+      };
+    };
+  };
+  "put-upload-session-file": {
+    parameters: {
+      path: {
+        uploadSessionId: string;
+      };
+      header: {
+        "Content-Type": string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": {
+            result?: "ok" | "error";
+            errors?: components["schemas"]["Error"][];
+            data?: components["schemas"]["UploadSessionFile"][];
+          };
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          file?: string;
+        };
+      };
+    };
+  };
+  "abandon-upload-session": {
+    parameters: {
+      path: {
+        uploadSessionId: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+    };
+  };
+  "commit-upload-session": {
+    parameters: {
+      path: {
+        uploadSessionId: string;
+      };
+      header: {
+        "Content-Type": string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Chapter"];
+        };
+      };
+    };
+    /** The size of the body is limited to 4KB. */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CommitUploadSession"];
+      };
+    };
+  };
+  "delete-uploaded-session-file": {
+    parameters: {
+      path: {
+        uploadSessionId: string;
+        uploadSessionFileId: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+    };
+  };
+  "delete-uploaded-session-files": {
+    parameters: {
+      path: {
+        uploadSessionId: string;
+      };
+      header: {
+        "Content-Type": string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+    };
+    /** The size of the body is limited to 20KB. */
+    requestBody: {
+      content: {
+        "application/json": string[];
+      };
+    };
+  };
+  "get-manga-relation": {
+    parameters: {
+      path: {
+        mangaId: string;
+      };
+    };
+    responses: {
+      /** Manga relation list */
+      200: {
+        content: {
+          "application/json": components["schemas"]["MangaRelationList"];
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+  };
+  /** Create a new Manga relation. */
+  "post-manga-relation": {
+    parameters: {
+      path: {
+        mangaId: string;
+      };
+      header: {
+        "Content-Type": string;
+      };
+    };
+    responses: {
+      /** Manga relation created */
+      200: {
+        content: {
+          "application/json": components["schemas"]["MangaRelationResponse"];
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+    };
+    /** The size of the body is limited to 8KB. */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MangaRelationCreate"];
+      };
+    };
+  };
+  "delete-manga-relation-id": {
+    parameters: {
+      path: {
+        mangaId: string;
+        id: string;
+      };
+    };
+    responses: {
+      /** Manga relation has been deleted. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Response"];
+        };
+      };
+      /** Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
         };
       };
     };
